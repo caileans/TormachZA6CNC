@@ -1,0 +1,298 @@
+from GcodeParser_custom import GcodeParser_custom as GcodeParser
+from math import pi, sin, cos, atan2, acos, asin, sqrt
+import numpy as np
+from os import system
+# import rospy
+
+# data type for tool pose representation as in Gcode: xyzijk
+class ToolPose:
+    def __init__(self, x=0, y=0, z=0, i=0, j=0, k=0):
+        self.x = x
+        self.y = y
+        self.z = z
+        self.i = i
+        self.j = j
+        self.k = k
+
+# data type for bot pose as used in TRPL: xyzabc
+class BotPose:
+    def __init__(self, x=0, y=0, z=0, a=0, b=0, c=0):
+        self.x = x
+        self.y = y
+        self.z = z
+        self.a = a
+        self.b = b
+        self.c = c
+
+# class to call appropriate TRPL ros services give gcode
+class GcodeToTRPL:
+    def __init__(self, feedRate=0, rapidFeed=0, defaultLengthUnits="mm"):
+        self.rapidFeed = rapidFeed
+        self.feedRate = feedRate
+        self.motionMode = 1
+        self.lengthUnits = defaultLengthUnits
+        self.toolPose = ToolPose()
+        self.newToolPose = ToolPose()
+        self.botPose = BotPose()
+        # self.callRobotCommand = rospy.ServiceProxy('/robot_command/execute_mdi', wtfGoesHere???)
+
+# Gcode parsing functions
+    def runFile(self, file):
+        #import the gcode
+        with open(file + '.nc', 'r') as f:
+            gcode = f.read()
+
+        parsedGcode = GcodeParser(gcode).parseAllLines()
+
+        self.constructTRPLFile(parsedGcode, file + ".py")
+
+        self.runTRPLFile(file + ".py")
+
+
+    def runBlock(self, block):
+        print("WARNING: THIS FUNCTION HAS NO BUFFER. MULTIPLE CALLS CAN SKIP MOVEMENTS")
+#        print(GcodeParser.parseLine(block))
+        newPose = self.evaluateGcodeBlock(GcodeParser.parseLine(block)[0])
+        
+        if newPose:
+            TRPLcommand = self.constructTRPLMoveCommand()
+            self.sendMDICommand(TRPLcommand)
+#            print(self.newToolPose)
+            
+            self.toolPose = self.newToolPose
+
+    def evaluateGcodeBlock(self, block):
+#        print(block)
+        newPose = False
+        for i in range(len(block)):
+            if block[i] == ['G', 0]:
+                self.motionMode = 0
+            elif block[i] == ['G', 1]:
+                self.motionMode = 1
+            elif block[i] == ['G', 2]:
+                self.motionMode = 2
+            elif block[i] == ['G', 3]:
+                self.motionMode = 3
+            elif block[i][0] == 'F':
+                self.feedRate = block[i][1]
+            elif block[i][0] == 'X':
+                newPose = True
+                self.newToolPose.x = block[i][1]
+            elif block[i][0] == 'Y':
+                newPose = True
+                self.newToolPose.y = block[i][1]
+            elif block[i][0] == 'Z':
+                newPose = True
+                self.newToolPose.z = block[i][1]
+            elif block[i][0] == 'I':
+                newPose = True
+                self.newToolPose.i = block[i][1]
+            elif block[i][0] == 'J':
+                newPose = True
+                self.newToolPose.j = block[i][1]
+            elif block[i][0] == 'K':
+                newPose = True
+                self.newToolPose.k = block[i][1]
+            else:
+                print("Error: " + str(block[i]) + " not found")
+        
+        return newPose
+        
+
+
+    # def runLinearMotion(self, feed):
+    #     print("executing linear motion")
+    #     self.botPose = self.calcBotPose(self.newToolPose, [0,0,0])
+    #     self.sendMDICommand(self.constructTRPLLine(self.botPose, feed))
+
+    # def runCircularMotion(self, dir, feed):
+    #     print("executing circular motion ASSUMES XY PLANE")
+    #     self.circInterToolPose = 1 #dis anit' right
+    #     self.circInterBotPose = self.calcBotPose(self.circInterToolPose)
+    #     self.botPose = self.calcBotPose(self.toolPose)
+    #     self.sendMDICommand(self.constructTRPLCirc(self.botPose, self.circInterBotPose, feed))
+    
+    
+
+
+
+# Math Functions
+    def calcBotPose(self,toolPose, toolOffset):
+        """converts the 5dof tool pose into the 6 dof robot endpose for cartesian waypoint. 
+        Note: this function assumes that the tool is mounted at 90 degrees to the J6 axis
+        Note: zeroing between the tool and the part should be done prior to calling this function
+
+        Inputs: toolPose- a ToolPose instance that has an x,y,z position and an i,j,k orrientation.
+                toolOffset- a 3d array that describes the linear offset frm the tool to J6
+                q0- a 3d array that describes how you want to optimize the J6 axis
+        Output: a BotPose object describing the end effector pose of the tormach
+        """
+
+        # calculate dot product of tool offset and orrientation vectors
+        dot=toolPose.i*toolOffset[0]+toolPose.j*toolOffset[1]+toolPose.k*toolOffset[2]
+        
+        # calculate the position of the end effector
+        position=[toolPose.x-dot*toolPose.i,toolPose.y-dot*toolPose.j,toolPose.z-dot*toolPose.k]
+
+        mag=sqrt(position[0]*position[0]+position[1]*position[1]+position[2]*position[2])
+
+        q0=[0, -1*position[1], -1*position[2]]
+
+        # calculate the dot product of q0 and the toolPose
+        magpose2=toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k
+
+
+        dot =( toolPose.i*q0[0]+toolPose.j*q0[1]+toolPose.k*q0[2])/magpose2
+
+        
+        # calculate the J6 orrientation i, j, k
+        q=np.array([q0[0]-dot*toolPose.i,q0[1]-dot*toolPose.j,q0[2]-dot*toolPose.k])
+        print(q)
+        # print(q)
+        # print(q0)
+        # print([toolPose.i,toolPose.j,toolPose.k])
+        # calculate A, B, C by calling the calcABC function
+        abc=self.calcABC(q, toolPose)
+
+        return BotPose(position[0],position[1],position[2], abc[0],abc[1],abc[2])
+
+
+    def calcABC(self,q,toolPose):
+        """determine the angles A, B, C from the 3 dimensional cartesion orientation
+
+        Input: q- a 3d array of values corresponding to i, j, k direction of joint 6 (pointing from joint 5 to joint 6)
+        Output: ABC- a 3d array of values coresponding to the A, B, C angles in degrees
+        """
+        magpose=sqrt(toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k)
+
+        # normalize the vector q
+        # qprime = [q[0]/sqrt(q[0]*q[0]+q[1]*q[1]+q[2]*q[2]),q[1]/sqrt(q[0]*q[0]+q[1]*q[1]+q[2]*q[2]),q[2]/sqrt(q[0]*q[0]+q[1]*q[1]+q[2]*q[2])]
+        # qprime2=[qprime[1]*toolPose.k-qprime[2]*toolPose.j,qprime[2]*toolPose.i-qprime[0]*toolPose.k,qprime[0]*toolPose.j-qprime[1]*toolPose.i]
+        # # print(qprime)
+        # # print(qprime2)
+        # # calculate the angle A
+        # A=atan2(-qprime[1],-qprime[2])
+
+        # calculate the angle B
+        # B=atan2((qprime[2]-cos(A)),qprime[0])
+        B=atan2(-toolPose.k,sqrt(toolPose.i*toolPose.i+toolPose.j*toolPose.j))
+
+        # calculate the angle C
+        # C=atan2(-qprime[1],-(qprime[0]-cos(B)))
+        C=atan2(toolPose.j,toolPose.i)
+
+
+        q0 = np.array([0.0, 0.0, 0.0])
+        q0[2] = cos(B)
+        q0ij = sin(B)
+        q0[0] = q0ij*cos(C)
+        q0[1] = q0ij*sin(C)
+        cross = np.cross(q, q0)
+        A = np.copysign(asin(np.sqrt(cross.dot(cross))/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0)))), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
+
+
+        # A=atan2(-qprime2[1],qprime2[2])
+
+        # # calculate the angle B
+        # B=atan2(qprime2[0],(qprime2[2]+cos(A)))
+
+        # # calculate the angle C
+        # C=atan2(-(qprime2[1]+sin(A)),-(qprime2[0]-cos(B)))
+        # print(self.R2rpy([[qprime[0]*toolPose.i/magpose,qprime[1]*toolPose.i/magpose,qprime[2]*toolPose.i/magpose],[qprime[0]*toolPose.j/magpose,qprime[1]*toolPose.j/magpose,qprime[2]*toolPose.j/magpose],[qprime[0]*toolPose.k/magpose,qprime[1]*toolPose.k/magpose,qprime[2]*toolPose.k/magpose]]))
+        
+        # print(A*180/pi)
+        # print(B*180/pi)
+        # print(C*180/pi)
+        # A=-pi
+        # B=-pi/2
+        # C=0
+        return [A*180/pi,B*180/pi,C*180/pi]
+
+
+# TRLP interface functions
+    def constructTRPLMoveCommand(self):
+        self.botPose = self.calcBotPose(self.newToolPose, [0,0,0])
+        if self.motionMode == 0:
+            TRPLCommand = self.constructTRPLLine(self.botPose, self.rapidFeed)
+        if self.motionMode == 1:
+            TRPLCommand = self.constructTRPLLine(self.botPose, self.feedRate)
+        if self.motionMode == 2:
+            circInterToolPose = 1 #dis anit' right
+            circInterBotPose = self.calcBotPose(self.circInterToolPose)
+            TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
+        if self.motionMode == 3:
+            circInterToolPose = 1 #dis anit' right
+            circInterBotPose = self.calcBotPose(self.circInterToolPose)
+            TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
+
+        return TRPLCommand
+
+    def constructTRPLLine(self, pose, vel):
+        #form the TRPL command
+        TRPLCommand = "movel(p["+str(pose.x) +","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"])" #,0,"+str(vel)+")"
+
+        print(TRPLCommand)
+        # _ = self.callRobotCommand(TRPLCommand)
+        # self.sendMDICommand(TRPLCommand)
+        return TRPLCommand
+
+    def constructTRPLCirc(self, pose, interPose, vel):
+        #form the TRPL command
+        TRPLCommand = "movec(p["+str(pose.x)+","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"],p["+str(interPose.x)+","+str(interPose.y)+","+str(interPose.z)+","+str(interPose.a)+","+str(interPose.b)+","+str(interPose.c)+"])"
+
+        print(TRPLCommand)
+        # _ = self.callRobotCommand(TRPLCommand)
+        # self.sendMDICommand(TRPLCommand)
+        return TRPLCommand
+
+    def sendMDICommand(self, command):
+        """send a trpl command to the tormach
+        
+        Input: a string of the command that is to be sent
+        output: none
+        """
+        rosCommand = "rosservice call /robot_command/execute_mdi '" + command + "'"
+        system(rosCommand)
+
+    def constructTRPLFile(self, code, fileName):
+        f = open(fileName, "w")
+        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\ndef main():\n    set_path_blending(True, 0.0)\n")
+        for block in code:
+            newPose = self.evaluateGcodeBlock(block)
+            if newPose:
+                f.write("    "+str(self.constructTRPLMoveCommand())+"\n")
+
+    def runTRPLFile(self, file):
+        rosCommand = "rosservice call /robot_command/load_program " + file + "&& rosservice call robot_command/run_command 2"
+        system(rosCommand)
+
+
+#testing
+parser = GcodeToTRPL(1, 1)
+#parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1;")
+#parser.runBlock("G01 x500.0 Y1 z600;")
+# parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1;;")
+# parser.runBlock("G01 x700.0 Y150.0 z600 I1.0 J0 K-1;;")
+# parser.runBlock("G01 x900.0 Y150.0 z600 I1.0 J0 K-1;;")
+# parser.runBlock("G01 x900.0 Y-50.0 z600 I1.0 J0 K-1;;")
+# parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1;;")
+
+# parser.runFile("testGcode")
+
+tpose = ToolPose(1, 1, 1, 0, 0, 1)
+print(parser.calcABC(np.array([1, 0, 0]), tpose))
+print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+tpose = ToolPose(1, 1, 1, 1, 0, 1)
+print(parser.calcABC(np.array([1, 0, -1]), tpose))
+print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+tpose = ToolPose(1, 1, 1, -1, 0, 1)
+print(parser.calcABC(np.array([1, 0, 1]), tpose))
+print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+tpose = ToolPose(1, 1, 1, 0, 1, 1)
+print(parser.calcABC(np.array([1, 0, 0]), tpose))
+print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+tpose = ToolPose(1, 1, 1, 0, -1, 1)
+print(parser.calcABC(np.array([1, 0, 0]), tpose))
+print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+
+    
