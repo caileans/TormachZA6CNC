@@ -136,7 +136,8 @@ class GcodeToTRPL:
 
         mag=sqrt(position[0]*position[0]+position[1]*position[1]+position[2]*position[2])
 
-        q0=[0, -1*position[1], -1*position[2]]
+        # q0=[0, -1*position[1], -1*position[2]]
+        q0=[1,0,0];
 
         # calculate the dot product of q0 and the toolPose
         magpose2=toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k
@@ -147,6 +148,8 @@ class GcodeToTRPL:
         
         # calculate the J6 orrientation i, j, k
         q=np.array([q0[0]-dot*toolPose.i,q0[1]-dot*toolPose.j,q0[2]-dot*toolPose.k])
+        if q.all(0):
+            q=np.array([0,0,-1])*copysign(1,toolPose.i);
         print(q)
         # print(q)
         # print(q0)
