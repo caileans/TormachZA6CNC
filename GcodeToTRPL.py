@@ -149,8 +149,8 @@ class GcodeToTRPL:
         # calculate the J6 orrientation i, j, k
         q=np.array([q0[0]-dot*toolPose.i,q0[1]-dot*toolPose.j,q0[2]-dot*toolPose.k])
         if q.all(0):
-            q=np.array([0,0,-1])*copysign(1,toolPose.i);
-        print(q)
+            q=np.array([0,0,-1])*copysign(1,toolPose.i)
+        # print(q)
         # print(q)
         # print(q0)
         # print([toolPose.i,toolPose.j,toolPose.k])
@@ -166,7 +166,7 @@ class GcodeToTRPL:
         Input: q- a 3d array of values corresponding to i, j, k direction of joint 6 (pointing from joint 5 to joint 6)
         Output: ABC- a 3d array of values coresponding to the A, B, C angles in degrees
         """
-        magpose=sqrt(toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k)
+        # magpose=sqrt(toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k)
 
         # normalize the vector q
         # qprime = [q[0]/sqrt(q[0]*q[0]+q[1]*q[1]+q[2]*q[2]),q[1]/sqrt(q[0]*q[0]+q[1]*q[1]+q[2]*q[2]),q[2]/sqrt(q[0]*q[0]+q[1]*q[1]+q[2]*q[2])]
@@ -234,7 +234,7 @@ class GcodeToTRPL:
         #form the TRPL command
         TRPLCommand = "movel(p["+str(pose.x) +","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"])" #,0,"+str(vel)+")"
 
-        print(TRPLCommand)
+        # print(TRPLCommand)
         # _ = self.callRobotCommand(TRPLCommand)
         # self.sendMDICommand(TRPLCommand)
         return TRPLCommand
@@ -243,7 +243,7 @@ class GcodeToTRPL:
         #form the TRPL command
         TRPLCommand = "movec(p["+str(pose.x)+","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"],p["+str(interPose.x)+","+str(interPose.y)+","+str(interPose.z)+","+str(interPose.a)+","+str(interPose.b)+","+str(interPose.c)+"])"
 
-        print(TRPLCommand)
+        # print(TRPLCommand)
         # _ = self.callRobotCommand(TRPLCommand)
         # self.sendMDICommand(TRPLCommand)
         return TRPLCommand
@@ -271,7 +271,9 @@ class GcodeToTRPL:
 
 
 #testing
-parser = GcodeToTRPL(1, 1)
+# parser = GcodeToTRPL(1, 1)
+
+
 #parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1;")
 #parser.runBlock("G01 x500.0 Y1 z600;")
 # parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1;;")
@@ -282,20 +284,20 @@ parser = GcodeToTRPL(1, 1)
 
 # parser.runFile("testGcode")
 
-tpose = ToolPose(1, 1, 1, 0, 0, 1)
-print(parser.calcABC(np.array([1, 0, 0]), tpose))
-print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
-tpose = ToolPose(1, 1, 1, 1, 0, 1)
-print(parser.calcABC(np.array([1, 0, -1]), tpose))
-print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
-tpose = ToolPose(1, 1, 1, -1, 0, 1)
-print(parser.calcABC(np.array([1, 0, 1]), tpose))
-print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
-tpose = ToolPose(1, 1, 1, 0, 1, 1)
-print(parser.calcABC(np.array([1, 0, 0]), tpose))
-print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
-tpose = ToolPose(1, 1, 1, 0, -1, 1)
-print(parser.calcABC(np.array([1, 0, 0]), tpose))
-print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+# tpose = ToolPose(1, 1, 1, 0, 0, 1)
+# print(parser.calcABC(np.array([1, 0, 0]), tpose))
+# print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+# tpose = ToolPose(1, 1, 1, 1, 0, 1)
+# print(parser.calcABC(np.array([1, 0, -1]), tpose))
+# print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+# tpose = ToolPose(1, 1, 1, -1, 0, 1)
+# print(parser.calcABC(np.array([1, 0, 1]), tpose))
+# print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+# tpose = ToolPose(1, 1, 1, 0, 1, 1)
+# print(parser.calcABC(np.array([1, 0, 0]), tpose))
+# print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+# tpose = ToolPose(1, 1, 1, 0, -1, 1)
+# print(parser.calcABC(np.array([1, 0, 0]), tpose))
+# print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
 
     
