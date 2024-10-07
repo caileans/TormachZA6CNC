@@ -130,10 +130,10 @@ class GcodeToTRPL:
         """
 
         # calculate dot product of tool offset and orrientation vectors
-        dot=toolPose.i*toolOffset[0]+toolPose.j*toolOffset[1]+toolPose.k*toolOffset[2]
+        # dot=toolPose.i*toolOffset[0]+toolPose.j*toolOffset[1]+toolPose.k*toolOffset[2]
         
-        # calculate the position of the end effector
-        position=[toolPose.x-dot*toolPose.i,toolPose.y-dot*toolPose.j,toolPose.z-dot*toolPose.k]
+        # # calculate the position of the end effector
+        # position=[toolPose.x-dot*toolPose.i,toolPose.y-dot*toolPose.j,toolPose.z-dot*toolPose.k]
 
         mag=sqrt(position[0]*position[0]+position[1]*position[1]+position[2]*position[2])
 
@@ -157,6 +157,9 @@ class GcodeToTRPL:
         # print([toolPose.i,toolPose.j,toolPose.k])
         # calculate A, B, C by calling the calcABC function
         abc=self.calcABC(q, toolPose)
+        R=rpy2R(abc);
+        newtooloffset=R*np.array(toolOffset);
+        position=[toolPose.x-newtooloffset[0],toolPose.y-newtooloffset[1],toolPose.z-newtooloffset[2]];
 
         return BotPose(position[0],position[1],position[2], abc[0],abc[1],abc[2])
 
@@ -270,6 +273,10 @@ class GcodeToTRPL:
     def runTRPLFile(self, file):
         rosCommand = "rosservice call /robot_command/load_program " + file + "&& rosservice call robot_command/run_command 2"
         system(rosCommand)
+
+    def rpy2R(rpy):
+    return np.matmul(np.matmul(rot([0,0,1],rpy[2]),rot([0,1,0],rpy[1])),rot([1,0,0],rpy[0]))
+
 
 
 #testing
