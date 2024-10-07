@@ -26,7 +26,7 @@ class BotPose:
 
 # class to call appropriate TRPL ros services give gcode
 class GcodeToTRPL:
-    def __init__(self, feedRate=0, rapidFeed=0, defaultLengthUnits="mm"):
+    def __init__(self, feedRate=0, rapidFeed=0, defaultLengthUnits="mm", toolOffset=[0,0,0]):
         self.rapidFeed = rapidFeed
         self.feedRate = feedRate
         self.motionMode = 1
@@ -34,6 +34,7 @@ class GcodeToTRPL:
         self.toolPose = ToolPose()
         self.newToolPose = ToolPose()
         self.botPose = BotPose()
+        self.toolOffset = toolOffset
         # self.callRobotCommand = rospy.ServiceProxy('/robot_command/execute_mdi', wtfGoesHere???)
 
 # Gcode parsing functions
@@ -117,7 +118,7 @@ class GcodeToTRPL:
 
 
 # Math Functions
-    def calcBotPose(self,toolPose, toolOffset):
+    def calcBotPose(self,toolPose, toolOffset = [0,0,0]):
         """converts the 5dof tool pose into the 6 dof robot endpose for cartesian waypoint. 
         Note: this function assumes that the tool is mounted at 90 degrees to the J6 axis
         Note: zeroing between the tool and the part should be done prior to calling this function
@@ -191,8 +192,8 @@ class GcodeToTRPL:
         q0[0] = q0ij*cos(C)
         q0[1] = q0ij*sin(C)
         cross = np.cross(q, q0)
-        A = np.copysign(asin(np.sqrt(cross.dot(cross))/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0)))), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
-
+        A = np.copysign(acos(q.dot(q0)/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0)))), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
+        # asin(np.sqrt(cross.dot(cross))/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0))))
 
         # A=atan2(-qprime2[1],qprime2[2])
 
@@ -214,7 +215,7 @@ class GcodeToTRPL:
 
 # TRLP interface functions
     def constructTRPLMoveCommand(self):
-        self.botPose = self.calcBotPose(self.newToolPose, [0,0,0])
+        self.botPose = self.calcBotPose(self.newToolPose, self.toolOffset)
         if self.motionMode == 0:
             TRPLCommand = self.constructTRPLLine(self.botPose, self.rapidFeed)
         if self.motionMode == 1:
@@ -232,7 +233,7 @@ class GcodeToTRPL:
 
     def constructTRPLLine(self, pose, vel):
         #form the TRPL command
-        TRPLCommand = "movel(p["+str(pose.x) +","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"])" #,0,"+str(vel)+")"
+        TRPLCommand = "movel(p["+str(pose.x) +","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"],0,"+str(vel)+")"
 
         # print(TRPLCommand)
         # _ = self.callRobotCommand(TRPLCommand)
@@ -259,7 +260,8 @@ class GcodeToTRPL:
 
     def constructTRPLFile(self, code, fileName):
         f = open(fileName, "w")
-        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\ndef main():\n    set_path_blending(True, 0.0)\n")
+        #USER FRAME IS SET HERE
+        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\nset_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    set_path_blending(True, 0.0)\n")
         for block in code:
             newPose = self.evaluateGcodeBlock(block)
             if newPose:
@@ -271,7 +273,7 @@ class GcodeToTRPL:
 
 
 #testing
-# parser = GcodeToTRPL(1, 1)
+parser = GcodeToTRPL(feedRate=1, rapidFeed=1, toolOffset=[0,0,0])
 
 
 #parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1;")
@@ -282,7 +284,7 @@ class GcodeToTRPL:
 # parser.runBlock("G01 x900.0 Y-50.0 z600 I1.0 J0 K-1;;")
 # parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1;;")
 
-# parser.runFile("testGcode")
+parser.runFile("testGcode")
 
 # tpose = ToolPose(1, 1, 1, 0, 0, 1)
 # print(parser.calcABC(np.array([1, 0, 0]), tpose))
