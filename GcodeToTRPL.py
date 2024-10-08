@@ -2,6 +2,7 @@ from GcodeParser_custom import GcodeParser_custom as GcodeParser
 from math import pi, sin, cos, atan2, acos, asin, sqrt
 import numpy as np
 from os import system
+from general_robotics_toolbox import rpy2R
 # import rospy
 
 # data type for tool pose representation as in Gcode: xyzijk
@@ -118,7 +119,7 @@ class GcodeToTRPL:
 
 
 # Math Functions
-    def calcBotPose(self,toolPose, toolOffset = [0,0,0]):
+    def calcBotPose(self,toolPose, toolOffset = [0.0,0.0,0.0]):
         """converts the 5dof tool pose into the 6 dof robot endpose for cartesian waypoint. 
         Note: this function assumes that the tool is mounted at 90 degrees to the J6 axis
         Note: zeroing between the tool and the part should be done prior to calling this function
@@ -135,7 +136,7 @@ class GcodeToTRPL:
         # # calculate the position of the end effector
         # position=[toolPose.x-dot*toolPose.i,toolPose.y-dot*toolPose.j,toolPose.z-dot*toolPose.k]
 
-        mag=sqrt(position[0]*position[0]+position[1]*position[1]+position[2]*position[2])
+        # mag=sqrt(position[0]*position[0]+position[1]*position[1]+position[2]*position[2])
 
         # q0=[0, -1*position[1], -1*position[2]]
         q0=[1,0,0];
@@ -156,11 +157,15 @@ class GcodeToTRPL:
         # print(q0)
         # print([toolPose.i,toolPose.j,toolPose.k])
         # calculate A, B, C by calling the calcABC function
+        # print(toolOffset)
+        # print(np.array([toolOffset[0],toolOffset[1],toolOffset[2]]).transpose())
         abc=self.calcABC(q, toolPose)
         R=rpy2R(abc);
-        newtooloffset=R*np.array(toolOffset);
+        # print(R)
+        newtooloffset=np.matmul(R,np.array(toolOffset).transpose());
+        print(newtooloffset)
         position=[toolPose.x-newtooloffset[0],toolPose.y-newtooloffset[1],toolPose.z-newtooloffset[2]];
-
+        print(position)
         return BotPose(position[0],position[1],position[2], abc[0],abc[1],abc[2])
 
 
@@ -259,7 +264,7 @@ class GcodeToTRPL:
         output: none
         """
         rosCommand = "rosservice call /robot_command/execute_mdi '" + command + "'"
-        system(rosCommand)
+        # system(rosCommand)
 
     def constructTRPLFile(self, code, fileName):
         f = open(fileName, "w")
@@ -272,10 +277,8 @@ class GcodeToTRPL:
 
     def runTRPLFile(self, file):
         rosCommand = "rosservice call /robot_command/load_program " + file + "&& rosservice call robot_command/run_command 2"
-        system(rosCommand)
+        # system(rosCommand)
 
-    def rpy2R(rpy):
-    return np.matmul(np.matmul(rot([0,0,1],rpy[2]),rot([0,1,0],rpy[1])),rot([1,0,0],rpy[0]))
 
 
 
