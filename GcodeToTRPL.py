@@ -158,20 +158,22 @@ class GcodeToTRPL:
         toolDirection=toolDirection/np.linalg.norm(toolDirection);
 
         # Let the toolOffset be only in the x/z plane with z being in the j6 dirrection such that j6 must go througha point p
-        p=np.array([toolPose.x,toolPose.y,toolPose.z])-toolOffset[0]*toolDirection;
+        p=np.array([toolPose.x,toolPose.y,toolPose.z])+toolOffset[0]*toolDirection;
 
         #Let the J6 vector be in the z-r plane passing through p with a norm n
-        n=np.array([p[1],-p[0],0]);
+        n=np.array([p[1],-1*p[0],0]);
         n=n/np.linalg.norm(n);
+        print(n)
+        print(toolDirection)
         #Let the J6 vector be orthoganal to the toolDirection pose such that
         J6=np.cross(toolDirection, n);
-
+        # print(J6)
         #if the n and toolDirection are in the same direction, default to an orrientation in the z axis
-        if J6.all(0):
+        if J6[0]==0 and J6[1]==0 and J6[2]==0:
             J6=np.array([0,0,1])*np.copysign(1,p[0]);
             J6=J6-np.dot(J6,toolDirection)*toolDirection
             print("c1")
-        if J6.all(0):
+        if J6[0]==0 and J6[1]==0 and J6[2]==0:
             J6=np.array([1,0,0])*np.copysign(1,p[0]);
             J6=J6-np.dot(J6,toolDirection)*toolDirection
             print("c2")
@@ -323,22 +325,22 @@ parser = GcodeToTRPL(feedRate=1, rapidFeed=1, toolOffset=[0,0,0])
 # parser.runBlock("G01 x900.0 Y-50.0 z600 I1.0 J0 K-1;;")
 # parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1;;")
 
-parser.runFile("testGcode")
+# parser.runFile("testGcode")
 
-# tpose = ToolPose(1, 1, 1, 0, 0, 1)
-# print(parser.calcABC(np.array([1, 0, 0]), tpose))
-# print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
-# tpose = ToolPose(1, 1, 1, 1, 0, 1)
-# print(parser.calcABC(np.array([1, 0, -1]), tpose))
-# print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
-# tpose = ToolPose(1, 1, 1, -1, 0, 1)
-# print(parser.calcABC(np.array([1, 0, 1]), tpose))
-# print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
-# tpose = ToolPose(1, 1, 1, 0, 1, 1)
-# print(parser.calcABC(np.array([1, 0, 0]), tpose))
-# print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
-# tpose = ToolPose(1, 1, 1, 0, -1, 1)
-# print(parser.calcABC(np.array([1, 0, 0]), tpose))
-# print(parser.calcBotPose(tpose, [0.0,0.0,0.0]))
+tpose = ToolPose(1, 1, 1, 0, 0, 1)
+print(parser.calcABC(np.array([1, 0, 0]), tpose))
+print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
+tpose = ToolPose(1, 1, 1, 1, 0, 1)
+print(parser.calcABC(np.array([1, 0, -1]), tpose))
+print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
+tpose = ToolPose(1, 1, 1, -1, 0, 1)
+print(parser.calcABC(np.array([1, 0, 1]), tpose))
+print(parser.calcBotPose(tpose, [1.0,0.0,0.0]))
+tpose = ToolPose(1, 1, 1, 0, 1, 1)
+print(parser.calcABC(np.array([1, 0, 0]), tpose))
+print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
+tpose = ToolPose(1, 1, 1, 0, -1, 1)
+print(parser.calcABC(np.array([1, 0, 0]), tpose))
+print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
 
     
