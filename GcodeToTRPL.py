@@ -139,21 +139,49 @@ class GcodeToTRPL:
         # mag=sqrt(position[0]*position[0]+position[1]*position[1]+position[2]*position[2])
 
         # q0=[0, -1*position[1], -1*position[2]]
-        q0=[1,0,0];
+        # q0=[1,0,0];
 
-        # calculate the dot product of q0 and the toolPose
-        magpose2=toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k
+        # # calculate the dot product of q0 and the toolPose
+        # magpose2=toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k
 
 
-        dot =( toolPose.i*q0[0]+toolPose.j*q0[1]+toolPose.k*q0[2])/magpose2
+        # dot =( toolPose.i*q0[0]+toolPose.j*q0[1]+toolPose.k*q0[2])/magpose2
 
         
-        # calculate the J6 orrientation i, j, k
-        q=np.array([q0[0]-dot*toolPose.i,q0[1]-dot*toolPose.j,q0[2]-dot*toolPose.k])
-        if q.all(0):
-            q=np.array([0,0,-1])*copysign(1,toolPose.i)
-        # print(q)
-        # print(q)
+        # # calculate the J6 orrientation i, j, k
+        # q=np.array([q0[0]-dot*toolPose.i,q0[1]-dot*toolPose.j,q0[2]-dot*toolPose.k])
+        # if q.all(0):
+        #     q=np.array([0,0,-1])*copysign(1,toolPose.i)
+
+        # Let the J6 vector be in the plane orthoganal to the tool direction toolDirection
+        toolDirection=np.array([toolPose.i,toolPose.j,toolPose.k]);
+        toolDirection=toolDirection/np.linalg.norm(toolDirection);
+
+        # Let the toolOffset be only in the x/z plane with z being in the j6 dirrection such that j6 must go througha point p
+        p=np.array([toolPose.x,toolPose.y,toolPose.z])-toolOffset[0]*toolDirection;
+
+        #Let the J6 vector be in the z-r plane passing through p with a norm n
+        n=np.array([p[1],-p[0],0]);
+        n=n/np.linalg.norm(n);
+        #Let the J6 vector be orthoganal to the toolDirection pose such that
+        J6=np.cross(toolDirection, n);
+
+        #if the n and toolDirection are in the same direction, default to an orrientation in the z axis
+        if J6.all(0):
+            J6=np.array([0,0,1])*np.copysign(1,p[0]);
+            J6=J6-np.dot(J6,toolDirection)*toolDirection
+            print("c1")
+        if J6.all(0):
+            J6=np.array([1,0,0])*np.copysign(1,p[0]);
+            J6=J6-np.dot(J6,toolDirection)*toolDirection
+            print("c2")
+
+        # set q=J6
+        q=J6;
+        print("J6")
+        print(q)
+        print('toolDirection')
+        print(toolDirection)
         # print(q0)
         # print([toolPose.i,toolPose.j,toolPose.k])
         # calculate A, B, C by calling the calcABC function
@@ -163,9 +191,9 @@ class GcodeToTRPL:
         R=rpy2R(abc);
         # print(R)
         newtooloffset=np.matmul(R,np.array(toolOffset).transpose());
-        print(newtooloffset)
+        # print(newtooloffset)
         position=[toolPose.x-newtooloffset[0],toolPose.y-newtooloffset[1],toolPose.z-newtooloffset[2]];
-        print(position)
+        # print(position)
         return BotPose(position[0],position[1],position[2], abc[0],abc[1],abc[2])
 
 
@@ -200,7 +228,8 @@ class GcodeToTRPL:
         q0[0] = q0ij*cos(C)
         q0[1] = q0ij*sin(C)
         cross = np.cross(q, q0)
-        A = np.copysign(acos(q.dot(q0)/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0)))), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
+        # print(((int)(q.dot(q0)/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0))))*10E12)/10.0E12)
+        A = np.copysign(acos(((int)(q.dot(q0)/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0))))*10E12)/10.0E12), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
         # asin(np.sqrt(cross.dot(cross))/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0))))
 
         # A=atan2(-qprime2[1],qprime2[2])
@@ -212,9 +241,9 @@ class GcodeToTRPL:
         # C=atan2(-(qprime2[1]+sin(A)),-(qprime2[0]-cos(B)))
         # print(self.R2rpy([[qprime[0]*toolPose.i/magpose,qprime[1]*toolPose.i/magpose,qprime[2]*toolPose.i/magpose],[qprime[0]*toolPose.j/magpose,qprime[1]*toolPose.j/magpose,qprime[2]*toolPose.j/magpose],[qprime[0]*toolPose.k/magpose,qprime[1]*toolPose.k/magpose,qprime[2]*toolPose.k/magpose]]))
         
-        # print(A*180/pi)
-        # print(B*180/pi)
-        # print(C*180/pi)
+        print(A*180/pi)
+        print(B*180/pi)
+        print(C*180/pi)
         # A=-pi
         # B=-pi/2
         # C=0
