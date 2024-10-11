@@ -1,7 +1,7 @@
 from GcodeParser_custom import GcodeParser_custom as GcodeParser
 from math import pi, sin, cos, atan2, acos, asin, sqrt
 import numpy as np
-from os import system
+import os
 from general_robotics_toolbox import rpy2R
 # import rospy
 
@@ -163,8 +163,8 @@ class GcodeToTRPL:
         #Let the J6 vector be in the z-r plane passing through p with a norm n
         n=np.array([p[1],-1*p[0],0]);
         n=n/np.linalg.norm(n);
-        print(n)
-        print(toolDirection)
+#        print(n)
+#        print(toolDirection)
         #Let the J6 vector be orthoganal to the toolDirection pose such that
         J6=np.cross(toolDirection, n);
         # print(J6)
@@ -182,8 +182,8 @@ class GcodeToTRPL:
         q=J6;
         print("J6")
         print(q)
-        print('toolDirection')
-        print(toolDirection)
+#        print('toolDirection')
+#        print(toolDirection)
         # print(q0)
         # print([toolPose.i,toolPose.j,toolPose.k])
         # calculate A, B, C by calling the calcABC function
@@ -230,8 +230,9 @@ class GcodeToTRPL:
         q0[0] = q0ij*cos(C)
         q0[1] = q0ij*sin(C)
         cross = np.cross(q, q0)
-        # print(((int)(q.dot(q0)/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0))))*10E12)/10.0E12)
-        A = np.copysign(acos(((int)(q.dot(q0)/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0))))*10E12)/10.0E12), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
+        # print((int((q.dot(q0)/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0))))*10E12))/10.0E12)
+#        A = np.copysign(acos(((int)(q.dot(q0)/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0))))*10E12)/10.0E12), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
+        A =pi- np.copysign(asin(np.sqrt(cross.dot(cross))/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0)))), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
         # asin(np.sqrt(cross.dot(cross))/(np.sqrt(q.dot(q))*np.sqrt(q0.dot(q0))))
 
         # A=atan2(-qprime2[1],qprime2[2])
@@ -243,13 +244,13 @@ class GcodeToTRPL:
         # C=atan2(-(qprime2[1]+sin(A)),-(qprime2[0]-cos(B)))
         # print(self.R2rpy([[qprime[0]*toolPose.i/magpose,qprime[1]*toolPose.i/magpose,qprime[2]*toolPose.i/magpose],[qprime[0]*toolPose.j/magpose,qprime[1]*toolPose.j/magpose,qprime[2]*toolPose.j/magpose],[qprime[0]*toolPose.k/magpose,qprime[1]*toolPose.k/magpose,qprime[2]*toolPose.k/magpose]]))
         
-        print(A*180/pi)
-        print(B*180/pi)
-        print(C*180/pi)
+        print(A*180.0/pi)
+        print(B*180.0/pi)
+        print(C*180.0/pi)
         # A=-pi
         # B=-pi/2
         # C=0
-        return [A*180/pi,B*180/pi,C*180/pi]
+        return [A*180.0/pi,B*180.0/pi,C*180.0/pi]
 
 
 # TRLP interface functions
@@ -272,7 +273,7 @@ class GcodeToTRPL:
 
     def constructTRPLLine(self, pose, vel):
         #form the TRPL command
-        TRPLCommand = "movel(p["+str(pose.x) +","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"],0,"+str(vel)+")"
+        TRPLCommand = "movel(p["+str(pose.x) +","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"])"#",0,"+str(vel)+")"
 
         # print(TRPLCommand)
         # _ = self.callRobotCommand(TRPLCommand)
@@ -300,15 +301,17 @@ class GcodeToTRPL:
     def constructTRPLFile(self, code, fileName):
         f = open(fileName, "w")
         #USER FRAME IS SET HERE
-        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\nset_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    set_path_blending(True, 0.0)\n")
+        # f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\nset_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    set_path_blending(True, 0.0)\n")
+        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n#    set_path_blending(True, 0.0)\n")
         for block in code:
             newPose = self.evaluateGcodeBlock(block)
             if newPose:
                 f.write("    "+str(self.constructTRPLMoveCommand())+"\n")
+        f.write("    exit()\n")
 
     def runTRPLFile(self, file):
-        rosCommand = "rosservice call /robot_command/load_program " + file + "&& rosservice call robot_command/run_command 2"
-        # system(rosCommand)
+        rosCommand = "rosservice call /robot_command/load_program " + os.getcwd() + file + " && rosservice call robot_command/run_command 2"
+        # os.system(rosCommand)
 
 
 
@@ -325,22 +328,22 @@ parser = GcodeToTRPL(feedRate=1, rapidFeed=1, toolOffset=[0,0,0])
 # parser.runBlock("G01 x900.0 Y-50.0 z600 I1.0 J0 K-1;;")
 # parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1;;")
 
-# parser.runFile("testGcode")
+parser.runFile("testGcode")
 
-tpose = ToolPose(1, 1, 1, 0, 0, 1)
-print(parser.calcABC(np.array([1, 0, 0]), tpose))
-print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
-tpose = ToolPose(1, 1, 1, 1, 0, 1)
-print(parser.calcABC(np.array([1, 0, -1]), tpose))
-print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
-tpose = ToolPose(1, 1, 1, -1, 0, 1)
-print(parser.calcABC(np.array([1, 0, 1]), tpose))
-print(parser.calcBotPose(tpose, [1.0,0.0,0.0]))
-tpose = ToolPose(1, 1, 1, 0, 1, 1)
-print(parser.calcABC(np.array([1, 0, 0]), tpose))
-print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
-tpose = ToolPose(1, 1, 1, 0, -1, 1)
-print(parser.calcABC(np.array([1, 0, 0]), tpose))
-print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
+#tpose = ToolPose(1, 1, 1, 0, 0, 1)
+#print(parser.calcABC(np.array([1, 0, 0]), tpose))
+#print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
+#tpose = ToolPose(1, 1, 1, 1, 0, 1)
+#print(parser.calcABC(np.array([1, 0, -1]), tpose))
+#print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
+#tpose = ToolPose(1, 1, 1, -1, 0, 1)
+#print(parser.calcABC(np.array([1, 0, 1]), tpose))
+#print(parser.calcBotPose(tpose, [1.0,0.0,0.0]))
+#tpose = ToolPose(1, 1, 1, 0, 1, 1)
+#print(parser.calcABC(np.array([1, 0, 0]), tpose))
+#print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
+#tpose = ToolPose(1, 1, 1, 0, -1, 1)
+#print(parser.calcABC(np.array([1, 0, 0]), tpose))
+#print(parser.calcBotPose(tpose, [100.0,0.0,0.0]))
 
     
