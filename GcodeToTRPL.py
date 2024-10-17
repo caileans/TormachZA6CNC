@@ -370,7 +370,7 @@ class GcodeToTRPL:
         # radius of rotation
         r=sqrt(r2dco.dot(r2dco))
         # calculate and return point at r,theta/2, z/2 of rotation
-        xyz= pCenter +r*r2dx*cos(thetaA2)-r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2;
+        xyz= pCenter -r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2;
         output=ToolPose();
         output.x=xyz[0];
         output.y=xyz[1];
