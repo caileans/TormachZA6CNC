@@ -373,7 +373,7 @@ class GcodeToTRPL:
         xyz= pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2;
         print(r2dx)
         print(r2dy)
-        print(ahat.dot(pFinal-pInitial)*ahat)
+        print(thetaA2)
         output=ToolPose();
         output.x=xyz[0];
         output.y=xyz[1];
