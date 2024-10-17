@@ -143,9 +143,9 @@ class GcodeToTRPL:
                 q0- a 3d array that describes how you want to optimize the J6 axis
         Output: a BotPose object describing the end effector pose of the tormach
         """
-        toolPose.i=0;
-        toolPose.j=0;
-        toolPose.k=1;
+        # toolPose.i=0;
+        # toolPose.j=0;
+        # toolPose.k=1;
 
         # calculate dot product of tool offset and orrientation vectors
         # dot=toolPose.i*toolOffset[0]+toolPose.j*toolOffset[1]+toolPose.k*toolOffset[2]
