@@ -156,47 +156,47 @@ class GcodeToTRPL:
         # mag=sqrt(position[0]*position[0]+position[1]*position[1]+position[2]*position[2])
 
         # q0=[0, -1*position[1], -1*position[2]]
-        # q0=[1,0,0]
+        q0=[1,0,0]
 
         # # calculate the dot product of q0 and the toolPose
-        # magpose2=toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k
+        magpose2=toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k
 
 
-        # dot =( toolPose.i*q0[0]+toolPose.j*q0[1]+toolPose.k*q0[2])/magpose2
+        dot =( toolPose.i*q0[0]+toolPose.j*q0[1]+toolPose.k*q0[2])/magpose2
 
         
         # # calculate the J6 orrientation i, j, k
-        # q=np.array([q0[0]-dot*toolPose.i,q0[1]-dot*toolPose.j,q0[2]-dot*toolPose.k])
-        # if q.all(0):
-        #     q=np.array([0,0,-1])*copysign(1,toolPose.i)
+        q=np.array([q0[0]-dot*toolPose.i,q0[1]-dot*toolPose.j,q0[2]-dot*toolPose.k])
+        if q.all(0):
+            q=np.array([0,0,-1])*copysign(1,toolPose.i)
 
-        # Let the J6 vector be in the plane orthoganal to the tool direction toolDirection
-        toolDirection=np.array([toolPose.i,toolPose.j,toolPose.k])
-        toolDirection=toolDirection/np.linalg.norm(toolDirection)
+#         # Let the J6 vector be in the plane orthoganal to the tool direction toolDirection
+#         toolDirection=np.array([toolPose.i,toolPose.j,toolPose.k])
+#         toolDirection=toolDirection/np.linalg.norm(toolDirection)
 
-        # Let the toolOffset be only in the x/z plane with z being in the j6 dirrection such that j6 must go througha point p
-        p=np.array([toolPose.x,toolPose.y,toolPose.z])+toolOffset[0]*toolDirection
+#         # Let the toolOffset be only in the x/z plane with z being in the j6 dirrection such that j6 must go througha point p
+#         p=np.array([toolPose.x,toolPose.y,toolPose.z])+toolOffset[0]*toolDirection
 
-        #Let the J6 vector be in the z-r plane passing through p with a norm n
-        n=np.array([p[1],-1*p[0],0])
-        n=n/np.linalg.norm(n)
-#        print(n)
-#        print(toolDirection)
-        #Let the J6 vector be orthoganal to the toolDirection pose such that
-        J6=np.cross(toolDirection, n)
-        # print(J6)
-        #if the n and toolDirection are in the same direction, default to an orrientation in the z axis
-        if J6[0]==0 and J6[1]==0 and J6[2]==0:
-            J6=np.array([0,0,1])*np.copysign(1,p[0])
-            J6=J6-np.dot(J6,toolDirection)*toolDirection
-            print("c1")
-        if J6[0]==0 and J6[1]==0 and J6[2]==0:
-            J6=np.array([1,0,0])*np.copysign(1,p[0])
-            J6=J6-np.dot(J6,toolDirection)*toolDirection
-            print("c2")
+#         #Let the J6 vector be in the z-r plane passing through p with a norm n
+#         n=np.array([p[1],-1*p[0],0])
+#         n=n/np.linalg.norm(n)
+# #        print(n)
+# #        print(toolDirection)
+#         #Let the J6 vector be orthoganal to the toolDirection pose such that
+#         J6=np.cross(toolDirection, n)
+#         # print(J6)
+#         #if the n and toolDirection are in the same direction, default to an orrientation in the z axis
+#         if J6[0]==0 and J6[1]==0 and J6[2]==0:
+#             J6=np.array([0,0,1])*np.copysign(1,p[0])
+#             J6=J6-np.dot(J6,toolDirection)*toolDirection
+#             print("c1")
+#         if J6[0]==0 and J6[1]==0 and J6[2]==0:
+#             J6=np.array([1,0,0])*np.copysign(1,p[0])
+#             J6=J6-np.dot(J6,toolDirection)*toolDirection
+#             print("c2")
 
-        # set q=J6
-        q=J6
+#         # set q=J6
+#         q=J6
         print("J6")
         print(q)
 #        print('toolDirection')
@@ -320,7 +320,7 @@ class GcodeToTRPL:
     def constructTRPLFile(self, code, fileName):
         f = open(fileName, "w")
         #USER FRAME IS SET HERE
-        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n    #set_path_blending(True, 0.0)\n")
+        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    #set_path_blending(True, 0.0)\n")
         # f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n#    set_path_blending(True, 0.0)\n")
         for block in code:
             newPose = self.evaluateGcodeBlock(block)
