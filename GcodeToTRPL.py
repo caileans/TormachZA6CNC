@@ -268,6 +268,7 @@ class GcodeToTRPL:
 # TRLP interface functions
     def constructTRPLMoveCommand(self):
         self.botPose = self.calcBotPose(self.newToolPose, self.toolOffset)
+        print(self.toolPose)
         if self.motionMode == 0:
             TRPLCommand = self.constructTRPLLine(self.botPose, self.rapidFeed)
         if self.motionMode == 1:
