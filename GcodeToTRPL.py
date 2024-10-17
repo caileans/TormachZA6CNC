@@ -313,6 +313,45 @@ class GcodeToTRPL:
         rosCommand = "rosservice call /robot_command/load_program " + os.getcwd() + file + " && rosservice call robot_command/run_command 2"
         # os.system(rosCommand)
 
+    def getMidPoint(self, toolPose, newToolPose, rfc, a= np.array([0,0,1])):
+        """determine midpoint for the movement of the end effector for the movec function
+
+        Inputs:
+            toolPose-       the initial pose of the end effector (toolPose)
+            newToolPose-    the final pose of the end effector (toolPose)
+            rfc-            the relative position from the final pose to the center point of the circle (np.array)
+            a-              the axis of rotation around the edge of the circle (np.array)
+        Output:
+            pMidpoint       the point the end effector reaches at theta/2 around the circle
+        """
+        # tool poses
+        pFinal=np.array([newToolPose.x,newToolPose.y,newToolPose.z]);
+        pInitial=np.array([toolPose.x,toolPose.y,toolPose.z]);
+        # center of the circle of movement
+        pCenter=pFinal+rfc;
+        # normalize the rotation axis
+        ahat= a/sqrt(a.dot(a));
+        # relative position from center to inital pose
+        rco=pCenter-pInitial;
+
+        # in rotation plane rco
+        r2dco=rco-rco.dot(ahat)*ahat;
+        # in rotation plane rcf
+        r2dcf=rfc.dot(ahat)*ahat-rfc;
+
+        # angle between rfc,rco
+        thetaA= acos(r2dco.dot(r2dcf)/(math.sqrt(r2dco.dot(r2dco))*sqrt(r2dcf.dot(r2dcf))));
+        thataA2=thetaA/2;
+
+        # normalized in rotation plane rco (x axis)
+        r2dx=r2dco/sqrt(r2dco.dot(r2dco));
+        # normalized in rotation plane y axis
+        r2dy=ahat.cross(r2dx);
+        # radius of rotation
+        r=sqrt(r2dco.dot(r2dco));
+        # calculate and return point at r,theta/2, z/2 of rotation
+        return pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2;
+
 
 
 
