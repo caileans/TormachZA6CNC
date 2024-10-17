@@ -143,6 +143,9 @@ class GcodeToTRPL:
                 q0- a 3d array that describes how you want to optimize the J6 axis
         Output: a BotPose object describing the end effector pose of the tormach
         """
+        toolPose.i=0;
+        toolPose.j=0;
+        toolPose.k=1;
 
         # calculate dot product of tool offset and orrientation vectors
         # dot=toolPose.i*toolOffset[0]+toolPose.j*toolOffset[1]+toolPose.k*toolOffset[2]
@@ -317,7 +320,7 @@ class GcodeToTRPL:
     def constructTRPLFile(self, code, fileName):
         f = open(fileName, "w")
         #USER FRAME IS SET HERE
-        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    set_path_blending(True, 0.0)\n")
+        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    #set_path_blending(True, 0.0)\n")
         # f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n#    set_path_blending(True, 0.0)\n")
         for block in code:
             newPose = self.evaluateGcodeBlock(block)
