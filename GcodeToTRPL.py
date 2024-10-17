@@ -320,7 +320,7 @@ class GcodeToTRPL:
     def constructTRPLFile(self, code, fileName):
         f = open(fileName, "w")
         #USER FRAME IS SET HERE
-        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    #set_path_blending(True, 0.0)\n")
+        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('none')\ndef main():\n    #set_path_blending(True, 0.0)\n")
         # f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n#    set_path_blending(True, 0.0)\n")
         for block in code:
             newPose = self.evaluateGcodeBlock(block)
@@ -395,8 +395,8 @@ parser = GcodeToTRPL(feedRate=1, rapidFeed=1, toolOffset=[0,0,0])
 # parser.runBlock("G01 x900.0 Y-50.0 z600 I1.0 J0 K-1")
 # parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1")
 
-# parser.runFile("circleTest")
-parser.runFile("testGcode")
+parser.runFile("circleTest")
+# parser.runFile("testGcode")
 
 #tpose = ToolPose(1, 1, 1, 0, 0, 1)
 #print(parser.calcABC(np.array([1, 0, 0]), tpose))
