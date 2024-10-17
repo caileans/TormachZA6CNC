@@ -358,7 +358,7 @@ class GcodeToTRPL:
         r2dco=rco-rco.dot(ahat)*ahat
         # in rotation plane rcf
         r2dcf=rfc.dot(ahat)*ahat-rfc
-
+        print(rfc)
         # angle between rfc,rco
         thetaA= acos(r2dco.dot(r2dcf)/(sqrt(r2dco.dot(r2dco))*sqrt(r2dcf.dot(r2dcf))))
         thetaA2=thetaA/2
