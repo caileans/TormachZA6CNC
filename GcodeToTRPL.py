@@ -90,8 +90,10 @@ class GcodeToTRPL:
             elif block[i][0] == 'I':
                 if self.motionMode == 0 or self.motionMode == 1:
                     newPose = True
+                    print("different")
                     self.newToolPose.i = block[i][1]
                 else:
+                    print("print statements")
                     self.circCenter[0] = block[i][1]
             elif block[i][0] == 'J':
                 if self.motionMode == 0 or self.motionMode == 1:
