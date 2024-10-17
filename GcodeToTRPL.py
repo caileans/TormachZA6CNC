@@ -360,9 +360,9 @@ class GcodeToTRPL:
         r2dcf=rfc.dot(ahat)*ahat-rfc
         print("rfc")
         # angle between rfc,rco
-        print(r2dco.dot(r2dcf))
-        print(sqrt(r2dco.dot(r2dco)))
-        print(sqrt(r2dcf.dot(r2dcf)))
+        print(pFinal)
+        print(pCenter)
+        print(r2dcf)
         thetaA= acos(r2dco.dot(r2dcf)/(sqrt(r2dco.dot(r2dco))*sqrt(r2dcf.dot(r2dcf))))
         thetaA2=thetaA/2
 
