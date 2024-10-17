@@ -329,7 +329,7 @@ class GcodeToTRPL:
         f.write("    exit()\n")
 
     def runTRPLFile(self, file):
-        rosCommand = "rosservice call /robot_command/load_program " + os.getcwd() + file + " && rosservice call robot_command/run_command 2"
+        rosCommand = "rosservice call /robot_command/load_program " + os.getcwd()+"/" + file + " && rosservice call robot_command/run_command 2"
         os.system(rosCommand)
 
     def getMidPoint(self, toolPose, newToolPose, rfc, a= np.array([0,0,1])):
