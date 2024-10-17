@@ -378,7 +378,7 @@ parser = GcodeToTRPL(feedRate=1, rapidFeed=1, toolOffset=[0,0,0])
 # parser.runBlock("G01 x900.0 Y-50.0 z600 I1.0 J0 K-1")
 # parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1")
 
-parser.runFile("testGcode")
+parser.runFile("circleTest")
 
 #tpose = ToolPose(1, 1, 1, 0, 0, 1)
 #print(parser.calcABC(np.array([1, 0, 0]), tpose))
