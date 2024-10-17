@@ -352,7 +352,7 @@ class GcodeToTRPL:
 
         # angle between rfc,rco
         thetaA= acos(r2dco.dot(r2dcf)/(sqrt(r2dco.dot(r2dco))*sqrt(r2dcf.dot(r2dcf))))
-        thataA2=thetaA/2
+        thetaA2=thetaA/2
 
         # normalized in rotation plane rco (x axis)
         r2dx=r2dco/sqrt(r2dco.dot(r2dco))
