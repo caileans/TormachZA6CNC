@@ -34,6 +34,7 @@ class GcodeToTRPL:
         self.lengthUnits = defaultLengthUnits
         self.toolPose = ToolPose()
         self.newToolPose = ToolPose()
+        self.circCenter = [0,0,0]
         self.botPose = BotPose()
         self.toolOffset = toolOffset
         # self.callRobotCommand = rospy.ServiceProxy('/robot_command/execute_mdi', wtfGoesHere???)
@@ -87,14 +88,23 @@ class GcodeToTRPL:
                 newPose = True
                 self.newToolPose.z = block[i][1]
             elif block[i][0] == 'I':
-                newPose = True
-                self.newToolPose.i = block[i][1]
+                if self.motionMode == 0 or self.motionMode == 1:
+                    newPose = True
+                    self.newToolPose.i = block[i][1]
+                else:
+                    self.circCenter[0] = block[i][1]
             elif block[i][0] == 'J':
-                newPose = True
-                self.newToolPose.j = block[i][1]
+                if self.motionMode == 0 or self.motionMode == 1:
+                    newPose = True
+                    self.newToolPose.j = block[i][1]
+                else:
+                    self.circCenter[1] = block[i][1]
             elif block[i][0] == 'K':
-                newPose = True
-                self.newToolPose.k = block[i][1]
+                if self.motionMode == 0 or self.motionMode == 1:
+                    newPose = True
+                    self.newToolPose.k = block[i][1]
+                else:
+                    self.circCenter[2] = block[i][1]
             else:
                 print("Error: " + str(block[i]) + " not found")
         
@@ -139,7 +149,7 @@ class GcodeToTRPL:
         # mag=sqrt(position[0]*position[0]+position[1]*position[1]+position[2]*position[2])
 
         # q0=[0, -1*position[1], -1*position[2]]
-        # q0=[1,0,0];
+        # q0=[1,0,0]
 
         # # calculate the dot product of q0 and the toolPose
         # magpose2=toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k
@@ -154,32 +164,32 @@ class GcodeToTRPL:
         #     q=np.array([0,0,-1])*copysign(1,toolPose.i)
 
         # Let the J6 vector be in the plane orthoganal to the tool direction toolDirection
-        toolDirection=np.array([toolPose.i,toolPose.j,toolPose.k]);
-        toolDirection=toolDirection/np.linalg.norm(toolDirection);
+        toolDirection=np.array([toolPose.i,toolPose.j,toolPose.k])
+        toolDirection=toolDirection/np.linalg.norm(toolDirection)
 
         # Let the toolOffset be only in the x/z plane with z being in the j6 dirrection such that j6 must go througha point p
-        p=np.array([toolPose.x,toolPose.y,toolPose.z])+toolOffset[0]*toolDirection;
+        p=np.array([toolPose.x,toolPose.y,toolPose.z])+toolOffset[0]*toolDirection
 
         #Let the J6 vector be in the z-r plane passing through p with a norm n
-        n=np.array([p[1],-1*p[0],0]);
-        n=n/np.linalg.norm(n);
+        n=np.array([p[1],-1*p[0],0])
+        n=n/np.linalg.norm(n)
 #        print(n)
 #        print(toolDirection)
         #Let the J6 vector be orthoganal to the toolDirection pose such that
-        J6=np.cross(toolDirection, n);
+        J6=np.cross(toolDirection, n)
         # print(J6)
         #if the n and toolDirection are in the same direction, default to an orrientation in the z axis
         if J6[0]==0 and J6[1]==0 and J6[2]==0:
-            J6=np.array([0,0,1])*np.copysign(1,p[0]);
+            J6=np.array([0,0,1])*np.copysign(1,p[0])
             J6=J6-np.dot(J6,toolDirection)*toolDirection
             print("c1")
         if J6[0]==0 and J6[1]==0 and J6[2]==0:
-            J6=np.array([1,0,0])*np.copysign(1,p[0]);
+            J6=np.array([1,0,0])*np.copysign(1,p[0])
             J6=J6-np.dot(J6,toolDirection)*toolDirection
             print("c2")
 
         # set q=J6
-        q=J6;
+        q=J6
         print("J6")
         print(q)
 #        print('toolDirection')
@@ -190,11 +200,11 @@ class GcodeToTRPL:
         # print(toolOffset)
         # print(np.array([toolOffset[0],toolOffset[1],toolOffset[2]]).transpose())
         abc=self.calcABC(q, toolPose)
-        R=rpy2R(abc);
+        R=rpy2R(abc)
         # print(R)
-        newtooloffset=np.matmul(R,np.array(toolOffset).transpose());
+        newtooloffset=np.matmul(R,np.array(toolOffset).transpose())
         # print(newtooloffset)
-        position=[toolPose.x-newtooloffset[0],toolPose.y-newtooloffset[1],toolPose.z-newtooloffset[2]];
+        position=[toolPose.x-newtooloffset[0],toolPose.y-newtooloffset[1],toolPose.z-newtooloffset[2]]
         # print(position)
         return BotPose(position[0],position[1],position[2], abc[0],abc[1],abc[2])
 
@@ -261,13 +271,14 @@ class GcodeToTRPL:
         if self.motionMode == 1:
             TRPLCommand = self.constructTRPLLine(self.botPose, self.feedRate)
         if self.motionMode == 2:
-            circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.newToolPose.i,self.newToolPose.j,self.newToolPose.k]), a= np.array([0,0,-1]))
+            circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.circCenter[0],self.circCenter[1],self.circCenter[2]]), a= np.array([0,0,-1]))
             circInterBotPose = self.calcBotPose(self.circInterToolPose)
             TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
         if self.motionMode == 3:
-            circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.newToolPose.i,self.newToolPose.j,self.newToolPose.k]), a= np.array([0,0,1]))
+            circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.circCenter[0],self.circCenter[1],self.circCenter[2]]), a= np.array([0,0,1]))
             circInterBotPose = self.calcBotPose(self.circInterToolPose)
             TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
+
 
         return TRPLCommand
 
@@ -301,8 +312,8 @@ class GcodeToTRPL:
     def constructTRPLFile(self, code, fileName):
         f = open(fileName, "w")
         #USER FRAME IS SET HERE
-        # f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\nset_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    set_path_blending(True, 0.0)\n")
-        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n#    set_path_blending(True, 0.0)\n")
+        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    set_path_blending(True, 0.0)\n")
+        # f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n#    set_path_blending(True, 0.0)\n")
         for block in code:
             newPose = self.evaluateGcodeBlock(block)
             if newPose:
@@ -325,32 +336,32 @@ class GcodeToTRPL:
             pMidpoint       the point the end effector reaches at theta/2 around the circle
         """
         # tool poses
-        pFinal=np.array([newToolPose.x,newToolPose.y,newToolPose.z]);
-        pInitial=np.array([toolPose.x,toolPose.y,toolPose.z]);
+        pFinal=np.array([newToolPose.x,newToolPose.y,newToolPose.z])
+        pInitial=np.array([toolPose.x,toolPose.y,toolPose.z])
         # center of the circle of movement
-        pCenter=pFinal+rfc;
+        pCenter=pFinal+rfc
         # normalize the rotation axis
-        ahat= a/sqrt(a.dot(a));
+        ahat= a/sqrt(a.dot(a))
         # relative position from center to inital pose
-        rco=pCenter-pInitial;
+        rco=pCenter-pInitial
 
         # in rotation plane rco
-        r2dco=rco-rco.dot(ahat)*ahat;
+        r2dco=rco-rco.dot(ahat)*ahat
         # in rotation plane rcf
-        r2dcf=rfc.dot(ahat)*ahat-rfc;
+        r2dcf=rfc.dot(ahat)*ahat-rfc
 
         # angle between rfc,rco
-        thetaA= acos(r2dco.dot(r2dcf)/(math.sqrt(r2dco.dot(r2dco))*sqrt(r2dcf.dot(r2dcf))));
-        thataA2=thetaA/2;
+        thetaA= acos(r2dco.dot(r2dcf)/(math.sqrt(r2dco.dot(r2dco))*sqrt(r2dcf.dot(r2dcf))))
+        thataA2=thetaA/2
 
         # normalized in rotation plane rco (x axis)
-        r2dx=r2dco/sqrt(r2dco.dot(r2dco));
+        r2dx=r2dco/sqrt(r2dco.dot(r2dco))
         # normalized in rotation plane y axis
-        r2dy=ahat.cross(r2dx);
+        r2dy=ahat.cross(r2dx)
         # radius of rotation
-        r=sqrt(r2dco.dot(r2dco));
+        r=sqrt(r2dco.dot(r2dco))
         # calculate and return point at r,theta/2, z/2 of rotation
-        return pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2;
+        return pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2
 
 
 
@@ -359,13 +370,13 @@ class GcodeToTRPL:
 parser = GcodeToTRPL(feedRate=1, rapidFeed=1, toolOffset=[0,0,0])
 
 
-#parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1;")
-#parser.runBlock("G01 x500.0 Y1 z600;")
-# parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1;;")
-# parser.runBlock("G01 x700.0 Y150.0 z600 I1.0 J0 K-1;;")
-# parser.runBlock("G01 x900.0 Y150.0 z600 I1.0 J0 K-1;;")
-# parser.runBlock("G01 x900.0 Y-50.0 z600 I1.0 J0 K-1;;")
-# parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1;;")
+#parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1")
+#parser.runBlock("G01 x500.0 Y1 z600")
+# parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1")
+# parser.runBlock("G01 x700.0 Y150.0 z600 I1.0 J0 K-1")
+# parser.runBlock("G01 x900.0 Y150.0 z600 I1.0 J0 K-1")
+# parser.runBlock("G01 x900.0 Y-50.0 z600 I1.0 J0 K-1")
+# parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1")
 
 parser.runFile("testGcode")
 
