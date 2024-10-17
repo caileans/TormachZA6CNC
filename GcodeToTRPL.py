@@ -339,7 +339,7 @@ class GcodeToTRPL:
         pFinal=np.array([newToolPose.x,newToolPose.y,newToolPose.z])
         pInitial=np.array([toolPose.x,toolPose.y,toolPose.z])
         # center of the circle of movement
-        pCenter=pFinal+rfc
+        pCenter=pInitial+rfc
         # normalize the rotation axis
         ahat= a/sqrt(a.dot(a))
         # relative position from center to inital pose
