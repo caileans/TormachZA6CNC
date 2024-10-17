@@ -67,7 +67,7 @@ class GcodeToTRPL:
     def evaluateGcodeBlock(self, block):
 #        print(block)
         self.toolPose = self.newToolPose
-        self.newToolPose=ToolPose()
+        # self.newToolPose=ToolPose()
         newPose = False
         for i in range(len(block)):
             if block[i] == ['G', 0]:
@@ -270,7 +270,7 @@ class GcodeToTRPL:
 # TRLP interface functions
     def constructTRPLMoveCommand(self):
         self.botPose = self.calcBotPose(self.newToolPose, self.toolOffset)
-        print(self.toolPose)
+        # print(self.toolPose)
         if self.motionMode == 0:
             TRPLCommand = self.constructTRPLLine(self.botPose, self.rapidFeed)
         if self.motionMode == 1:
@@ -374,6 +374,7 @@ class GcodeToTRPL:
         output.i=toolPose.i;
         output.j=toolPose.j;
         output.k=toolPose.k;
+        # newToolPose.i
         return output
 
 
@@ -391,7 +392,8 @@ parser = GcodeToTRPL(feedRate=1, rapidFeed=1, toolOffset=[0,0,0])
 # parser.runBlock("G01 x900.0 Y-50.0 z600 I1.0 J0 K-1")
 # parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1")
 
-parser.runFile("circleTest")
+# parser.runFile("circleTest")
+parser.runFile("testGcode")
 
 #tpose = ToolPose(1, 1, 1, 0, 0, 1)
 #print(parser.calcABC(np.array([1, 0, 0]), tpose))
