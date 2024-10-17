@@ -332,7 +332,7 @@ class GcodeToTRPL:
         rosCommand = "rosservice call /robot_command/load_program " + os.getcwd()+"/" + file + " && rosservice call robot_command/run_command 2"
         os.system(rosCommand)
 
-    def getMidPoint(self, toolPose, newToolPose, rfc, a= np.array([0,0,1])):
+    def getMidPoint(self, toolPose, newToolPose, roc, a= np.array([0,0,1])):
         """determine midpoint for the movement of the end effector for the movec function moves counter clockwise around a (to go clockwise use -a)
 
         Inputs:
@@ -347,11 +347,12 @@ class GcodeToTRPL:
         pFinal=np.array([newToolPose.x,newToolPose.y,newToolPose.z])
         pInitial=np.array([toolPose.x,toolPose.y,toolPose.z])
         # center of the circle of movement
-        pCenter=pInitial+rfc
+        pCenter=pInitial+roc
         # normalize the rotation axis
         ahat= a/sqrt(a.dot(a))
         # relative position from center to inital pose
-        rco=pCenter-pInitial
+        rco=-roc
+        rfc=pFinal-pCenter
 
         # in rotation plane rco
         r2dco=rco-rco.dot(ahat)*ahat
@@ -369,7 +370,7 @@ class GcodeToTRPL:
         # radius of rotation
         r=sqrt(r2dco.dot(r2dco))
         # calculate and return point at r,theta/2, z/2 of rotation
-        xyz= pCenter +r*r2dx*cos(thetaA2)-r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2;
+        xyz= pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2;
         output=ToolPose();
         output.x=xyz[0];
         output.y=xyz[1];
