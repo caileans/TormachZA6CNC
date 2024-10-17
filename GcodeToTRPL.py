@@ -66,6 +66,8 @@ class GcodeToTRPL:
 
     def evaluateGcodeBlock(self, block):
 #        print(block)
+        self.toolPose = self.newToolPose
+        self.newToolPose=ToolPose()
         newPose = False
         for i in range(len(block)):
             if block[i] == ['G', 0]:
