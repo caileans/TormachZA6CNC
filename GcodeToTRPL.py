@@ -357,7 +357,7 @@ class GcodeToTRPL:
         # normalized in rotation plane rco (x axis)
         r2dx=r2dco/sqrt(r2dco.dot(r2dco))
         # normalized in rotation plane y axis
-        r2dy=ahat.cross(r2dx)
+        r2dy=np.cross(ahat,r2dx)
         # radius of rotation
         r=sqrt(r2dco.dot(r2dco))
         # calculate and return point at r,theta/2, z/2 of rotation
