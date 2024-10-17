@@ -145,7 +145,7 @@ class GcodeToTRPL:
         """
         toolPose.i=0;
         toolPose.j=0;
-        toolPose.k=1;
+        toolPose.k=-1;
 
         # calculate dot product of tool offset and orrientation vectors
         # dot=toolPose.i*toolOffset[0]+toolPose.j*toolOffset[1]+toolPose.k*toolOffset[2]
