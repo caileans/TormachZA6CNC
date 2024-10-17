@@ -272,11 +272,11 @@ class GcodeToTRPL:
             TRPLCommand = self.constructTRPLLine(self.botPose, self.feedRate)
         if self.motionMode == 2:
             circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.circCenter[0],self.circCenter[1],self.circCenter[2]]), a= np.array([0,0,-1]))
-            circInterBotPose = self.calcBotPose(self.circInterToolPose)
+            circInterBotPose = self.calcBotPose(circInterToolPose)
             TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
         if self.motionMode == 3:
             circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.circCenter[0],self.circCenter[1],self.circCenter[2]]), a= np.array([0,0,1]))
-            circInterBotPose = self.calcBotPose(self.circInterToolPose)
+            circInterBotPose = self.calcBotPose(ircInterToolPose)
             TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
 
 
