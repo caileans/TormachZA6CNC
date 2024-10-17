@@ -276,7 +276,7 @@ class GcodeToTRPL:
             TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
         if self.motionMode == 3:
             circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.circCenter[0],self.circCenter[1],self.circCenter[2]]), a= np.array([0,0,1]))
-            circInterBotPose = self.calcBotPose(ircInterToolPose)
+            circInterBotPose = self.calcBotPose(circInterToolPose)
             TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
 
 
