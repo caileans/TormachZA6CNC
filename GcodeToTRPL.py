@@ -261,11 +261,11 @@ class GcodeToTRPL:
         if self.motionMode == 1:
             TRPLCommand = self.constructTRPLLine(self.botPose, self.feedRate)
         if self.motionMode == 2:
-            circInterToolPose = 1 #dis anit' right
+            circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.newToolPose.i,self.newToolPose.j,self.newToolPose.k]), a= np.array([0,0,-1]))
             circInterBotPose = self.calcBotPose(self.circInterToolPose)
             TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
         if self.motionMode == 3:
-            circInterToolPose = 1 #dis anit' right
+            circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.newToolPose.i,self.newToolPose.j,self.newToolPose.k]), a= np.array([0,0,1]))
             circInterBotPose = self.calcBotPose(self.circInterToolPose)
             TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
 
@@ -314,7 +314,7 @@ class GcodeToTRPL:
         # os.system(rosCommand)
 
     def getMidPoint(self, toolPose, newToolPose, rfc, a= np.array([0,0,1])):
-        """determine midpoint for the movement of the end effector for the movec function
+        """determine midpoint for the movement of the end effector for the movec function moves counter clockwise around a (to go clockwise use -a)
 
         Inputs:
             toolPose-       the initial pose of the end effector (toolPose)
