@@ -203,8 +203,8 @@ class GcodeToTRPL:
 
 #         # set q=J6
 #         q=J6
-        print("J6")
-        print(q)
+        # print("J6")
+        # print(q)
 #        print('toolDirection')
 #        print(toolDirection)
         # print(q0)
@@ -267,9 +267,9 @@ class GcodeToTRPL:
         # C=atan2(-(qprime2[1]+sin(A)),-(qprime2[0]-cos(B)))
         # print(self.R2rpy([[qprime[0]*toolPose.i/magpose,qprime[1]*toolPose.i/magpose,qprime[2]*toolPose.i/magpose],[qprime[0]*toolPose.j/magpose,qprime[1]*toolPose.j/magpose,qprime[2]*toolPose.j/magpose],[qprime[0]*toolPose.k/magpose,qprime[1]*toolPose.k/magpose,qprime[2]*toolPose.k/magpose]]))
         
-        print(A*180.0/pi)
-        print(B*180.0/pi)
-        print(C*180.0/pi)
+        # print(A*180.0/pi)
+        # print(B*180.0/pi)
+        # print(C*180.0/pi)
         # A=-pi
         # B=-pi/2
         # C=0
@@ -326,7 +326,7 @@ class GcodeToTRPL:
     def constructTRPLFile(self, code, fileName):
         f = open(fileName, "w")
         #USER FRAME IS SET HERE
-        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n    #set_path_blending(True, 0.0)\n")
+        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    #set_path_blending(True, 0.0)\n")
         # f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n#    set_path_blending(True, 0.0)\n")
         for block in code:
             newPose = self.evaluateGcodeBlock(block)
@@ -364,11 +364,11 @@ class GcodeToTRPL:
         r2dco=rco-rco.dot(ahat)*ahat
         # in rotation plane rcf
         r2dcf=rfc.dot(ahat)*ahat-rfc
-        print("rfc")
+        # print("rfc")
         # angle between rfc,rco
-        print(pInitial)
-        print(pCenter)
-        print(r2dco)
+        # print(pInitial)
+        # print(pCenter)
+        # print(r2dco)
         thetaA= acos(r2dco.dot(r2dcf)/(sqrt(r2dco.dot(r2dco))*sqrt(r2dcf.dot(r2dcf))))
         thetaA2=thetaA/2
 
@@ -397,7 +397,7 @@ class GcodeToTRPL:
 
 
 #testing
-parser = GcodeToTRPL(feedRate=1, rapidFeed=1, toolOffset=[0,0,0])
+parser = GcodeToTRPL(feedRate=1, rapidFeed=1, defaultLengthUnits="in",toolOffset=[0,0,0])
 
 
 #parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1")
@@ -408,7 +408,8 @@ parser = GcodeToTRPL(feedRate=1, rapidFeed=1, toolOffset=[0,0,0])
 # parser.runBlock("G01 x900.0 Y-50.0 z600 I1.0 J0 K-1")
 # parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1")
 
-parser.runFile("circleTest")
+# parser.runFile("circleTest")
+parser.runFile("tormachR")
 # parser.runFile("testGcode")
 
 #tpose = ToolPose(1, 1, 1, 0, 0, 1)
