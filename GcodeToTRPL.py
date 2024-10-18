@@ -307,7 +307,7 @@ class GcodeToTRPL:
 
     def constructTRPLCirc(self, pose, interPose, vel):
         #form the TRPL command
-        TRPLCommand = "movec(p["+str(pose.x)+","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"],p["+str(interPose.x)+","+str(interPose.y)+","+str(interPose.z)+","+str(interPose.a)+","+str(interPose.b)+","+str(interPose.c)+"])"
+        TRPLCommand = "movec(p["+str(interPose.x)+","+str(interPose.y)+","+str(interPose.z)+","+str(interPose.a)+","+str(interPose.b)+","+str(interPose.c)+"],p["+str(pose.x)+","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"])"
 
         # print(TRPLCommand)
         # _ = self.callRobotCommand(TRPLCommand)
