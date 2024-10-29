@@ -10,7 +10,7 @@ def jointStateCallback(msg):
 
 if __name__=='__main__':
 	#start the buffer_node node
-	rospy.init_node("bufferNode")
+	rospy.init_node("buffer_node")
 	
 	#subscribe to the "/tormach/movePose" topic which has a pose msg type
 	sub=rospy.Subscriber("/tormach/movePose", pose, callback=pose_callback)
