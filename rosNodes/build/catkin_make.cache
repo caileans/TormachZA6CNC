@@ -1,2 +1,0 @@
-tormach_controller
--DCATKIN_DEVEL_PREFIX=/home/yahboom/tormach/TormachZA6CNC/rosNodes/devel -DCMAKE_INSTALL_PREFIX=/home/yahboom/tormach/TormachZA6CNC/rosNodes/install -G Unix Makefiles
