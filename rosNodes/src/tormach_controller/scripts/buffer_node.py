@@ -1,5 +1,5 @@
-import rospy import rospy
-from tormach_controller import pose
+import rospy 
+#from tormach_controller import pose
 from sensor_msgs import JointState
 
 def pose_callback(msg):
@@ -13,7 +13,7 @@ if __name__=='__main__':
 	rospy.init_node("buffer_node")
 	
 	#subscribe to the "/tormach/movePose" topic which has a pose msg type
-	sub=rospy.Subscriber("/tormach/movePose", pose, callback=pose_callback)
+	#sub=rospy.Subscriber("/tormach/movePose", pose, callback=pose_callback)
 	
 	with open('data.csv','w',newline='') as csvfile:
 		writer=csv.writer(csvfile)
@@ -21,5 +21,5 @@ if __name__=='__main__':
 	
 	#keep node running until shutdown request
 	while not rospy.is_shutdown():
-	
-csvfile.close()
+		x=0
+	csvfile.close()
