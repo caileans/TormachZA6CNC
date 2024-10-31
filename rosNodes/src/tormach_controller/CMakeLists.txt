@@ -106,7 +106,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES tormach_controller
-#  CATKIN_DEPENDS rospy
+  CATKIN_DEPENDS rospy
    CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
