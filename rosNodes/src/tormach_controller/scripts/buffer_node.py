@@ -932,7 +932,7 @@ def pose_callback(msg):
     rospy.loginfo(msg)
 def jointStateCallback(msg):
     rospy.loginfo(msg.effort);
-    jac=robotJacobian(tormach,np.array(msg.position)[0:6])
+    jac=robotjacobian(tormach,np.array(msg.position)[0:6])
     force=np.matmult(np.linalg.pinv(np.linalg.transpose(jac)),np.array(msg.effort)[0,6])
     rospy.loginfo(force)
     #writer.writerow(msg.effort)
