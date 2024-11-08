@@ -1,10 +1,3 @@
-import rospy 
-from tormach_controller.msg import pose
-from sensor_msgs.msg import JointState
-
-
-
-	
 # Copyright (c) 2018, Rensselaer Polytechnic Institute, Wason Technology LLC
 # All rights reserved.
 # 
@@ -920,36 +913,6 @@ def random_p():
 
 def random_transform():
     return Transform(random_R(), random_p())
-    
-#---------My code starts here----------------
-
-H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
-P=np.array([[0,.025,0,.123,.2965,.1,.1175],[0,0,-.001,0,.001,0,0],[.279,.171,.454,.035,0,0,0]])
-jointtype=np.array([0,0,0,0,0,0])
-tormach = Robot(H,P,jointtype)
-
-def pose_callback(msg):
-    rospy.loginfo(msg)
-def jointStateCallback(msg):
-    rospy.loginfo(msg.effort);
-    jac=robotJacobian(tormach,np.array(msg.position)[0:6])
-    force=np.matmult(np.linalg.pinv(np.linalg.transpose(jac)),np.array(msg.effort)[0,6])
-    rospy.loginfo(force)
-    #writer.writerow(msg.effort)
-
-if __name__=='__main__':
-    #start the buffer_node node
-    rospy.init_node("buffer_node")
-    #subscribe to the "/tormach/movePose" topic which has a pose msg type
-    sub=rospy.Subscriber("/tormach/movePose", pose, callback=pose_callback)
-    #with open('data.csv','w',newline='') as csvfile:
-    #	writer=csv.writer(csvfile)
-    currentPoseSub=rospy.Subscriber("/joint_states", JointState, callback=jointStateCallback)
-
-    #keep node running until shutdown request
-    while not  rospy.is_shutdown():
-        x=0
-    #csvfile.close()
 
 
     
