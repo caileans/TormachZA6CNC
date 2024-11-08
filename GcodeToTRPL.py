@@ -402,7 +402,7 @@ class GcodeToTRPL:
 
 
 #testing
-parser = GcodeToTRPL(feedRate=10, rapidFeed=10, defaultLengthUnits="in", defaultAngleUnits="deg", defaultTimeUnits="min", toolOffset=[0,0,0])
+parser = GcodeToTRPL(feedRate=12, rapidFeed=12, defaultLengthUnits="in", defaultAngleUnits="deg", defaultTimeUnits="min", toolOffset=[0,0,0])
 
 
 #parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1")
