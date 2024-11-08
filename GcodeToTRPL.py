@@ -84,19 +84,20 @@ class GcodeToTRPL:
                 self.motionMode = 2
             elif block[i] == ['G', 3]:
                 self.motionMode = 3
-            elif block[i][0] == 'F':
-                self.feedRate = block[i][1]
+            # elif block[i][0] == 'F':
+            #     self.feedRate = block[i][1]
             elif block[i][0] == 'X':
                 newPose = True
                 # self.newToolPose.x = block[i][1]
-                self.newToolPose.z = block[i][1]
+                self.newToolPose.y = -block[i][1]
             elif block[i][0] == 'Y':
                 newPose = True
-                self.newToolPose.y = block[i][1]
+                # self.newToolPose.y = block[i][1]
+                self.newToolPose.z = block[i][1]
             elif block[i][0] == 'Z':
                 newPose = True
                 # self.newToolPose.z = block[i][1]
-                self.newToolPose.x = -block[i][1]
+                self.newToolPose.y = -block[i][1]
             elif block[i][0] == 'I':
                 if self.motionMode == 0 or self.motionMode == 1:
                     newPose = True
