@@ -97,7 +97,7 @@ class GcodeToTRPL:
             elif block[i][0] == 'Z':
                 newPose = True
                 # self.newToolPose.z = block[i][1]
-                self.newToolPose.y = -block[i][1]
+                self.newToolPose.x = -block[i][1]
             elif block[i][0] == 'I':
                 if self.motionMode == 0 or self.motionMode == 1:
                     newPose = True
