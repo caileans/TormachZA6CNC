@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   message_generation
+  actionlib_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -50,6 +51,7 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    FILES
    pose.msg
+   forceTorque.msg
 #   Message1.msg
 #   Message2.msg
  )
@@ -62,15 +64,17 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
+ add_action_files(
+   FILES
+   MovePose.action
 #   Action1.action
 #   Action2.action
-# )
+ )
 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
+   actionlib_msgs
    std_msgs  # Or other packages containing msgs
  )
 
@@ -108,6 +112,7 @@ catkin_package(
 #  LIBRARIES tormach_controller
   CATKIN_DEPENDS rospy
    CATKIN_DEPENDS message_runtime
+   CATKIN_DEPENDS actionlib_msgs
 #  DEPENDS system_lib
 )
 
@@ -161,7 +166,7 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
- catkin_install_python(PROGRAMS scripts/buffer_node.py
+ catkin_install_python(PROGRAMS scripts/buffer_node.py scripts/move_pose_action.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
