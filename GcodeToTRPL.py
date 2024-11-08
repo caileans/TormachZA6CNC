@@ -273,8 +273,8 @@ class GcodeToTRPL:
         # print(A*180.0/pi)
         # print(B*180.0/pi)
         # print(C*180.0/pi)
-        A=-178*pi/180.0
-        B=-2.8*pi/180.0
+        A=-175*pi/180.0
+        B=-6.5*pi/180.0
         C=-40*pi/180.0
         return [A*180.0/pi,B*180.0/pi,C*180.0/pi]
 
@@ -400,7 +400,7 @@ class GcodeToTRPL:
 
 
 #testing
-parser = GcodeToTRPL(feedRate=24, rapidFeed=24, defaultLengthUnits="in",toolOffset=[0,0,0])
+parser = GcodeToTRPL(feedRate=10, rapidFeed=10, defaultLengthUnits="in",toolOffset=[0,0,0])
 
 
 #parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1")
