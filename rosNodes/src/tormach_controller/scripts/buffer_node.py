@@ -937,7 +937,7 @@ def jointStateCallback(msg):
     print(np.array(msg.position)[0:6])
     jac=robotjacobian(tormach,np.array(msg.position)[0:6])
     print(jac)
-    in1=np.array(msg.effort)[0:6]
+    in1=np.transpose(np.array(msg.effort)[0:6])
     print(in1)
     force=np.matmul(np.linalg.pinv(np.transpose(jac)),in1)
     rospy.loginfo(force)
