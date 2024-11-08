@@ -27,11 +27,13 @@ class BotPose:
 
 # class to call appropriate TRPL ros services give gcode
 class GcodeToTRPL:
-    def __init__(self, feedRate=0, rapidFeed=0, defaultLengthUnits="mm", toolOffset=[0,0,0]):
+    def __init__(self, feedRate=0, rapidFeed=0, defaultLengthUnits="mm", defaultAngleUnits="deg", defaultTimeUnits="s", toolOffset=[0,0,0]):
         self.rapidFeed = rapidFeed
         self.feedRate = feedRate
         self.motionMode = 1
         self.lengthUnits = defaultLengthUnits
+        self.angleUnits = defaultAngleUnits
+        self.timeUnits = defaultTimeUnits
         self.toolPose = ToolPose()
         self.newToolPose = ToolPose()
         self.circCenter = [0,0,0]
@@ -329,7 +331,7 @@ class GcodeToTRPL:
     def constructTRPLFile(self, code, fileName):
         f = open(fileName, "w")
         #USER FRAME IS SET HERE
-        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    set_path_blending(True, 0.0)\n")
+        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','"+str(self.angleUnits)+"','"+str(self.timeUnits)+"')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    set_path_blending(True, 0.0)\n")
         # f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n#    set_path_blending(True, 0.0)\n")
         for block in code:
             newPose = self.evaluateGcodeBlock(block)
@@ -400,7 +402,7 @@ class GcodeToTRPL:
 
 
 #testing
-parser = GcodeToTRPL(feedRate=1, rapidFeed=1, defaultLengthUnits="in",toolOffset=[0,0,0])
+parser = GcodeToTRPL(feedRate=10, rapidFeed=10, defaultLengthUnits="in", defaultAngleUnits="deg", defaultTimeUnits="min", toolOffset=[0,0,0])
 
 
 #parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1")
