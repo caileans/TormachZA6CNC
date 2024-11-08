@@ -88,20 +88,22 @@ class GcodeToTRPL:
                 self.feedRate = block[i][1]
             elif block[i][0] == 'X':
                 newPose = True
-                self.newToolPose.x = block[i][1]
+                # self.newToolPose.x = block[i][1]
+                self.newToolPose.z = block[i][1]
             elif block[i][0] == 'Y':
                 newPose = True
                 self.newToolPose.y = block[i][1]
             elif block[i][0] == 'Z':
                 newPose = True
-                self.newToolPose.z = block[i][1]
+                # self.newToolPose.z = block[i][1]
+                self.newToolPose.x = -block[i][1]
             elif block[i][0] == 'I':
                 if self.motionMode == 0 or self.motionMode == 1:
                     newPose = True
-                    print("different")
+                    # print("different")
                     self.newToolPose.i = block[i][1]
                 else:
-                    print("print statements")
+                    # print("print statements")
                     self.circCenter[0] = block[i][1]
             elif block[i][0] == 'J':
                 if self.motionMode == 0 or self.motionMode == 1:
@@ -149,9 +151,9 @@ class GcodeToTRPL:
                 q0- a 3d array that describes how you want to optimize the J6 axis
         Output: a BotPose object describing the end effector pose of the tormach
         """
-        # toolPose.i=0;
-        # toolPose.j=0;
-        # toolPose.k=1;
+        # toolPose.i=0
+        # toolPose.j=0
+        # toolPose.k=1
 
         # calculate dot product of tool offset and orrientation vectors
         # dot=toolPose.i*toolOffset[0]+toolPose.j*toolOffset[1]+toolPose.k*toolOffset[2]
@@ -166,7 +168,7 @@ class GcodeToTRPL:
 
         # # calculate the dot product of q0 and the toolPose
         magpose2=toolPose.i*toolPose.i+toolPose.j*toolPose.j+toolPose.k*toolPose.k
-
+        magpose2=1
 
         dot =( toolPose.i*q0[0]+toolPose.j*q0[1]+toolPose.k*q0[2])/magpose2
 
@@ -270,9 +272,9 @@ class GcodeToTRPL:
         # print(A*180.0/pi)
         # print(B*180.0/pi)
         # print(C*180.0/pi)
-        # A=-pi
-        # B=-pi/2
-        # C=0
+        A=-178*pi/180.0
+        B=-2.8*pi/180.0
+        C=-40*pi/180.0
         return [A*180.0/pi,B*180.0/pi,C*180.0/pi]
 
 
@@ -298,7 +300,7 @@ class GcodeToTRPL:
 
     def constructTRPLLine(self, pose, vel):
         #form the TRPL command
-        TRPLCommand = "movel(p["+str(pose.x) +","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"])"#",0,"+str(vel)+")"
+        TRPLCommand = "movel(p["+str(pose.x) +","+str(pose.y)+","+str(pose.z)+","+str(pose.a)+","+str(pose.b)+","+str(pose.c)+"], velocity="+str(vel)+")"
 
         # print(TRPLCommand)
         # _ = self.callRobotCommand(TRPLCommand)
@@ -379,17 +381,17 @@ class GcodeToTRPL:
         # radius of rotation
         r=sqrt(r2dco.dot(r2dco))
         # calculate and return point at r,theta/2, z/2 of rotation
-        xyz= pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2;
+        xyz= pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2
         print(r2dx)
         print(r2dy)
         print(thetaA2)
-        output=ToolPose();
-        output.x=xyz[0];
-        output.y=xyz[1];
-        output.z=xyz[2];
-        output.i=toolPose.i;
-        output.j=toolPose.j;
-        output.k=toolPose.k;
+        output=ToolPose()
+        output.x=xyz[0]
+        output.y=xyz[1]
+        output.z=xyz[2]
+        output.i=toolPose.i
+        output.j=toolPose.j
+        output.k=toolPose.k
         # newToolPose.i
         return output
 
@@ -397,7 +399,7 @@ class GcodeToTRPL:
 
 
 #testing
-parser = GcodeToTRPL(feedRate=1, rapidFeed=1, defaultLengthUnits="in",toolOffset=[0,0,0])
+parser = GcodeToTRPL(feedRate=24, rapidFeed=24, defaultLengthUnits="in",toolOffset=[0,0,0])
 
 
 #parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1")
@@ -409,7 +411,7 @@ parser = GcodeToTRPL(feedRate=1, rapidFeed=1, defaultLengthUnits="in",toolOffset
 # parser.runBlock("G01 x700.0 Y-50.0 z600 I1.0 J0 K-1")
 
 # parser.runFile("circleTest")
-parser.runFile("TormachR")
+parser.runFile("WAAM_wall_2025")
 # parser.runFile("testGcode")
 
 #tpose = ToolPose(1, 1, 1, 0, 0, 1)
