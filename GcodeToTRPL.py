@@ -27,17 +27,19 @@ class BotPose:
 
 # class to call appropriate TRPL ros services give gcode
 class GcodeToTRPL:
-    def __init__(self, feedRate=0, rapidFeed=0, defaultLengthUnits="mm", toolOffset=[0,0,0]):
+    def __init__(self, feedRate=0, rapidFeed=0, defaultLengthUnits="mm", defaultAngleUnits="deg", defaultTimeUnits="s", toolOffset=[0,0,0]):
         self.rapidFeed = rapidFeed
         self.feedRate = feedRate
         self.motionMode = 1
         self.lengthUnits = defaultLengthUnits
+        self.angleUnits = defaultAngleUnits
+        self.timeUnits = defaultTimeUnits
         self.toolPose = ToolPose()
         self.newToolPose = ToolPose()
         self.circCenter = [0,0,0]
         self.botPose = BotPose()
         self.toolOffset = toolOffset
-        # self.callRobotCommand = rospy.ServiceProxy('/robot_command/execute_mdi', wtfGoesHere???)
+
 
 # Gcode parsing functions
     def runFile(self, file):
@@ -84,15 +86,16 @@ class GcodeToTRPL:
                 self.motionMode = 2
             elif block[i] == ['G', 3]:
                 self.motionMode = 3
-            elif block[i][0] == 'F':
-                self.feedRate = block[i][1]
+            # elif block[i][0] == 'F':
+            #     self.feedRate = block[i][1]
             elif block[i][0] == 'X':
                 newPose = True
                 # self.newToolPose.x = block[i][1]
-                self.newToolPose.z = block[i][1]
+                self.newToolPose.y = -block[i][1]
             elif block[i][0] == 'Y':
                 newPose = True
-                self.newToolPose.y = block[i][1]
+                # self.newToolPose.y = block[i][1]
+                self.newToolPose.z = block[i][1]
             elif block[i][0] == 'Z':
                 newPose = True
                 # self.newToolPose.z = block[i][1]
@@ -272,8 +275,8 @@ class GcodeToTRPL:
         # print(A*180.0/pi)
         # print(B*180.0/pi)
         # print(C*180.0/pi)
-        A=-178*pi/180.0
-        B=-2.8*pi/180.0
+        A=-175*pi/180.0
+        B=-6.5*pi/180.0
         C=-40*pi/180.0
         return [A*180.0/pi,B*180.0/pi,C*180.0/pi]
 
@@ -328,7 +331,7 @@ class GcodeToTRPL:
     def constructTRPLFile(self, code, fileName):
         f = open(fileName, "w")
         #USER FRAME IS SET HERE
-        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    set_path_blending(True, 0.0)\n")
+        f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','"+str(self.angleUnits)+"','"+str(self.timeUnits)+"')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\nchange_user_frame('table')\ndef main():\n    set_path_blending(True, 0.0)\n")
         # f.write("from robot_command.rpl import *\nset_units('"+str(self.lengthUnits)+"','deg')\n#set_user_frame('table', p[500, 0, 500, 0, 0, 0])\n#change_user_frame('table')\ndef main():\n#    set_path_blending(True, 0.0)\n")
         for block in code:
             newPose = self.evaluateGcodeBlock(block)
@@ -399,7 +402,7 @@ class GcodeToTRPL:
 
 
 #testing
-parser = GcodeToTRPL(feedRate=24, rapidFeed=24, defaultLengthUnits="in",toolOffset=[0,0,0])
+parser = GcodeToTRPL(feedRate=10, rapidFeed=10, defaultLengthUnits="in", defaultAngleUnits="deg", defaultTimeUnits="min", toolOffset=[0,0,0])
 
 
 #parser.runBlock("G01 x600.0 Y1 z600 I1.0 J0 K-1")
