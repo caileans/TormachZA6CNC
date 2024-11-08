@@ -926,12 +926,14 @@ def random_transform():
 H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
 P=np.array([[0,.025,0,.123,.2965,.1,.1175],[0,0,-.001,0,.001,0,0],[.279,.171,.454,.035,0,0,0]])
 jointtype=np.array([0,0,0,0,0,0])
+print(H)
+print(P)
 tormach = Robot(H,P,jointtype)
 
 def pose_callback(msg):
     rospy.loginfo(msg)
 def jointStateCallback(msg):
-    rospy.loginfo(msg.effort);
+    #rospy.loginfo(msg.effort);
     jac=robotjacobian(tormach,np.array(msg.position)[0:6])
     force=np.matmul(np.linalg.pinv(np.transpose(jac)),np.array(msg.effort)[0:6])
     rospy.loginfo(force)
