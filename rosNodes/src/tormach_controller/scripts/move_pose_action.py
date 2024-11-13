@@ -22,7 +22,7 @@ class TMovePoseAction (object):
         
     def execute_cb(self,goal):
         #start subscriber nodes
-        currentPoseSub=rospy.Subscriber("/joint_states", JointState, callback=jointStateCallback)
+        currentPoseSub=rospy.Subscriber("/joint_states", JointState, callback=self.jointStateCallback)
         currentForceSub=rospy.Subscriber("/eeforce", forceTorque, callback=self.forceCallback)
         postol=goal.postol
         vel=goal.vel
