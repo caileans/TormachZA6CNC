@@ -67,7 +67,7 @@ if __name__=='__main__':
     sub=rospy.Subscriber("/tormach/movePose", pose, callback=pose_callback)
     #with open('data.csv','w',newline='') as csvfile:
     #	writer=csv.writer(csvfile)
-    currentPoseSub=rospy.Subscriber("/joint_states", JointState, callback=jointStateCallback)
+    currentPoseSub=rospy.Subscriber("/joint_states", JointState,queue_size=1, callback=jointStateCallback)
     forcePub=rospy.Publisher('eeforce', forceTorque, queue_size=10)
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
