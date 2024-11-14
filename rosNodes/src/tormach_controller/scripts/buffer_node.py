@@ -965,7 +965,7 @@ def jointStateCallback(msg):
     in2=np.linalg.pinv(np.transpose(jac))
     #print(in2)
     force=np.matmul(in2,in1)
-    force=np.array([0,0,0,0,0,0])
+    #force=np.array([0,0,0,0,0,0])
     pubmsg=forceTorque()
     pubmsg.forcex=force[0];
     pubmsg.forcey=force[1];
