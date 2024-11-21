@@ -36,7 +36,7 @@ def main():
     while not  rospy.is_shutdown():
         c=readchar()
         print(c)
-        jointStateCallback(pub.get_msg())
+        jointStateCallback(currentPoseSub.get_msg())
         #rospy.Timer(rospy.Duration(.1),timercb)
         f.write(str(pose)+','+str(effort)+'\n')
         if c=='e':
