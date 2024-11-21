@@ -3,6 +3,7 @@ from tormach_controller.msg import pose, forceTorque, MovePoseAction, MovePoseGo
 from sensor_msgs.msg import JointState
 #need to do pip install read char before running
 from readchar import readchar
+import asyncio
 
 pose=[0,0,0,0,0,0]
 effort=[0,0,0,0,0,0]
@@ -30,6 +31,7 @@ if __name__=='__main__':
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
         c=readchar()
+        await asyncio.sleep(1)
         f.write(str(pose)+','+str(effort)+'\n')
         if c=='e':
             break
