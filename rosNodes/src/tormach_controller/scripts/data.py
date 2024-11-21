@@ -20,7 +20,7 @@ def jointStateCallback(msg):
     #writer.writerow(msg.effort)
     pose=msg.position[0:6]
     effort=msg.effort
-def timercb():
+def timercb(event):
     1==1
 
 def main():
