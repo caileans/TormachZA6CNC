@@ -19,7 +19,7 @@ def jointStateCallback(msg):
     pose=msg.position[0:6]
     effort=msg.effort
 
-def main():
+
 
 
 if __name__=='__main__':
