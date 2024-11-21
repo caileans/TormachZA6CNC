@@ -32,8 +32,7 @@ def main():
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
         c=readchar()
-        task=asyncio.loop.create_task(pause(1))
-        asyncio.loop.run_until_complete(task)
+        print(c)
         f.write(str(pose)+','+str(effort)+'\n')
         if c=='e':
             break
