@@ -31,12 +31,12 @@ def main():
     
     #with open('data.csv','wb') as file:
     #	writer=csv.writer(csvfile)
-    currentPoseSub=rospy.Publisher("/joint_states", JointState,queue_size=1, latch=True)
+    currentPoseSub=rospy.Subscriber("/joint_states", JointState,queue_size=1, callback="jointStateCallback")
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
         c=readchar()
         print(c)
-        jointStateCallback(currentPoseSub.get_msg())
+        rospy.wait_for_message("/joint_states", JointState, timeout=5)
         #rospy.Timer(rospy.Duration(.1),timercb)
         f.write(str(pose)+','+str(effort)+'\n')
         if c=='e':
