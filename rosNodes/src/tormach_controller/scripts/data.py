@@ -8,6 +8,8 @@ import asyncio
 pose=[0,0,0,0,0,0]
 effort=[0,0,0,0,0,0]
 
+async def pause(sec):
+    await asyncio.sleep(sec)
 
 def jointStateCallback(msg):
     #print("h")
@@ -31,7 +33,7 @@ if __name__=='__main__':
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
         c=readchar()
-        await asyncio.sleep(1)
+        pause(1)
         f.write(str(pose)+','+str(effort)+'\n')
         if c=='e':
             break
