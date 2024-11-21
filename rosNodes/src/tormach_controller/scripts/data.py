@@ -20,6 +20,7 @@ def jointStateCallback(msg):
     #writer.writerow(msg.effort)
     pose=msg.position[0:6]
     effort=msg.effort
+    f.write(str(pose)+','+str(effort)+'\n')
 def timercb(event):
     1==1
 
@@ -38,7 +39,7 @@ def main():
         print(c)
         jointStateCallback(rospy.wait_for_message("/joint_states", JointState, timeout=5))
         #rospy.Timer(rospy.Duration(.1),timercb)
-        f.write(str(pose)+','+str(effort)+'\n')
+       
         if c=='e':
             break
     f.close()
