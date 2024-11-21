@@ -19,7 +19,7 @@ def jointStateCallback(msg):
     pose=msg.position[0:6]
     effort=msg.effort
 
-def main():
+async def main():
     #start the buffer_node node
     rospy.init_node("buffer_node")    
     
@@ -31,7 +31,8 @@ def main():
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
         c=readchar()
-        await pause(1)
+        task=asyncio.create_task(pause(1))
+        await task
         f.write(str(pose)+','+str(effort)+'\n')
         if c=='e':
             break
