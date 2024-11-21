@@ -9,6 +9,7 @@ import time
 
 pose=[0,0,0,0,0,0]
 effort=[0,0,0,0,0,0]
+f=open('data.csv','w')
 
 async def pause(sec):
     await asyncio.sleep(sec)
@@ -28,7 +29,7 @@ def main():
     #start the buffer_node node
     rospy.init_node("buffer_node")    
     
-    f=open('data.csv','w')
+    
     
     #with open('data.csv','wb') as file:
     #	writer=csv.writer(csvfile)
