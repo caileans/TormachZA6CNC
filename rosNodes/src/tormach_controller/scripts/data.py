@@ -19,7 +19,10 @@ def jointStateCallback(msg):
     pose=msg.position[0:6]
     effort=msg.effort
 
-async def main():
+def main():
+
+
+if __name__=='__main__':
     #start the buffer_node node
     rospy.init_node("buffer_node")    
     
@@ -36,9 +39,6 @@ async def main():
         if c=='e':
             break
     f.close()
-
-if __name__=='__main__':
-    main();
             
     #csvfile.close()
 
