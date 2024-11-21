@@ -31,7 +31,7 @@ def main():
     
     #with open('data.csv','wb') as file:
     #	writer=csv.writer(csvfile)
-    currentPoseSub=rospy.Publisher("/joint_states", JointState,queue_size=1, latch=true)
+    currentPoseSub=rospy.Publisher("/joint_states", JointState,queue_size=1, latch=True)
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
         c=readchar()
