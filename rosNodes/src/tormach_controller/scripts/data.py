@@ -3,16 +3,13 @@ from tormach_controller.msg import pose, forceTorque, MovePoseAction, MovePoseGo
 from sensor_msgs.msg import JointState
 #need to do pip install read char before running
 from readchar import readchar
-import asyncio
-import time
+
 
 
 pose=[0,0,0,0,0,0]
 effort=[0,0,0,0,0,0]
 f=open('data.csv','w')
 
-async def pause(sec):
-    await asyncio.sleep(sec)
 
 def jointStateCallback(msg):
     #print("h")
@@ -22,25 +19,17 @@ def jointStateCallback(msg):
     pose=msg.position[0:6]
     effort=msg.effort[0:6]
     f.write(str(pose)+','+str(effort)+'\n')
-def timercb(event):
-    1==1
 
 def main():
     #start the buffer_node node
     rospy.init_node("buffer_node")    
     
     
-    
-    #with open('data.csv','wb') as file:
-    #	writer=csv.writer(csvfile)
-    #currentPoseSub=rospy.Subscriber("/joint_states", JointState,queue_size=1, callback=jointStateCallback)
-    #keep node running until shutdown request
+
     while not  rospy.is_shutdown():
         c=readchar()
         print(c)
         jointStateCallback(rospy.wait_for_message("/joint_states", JointState, timeout=5))
-        #rospy.Timer(rospy.Duration(.1),timercb)
-       
         if c=='e':
             break
     f.close()
