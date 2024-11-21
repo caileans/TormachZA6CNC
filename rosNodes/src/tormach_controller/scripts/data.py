@@ -20,6 +20,8 @@ def jointStateCallback(msg):
     #writer.writerow(msg.effort)
     pose=msg.position[0:6]
     effort=msg.effort
+def timercb():
+    1==1
 
 def main():
     #start the buffer_node node
@@ -34,7 +36,7 @@ def main():
     while not  rospy.is_shutdown():
         c=readchar()
         print(c)
-        time.sleep(1)
+        rospy.Timer(rospy.Duration(.1),timercb)
         f.write(str(pose)+','+str(effort)+'\n')
         if c=='e':
             break
