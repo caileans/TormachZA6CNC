@@ -5,6 +5,7 @@ from sensor_msgs.msg import JointState
 from readchar import readchar
 import asyncio
 
+
 pose=[0,0,0,0,0,0]
 effort=[0,0,0,0,0,0]
 
@@ -31,8 +32,8 @@ def main():
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
         c=readchar()
-        task=loop.create_task(pause(1))
-        loop.run_until_complete(task)
+        task=asyncio.loop.create_task(pause(1))
+        asyncio.loop.run_until_complete(task)
         f.write(str(pose)+','+str(effort)+'\n')
         if c=='e':
             break
