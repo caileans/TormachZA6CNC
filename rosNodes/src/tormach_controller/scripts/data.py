@@ -19,7 +19,7 @@ def jointStateCallback(msg):
     pose=msg.position[0:6]
     effort=msg.effort
 
- def main():
+def main():
     #start the buffer_node node
     rospy.init_node("buffer_node")    
     
