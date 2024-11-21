@@ -4,6 +4,7 @@ from sensor_msgs.msg import JointState
 #need to do pip install read char before running
 from readchar import readchar
 import asyncio
+import time
 
 
 pose=[0,0,0,0,0,0]
@@ -33,6 +34,7 @@ def main():
     while not  rospy.is_shutdown():
         c=readchar()
         print(c)
+        time.sleep(1)
         f.write(str(pose)+','+str(effort)+'\n')
         if c=='e':
             break
