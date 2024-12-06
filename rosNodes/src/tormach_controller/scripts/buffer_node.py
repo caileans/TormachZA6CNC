@@ -996,19 +996,19 @@ g*(L6*m6 + Lc5*m5 + Lc6*m6)*(cos(q2)*sin(q3)*sin(q5) + cos(q3)*sin(q2)*sin(q5) -
     # print(np.shape(q))
     for i in range(np.shape(q)[0]):
 
-        q1=q[i,0]*180/pi
-        q2=q[i,1]*180/pi
-        q3=q[i,2]*180/pi
-        q4=q[i,3]*180/pi
-        q5=q[i,4]*180/pi
-        q6=q[i,5]*180/pi
+        q1=q[i,0]*pi/180
+        q2=q[i,1]*pi/180
+        q3=q[i,2]*pi/180
+        q4=q[i,3]*pi/180
+        q5=q[i,4]*pi/180
+        q6=q[i,5]*pi/180
         temp=np.zeros(6)
-        temp[0]=-tautrue[i,0]
-        temp[1]=-tautrue[i,1] -(g*(2*L5*m5*cos(q2 + q3) + 2*L5*m6*cos(q2 + q3) + 2*L4x*m4*cos(q2 + q3) + 2*L4x*m5*cos(q2 + q3) + 2*L4x*m6*cos(q2 + q3) + 2*Lc4*m4*cos(q2 + q3) + 2*Lc3a*m3*cos(q2 + q3) + 2*L4z*m4*sin(q2 + q3) + 2*L4z*m5*sin(q2 + q3) + 2*L4z*m6*sin(q2 + q3) + 2*Lc3c*m3*sin(q2 + q3) + 2*Lc2a*m2*cos(q2) + 2*L3*m3*sin(q2) + 2*L3*m4*sin(q2) + 2*L3*m5*sin(q2) + 2*L3*m6*sin(q2) + 2*Lc2c*m2*sin(q2) - L6*m6*sin(q2 + q3)*sin(q4 + q5) - Lc5*m5*sin(q2 + q3)*sin(q4 + q5) - Lc6*m6*sin(q2 + q3)*sin(q4 + q5) + 2*L6*m6*cos(q2 + q3)*cos(q5) + 2*Lc5*m5*cos(q2 + q3)*cos(q5) + 2*Lc6*m6*cos(q2 + q3)*cos(q5) + L6*m6*sin(q4 - q5)*sin(q2 + q3) + Lc5*m5*sin(q4 - q5)*sin(q2 + q3) + Lc6*m6*sin(q4 - q5)*sin(q2 + q3)))/2
-        temp[2]=-tautrue[i,2]-g*(L5*m5*cos(q2 + q3) + L5*m6*cos(q2 + q3) + L4x*m4*cos(q2 + q3) + L4x*m5*cos(q2 + q3) + L4x*m6*cos(q2 + q3) + Lc4*m4*cos(q2 + q3) + Lc3a*m3*cos(q2 + q3) + L4z*m4*sin(q2 + q3) + L4z*m5*sin(q2 + q3) + L4z*m6*sin(q2 + q3) + Lc3c*m3*sin(q2 + q3) + L6*m6*cos(q2 + q3)*cos(q5) + Lc5*m5*cos(q2 + q3)*cos(q5) + Lc6*m6*cos(q2 + q3)*cos(q5) - L6*m6*sin(q2 + q3)*cos(q4)*sin(q5) - Lc5*m5*sin(q2 + q3)*cos(q4)*sin(q5) - Lc6*m6*sin(q2 + q3)*cos(q4)*sin(q5))
-        temp[3]=-tautrue[i,3]+g*cos(q2 + q3)*sin(q4)*sin(q5)*(L6*m6 + Lc5*m5 + Lc6*m6)
-        temp[4]= -tautrue[i,4]+g*(L6*m6 + Lc5*m5 + Lc6*m6)*(cos(q2)*sin(q3)*sin(q5) + cos(q3)*sin(q2)*sin(q5) - cos(q2)*cos(q3)*cos(q4)*cos(q5) + cos(q4)*cos(q5)*sin(q2)*sin(q3))
-        temp[5]=-tautrue[i,5]
+        temp[0]=abs(-tautrue[i,0])
+        temp[1]=abs(-tautrue[i,1] -(g*(2*L5*m5*cos(q2 + q3) + 2*L5*m6*cos(q2 + q3) + 2*L4x*m4*cos(q2 + q3) + 2*L4x*m5*cos(q2 + q3) + 2*L4x*m6*cos(q2 + q3) + 2*Lc4*m4*cos(q2 + q3) + 2*Lc3a*m3*cos(q2 + q3) + 2*L4z*m4*sin(q2 + q3) + 2*L4z*m5*sin(q2 + q3) + 2*L4z*m6*sin(q2 + q3) + 2*Lc3c*m3*sin(q2 + q3) + 2*Lc2a*m2*cos(q2) + 2*L3*m3*sin(q2) + 2*L3*m4*sin(q2) + 2*L3*m5*sin(q2) + 2*L3*m6*sin(q2) + 2*Lc2c*m2*sin(q2) - L6*m6*sin(q2 + q3)*sin(q4 + q5) - Lc5*m5*sin(q2 + q3)*sin(q4 + q5) - Lc6*m6*sin(q2 + q3)*sin(q4 + q5) + 2*L6*m6*cos(q2 + q3)*cos(q5) + 2*Lc5*m5*cos(q2 + q3)*cos(q5) + 2*Lc6*m6*cos(q2 + q3)*cos(q5) + L6*m6*sin(q4 - q5)*sin(q2 + q3) + Lc5*m5*sin(q4 - q5)*sin(q2 + q3) + Lc6*m6*sin(q4 - q5)*sin(q2 + q3)))/2)
+        temp[2]=abs(-tautrue[i,2]-g*(L5*m5*cos(q2 + q3) + L5*m6*cos(q2 + q3) + L4x*m4*cos(q2 + q3) + L4x*m5*cos(q2 + q3) + L4x*m6*cos(q2 + q3) + Lc4*m4*cos(q2 + q3) + Lc3a*m3*cos(q2 + q3) + L4z*m4*sin(q2 + q3) + L4z*m5*sin(q2 + q3) + L4z*m6*sin(q2 + q3) + Lc3c*m3*sin(q2 + q3) + L6*m6*cos(q2 + q3)*cos(q5) + Lc5*m5*cos(q2 + q3)*cos(q5) + Lc6*m6*cos(q2 + q3)*cos(q5) - L6*m6*sin(q2 + q3)*cos(q4)*sin(q5) - Lc5*m5*sin(q2 + q3)*cos(q4)*sin(q5) - Lc6*m6*sin(q2 + q3)*cos(q4)*sin(q5)))
+        temp[3]=abs(-tautrue[i,3]+g*cos(q2 + q3)*sin(q4)*sin(q5)*(L6*m6 + Lc5*m5 + Lc6*m6))
+        temp[4]= abs(-tautrue[i,4]+g*(L6*m6 + Lc5*m5 + Lc6*m6)*(cos(q2)*sin(q3)*sin(q5) + cos(q3)*sin(q2)*sin(q5) - cos(q2)*cos(q3)*cos(q4)*cos(q5) + cos(q4)*cos(q5)*sin(q2)*sin(q3)))
+        temp[5]=abs(-tautrue[i,5])
         tau=np.append(tau,temp,axis=0)
 
     return tau
@@ -1072,12 +1072,12 @@ g*(L6*m6 + Lc5*m5 + Lc6*m6)*(cos(q2)*sin(q3)*sin(q5) + cos(q3)*sin(q2)*sin(q5) -
     # print(np.shape(q))
 
 
-    q1=q[0]*180/pi
-    q2=q[1]*180/pi
-    q3=q[2]*180/pi
-    q4=q[3]*180/pi
-    q5=q[4]*180/pi
-    q6=q[5]*180/pi
+    q1=q[0]*pi/180
+    q2=q[1]*pi/180
+    q3=q[2]*pi/180
+    q4=q[3]*pi/180
+    q5=q[4]*pi/180
+    q6=q[5]*pi/180
     # temp=np.zeros(6)
     tau[0]=-tautrue[0]
     tau[1]=-tautrue[1] -(g*(2*L5*m5*cos(q2 + q3) + 2*L5*m6*cos(q2 + q3) + 2*L4x*m4*cos(q2 + q3) + 2*L4x*m5*cos(q2 + q3) + 2*L4x*m6*cos(q2 + q3) + 2*Lc4*m4*cos(q2 + q3) + 2*Lc3a*m3*cos(q2 + q3) + 2*L4z*m4*sin(q2 + q3) + 2*L4z*m5*sin(q2 + q3) + 2*L4z*m6*sin(q2 + q3) + 2*Lc3c*m3*sin(q2 + q3) + 2*Lc2a*m2*cos(q2) + 2*L3*m3*sin(q2) + 2*L3*m4*sin(q2) + 2*L3*m5*sin(q2) + 2*L3*m6*sin(q2) + 2*Lc2c*m2*sin(q2) - L6*m6*sin(q2 + q3)*sin(q4 + q5) - Lc5*m5*sin(q2 + q3)*sin(q4 + q5) - Lc6*m6*sin(q2 + q3)*sin(q4 + q5) + 2*L6*m6*cos(q2 + q3)*cos(q5) + 2*Lc5*m5*cos(q2 + q3)*cos(q5) + 2*Lc6*m6*cos(q2 + q3)*cos(q5) + L6*m6*sin(q4 - q5)*sin(q2 + q3) + Lc5*m5*sin(q4 - q5)*sin(q2 + q3) + Lc6*m6*sin(q4 - q5)*sin(q2 + q3)))/2
@@ -1112,8 +1112,12 @@ def calibrate(csvFile):
         # print(res.x)
         adjustedTau= lambda q, tau: adjustTau(res.x,q,tau);
         # print(adjustedTau(q[1],tau[1]))
+        # print(tau[1])
         # print(adjustedTau(q[2],tau[2]))
+        # print(tau[2])
         # print(adjustedTau(q[3],tau[3]))
+        # print(tau[3])
+
         return adjustedTau
 
     # get data
