@@ -14,7 +14,7 @@ if __name__=='__main__':
     pnt.positions=[];
     pnt.effort=[];
     # pnt.velocities=[];
-    pnt.velocities=[1,0,0,0,0,0,0,0]
+    pnt.velocities=[10,0,0,0,0,0,0,0]
     pnt.accelerations=[];
     pnt.time_from_start.secs=1
     rospy.loginfo(pnt)
