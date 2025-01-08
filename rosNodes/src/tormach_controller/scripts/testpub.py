@@ -1,5 +1,5 @@
 import rospy 
-from trajectory_msgs import JointTrajectory, JointTrajectoryPoint
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
     
 
 if __name__=='__main__':
