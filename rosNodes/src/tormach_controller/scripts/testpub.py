@@ -7,7 +7,7 @@ if __name__=='__main__':
     #start the test node
     rospy.init_node("testpub")
 
-    forcePub=rospy.Publisher('/position_trajectory_controller/command', JointTrajectoryPoint)
+    forcePub=rospy.Publisher('/position_trajectory_controller/command', JointTrajectory)
 
     pnt=JointTrajectoryPoint()
     pnt.positions=[0,.22,-.17,.63,.3,.97,25.88,-9.25]
