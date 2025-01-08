@@ -14,9 +14,9 @@ if __name__=='__main__':
     pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
     pnt.effort=[];
     # pnt.velocities=[];
-    pnt.velocities=[0,0,0,0,0,0,0,0]
+    pnt.velocities=[1,0,0,0,0,0,0,0]
     pnt.accelerations=[];
-    pnt.time_from_start.secs=1
+    pnt.time_from_start.secs=0
     rospy.loginfo(pnt)
 
     pubmsg=JointTrajectory();
