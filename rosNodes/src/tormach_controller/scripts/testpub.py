@@ -14,7 +14,7 @@ if __name__=='__main__':
     pnt.effort=[];
     pnt.velocities=[];
     pnt.accelerations=[];
-
+    pnt.time_from_start.secs=1
     rospy.loginfo(pnt)
 
     pubmsg=JointTrajectory();
