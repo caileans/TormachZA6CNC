@@ -25,4 +25,4 @@ if __name__=='__main__':
     print("done")
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
-        x=1;
+        forcePub.publish(pubmsg)
