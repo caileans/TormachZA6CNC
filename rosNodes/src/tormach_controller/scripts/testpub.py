@@ -8,7 +8,7 @@ if __name__=='__main__':
     rospy.init_node("testpub")
 
     forcePub=rospy.Publisher('/position_trajectory_controller/command', JointTrajectory, queue_size=1)
-
+    rate=rospy.Rate(10)
     pnt=JointTrajectoryPoint()
     pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
     pnt.effort=[];
@@ -26,3 +26,4 @@ if __name__=='__main__':
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
         forcePub.publish(pubmsg)
+        rate.sleep();
