@@ -10,8 +10,8 @@ if __name__=='__main__':
     forcePub=rospy.Publisher('/position_trajectory_controller/command', JointTrajectory, queue_size=1)
     rate=rospy.Rate(10)
     pnt=JointTrajectoryPoint()
-    pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
-    # pnt.positions=[];
+    # pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
+    pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
     pnt.effort=[];
     # pnt.velocities=[];
     pnt.velocities=[1,0,0,0,0,0,0,0]
