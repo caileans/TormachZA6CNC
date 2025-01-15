@@ -3,6 +3,7 @@ from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
     
 # NOTE THIS NODE IS IN RADIANS!!!!!!!!!!!!!
+#publishing a new position will overwrite the current move
 if __name__=='__main__':
     
     #start the test node
@@ -28,15 +29,26 @@ if __name__=='__main__':
 
     forcePub.publish(pubmsg)
     print("done")
-    sleep(3)
-    pnt.positions=[.3,.22,-.17,.63,.3,.97,25.88,-9.25]
+    sleep(.9)
+    pnt.positions=[.3,.1,.1,.1,.1,.1,.1,.1];
     pubmsg.points=[pnt];
-    pnt.time_from_start.secs=3
+    pnt.time_from_start.secs=1
     forcePub.publish(pubmsg)
-    sleep(1)
-    pnt.positions=[-.0,.1,.1,.1,.1,.1,.1,.1];
+    sleep(.9)
+    # pnt.positions=[.3,.22,-.17,.63,.3,.97,25.88,-9.25]
+    pnt.positions=[.3,-.2,.1,.1,.1,.1,.1,.1];
     pubmsg.points=[pnt];
-    pnt.time_from_start.secs=3
+    pnt.time_from_start.secs=1
+    forcePub.publish(pubmsg)
+    sleep(.9)
+    pnt.positions=[.1,-.2,.1,.1,.1,.1,.1,.1];
+    pubmsg.points=[pnt];
+    pnt.time_from_start.secs=1
+    forcePub.publish(pubmsg)
+    sleep(.9)
+    pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
+    pubmsg.points=[pnt];
+    pnt.time_from_start.secs=1
     forcePub.publish(pubmsg)
     sleep(5)
     #keep node running until shutdown request
