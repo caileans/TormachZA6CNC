@@ -2,7 +2,7 @@ import rospy
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
     
-
+# NOTE THIS NODE IS IN RADIANS!!!!!!!!!!!!!
 if __name__=='__main__':
     
     #start the test node
@@ -33,7 +33,7 @@ if __name__=='__main__':
     pubmsg.points=[pnt];
     pnt.time_from_start.secs=3
     forcePub.publish(pubmsg)
-    sleep(5)
+    sleep(2)
     pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
     pubmsg.points=[pnt];
     pnt.time_from_start.secs=3
