@@ -31,14 +31,14 @@ if __name__=='__main__':
     sleep(3)
     pnt.positions=[15,.22,-.17,.63,.3,.97,25.88,-9.25]
     pubmsg.points=[pnt];
-    pnt.time_from_start.secs=1
+    pnt.time_from_start.secs=3
     forcePub.publish(pubmsg)
-    sleep(3)
+    sleep(5)
     pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
     pubmsg.points=[pnt];
-    pnt.time_from_start.secs=1
+    pnt.time_from_start.secs=3
     forcePub.publish(pubmsg)
-    sleep(.9)
+    sleep(5)
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
         
