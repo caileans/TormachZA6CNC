@@ -33,8 +33,8 @@ if __name__=='__main__':
     pubmsg.points=[pnt];
     pnt.time_from_start.secs=3
     forcePub.publish(pubmsg)
-    sleep(2)
-    pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
+    sleep(1)
+    pnt.positions=[-.0,.1,.1,.1,.1,.1,.1,.1];
     pubmsg.points=[pnt];
     pnt.time_from_start.secs=3
     forcePub.publish(pubmsg)
