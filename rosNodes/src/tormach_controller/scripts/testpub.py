@@ -34,22 +34,26 @@ if __name__=='__main__':
     pnt.positions=[.3,.1,.1,.1,.1,.1,.1,.1];
     pubmsg.points=[pnt];
     pnt.time_from_start.secs=1
+    pubmsg.header.stamp=rospy.Time.now()
     forcePub.publish(pubmsg)
     sleep(.9)
     # pnt.positions=[.3,.22,-.17,.63,.3,.97,25.88,-9.25]
     pnt.positions=[.3,-.2,.1,.1,.1,.1,.1,.1];
     pubmsg.points=[pnt];
     pnt.time_from_start.secs=1
+    pubmsg.header.stamp=rospy.Time.now()
     forcePub.publish(pubmsg)
     sleep(.9)
     pnt.positions=[.1,-.2,.1,.1,.1,.1,.1,.1];
     pubmsg.points=[pnt];
     pnt.time_from_start.secs=1
+    pubmsg.header.stamp=rospy.Time.now()
     forcePub.publish(pubmsg)
     sleep(.9)
     pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
     pubmsg.points=[pnt];
     pnt.time_from_start.secs=1
+    pubmsg.header.stamp=rospy.Time.now()
     forcePub.publish(pubmsg)
     sleep(5)
     #keep node running until shutdown request
