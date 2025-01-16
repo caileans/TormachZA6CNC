@@ -27,6 +27,7 @@ if __name__=='__main__':
     pubmsg.points=[pnt];
     pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
 
+    pubmsg.header.stamp=rospy.Time.now()
     forcePub.publish(pubmsg)
     print("done")
     sleep(.9)
