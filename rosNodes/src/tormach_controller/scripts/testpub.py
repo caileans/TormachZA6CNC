@@ -15,7 +15,8 @@ if __name__=='__main__':
     rate=rospy.Rate(10)
     pnt=JointTrajectoryPoint()
     # pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
-    pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
+    # pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
+    pnt.positions=[600,60,830,-146,-70,-28]
     pnt.effort=[];
     pnt.velocities=[];
     # pnt.velocities=[1,0,0,0,0,0,0,0]
@@ -25,37 +26,37 @@ if __name__=='__main__':
 
     pubmsg=JointTrajectory();
     pubmsg.points=[pnt];
-    pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
-
+    # pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
+    pubmsg.joint_names=['X','Y','Z','A','B','C']
     pubmsg.header.stamp=rospy.Time.now()
     forcePub.publish(pubmsg)
     print("done")
     sleep(.9)
-    pnt.positions=[.3,.1,.1,.1,.1,.1,.1,.1];
-    pubmsg.points=[pnt];
-    pnt.time_from_start.secs=1
-    pubmsg.header.stamp=rospy.Time.now()
-    forcePub.publish(pubmsg)
-    sleep(.9)
-    # pnt.positions=[.3,.22,-.17,.63,.3,.97,25.88,-9.25]
-    pnt.positions=[.3,-.2,.1,.1,.1,.1,.1,.1];
-    pubmsg.points=[pnt];
-    pnt.time_from_start.secs=1
-    pubmsg.header.stamp=rospy.Time.now()
-    forcePub.publish(pubmsg)
-    sleep(.9)
-    pnt.positions=[.1,-.2,.1,.1,.1,.1,.1,.1];
-    pubmsg.points=[pnt];
-    pnt.time_from_start.secs=1
-    pubmsg.header.stamp=rospy.Time.now()
-    forcePub.publish(pubmsg)
-    sleep(.9)
-    pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
-    pubmsg.points=[pnt];
-    pnt.time_from_start.secs=1
-    pubmsg.header.stamp=rospy.Time.now()
-    forcePub.publish(pubmsg)
-    sleep(5)
+    # pnt.positions=[.3,.1,.1,.1,.1,.1,.1,.1];
+    # pubmsg.points=[pnt];
+    # pnt.time_from_start.secs=1
+    # pubmsg.header.stamp=rospy.Time.now()
+    # forcePub.publish(pubmsg)
+    # sleep(.9)
+    # # pnt.positions=[.3,.22,-.17,.63,.3,.97,25.88,-9.25]
+    # pnt.positions=[.3,-.2,.1,.1,.1,.1,.1,.1];
+    # pubmsg.points=[pnt];
+    # pnt.time_from_start.secs=1
+    # pubmsg.header.stamp=rospy.Time.now()
+    # forcePub.publish(pubmsg)
+    # sleep(.9)
+    # pnt.positions=[.1,-.2,.1,.1,.1,.1,.1,.1];
+    # pubmsg.points=[pnt];
+    # pnt.time_from_start.secs=1
+    # pubmsg.header.stamp=rospy.Time.now()
+    # forcePub.publish(pubmsg)
+    # sleep(.9)
+    # pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
+    # pubmsg.points=[pnt];
+    # pnt.time_from_start.secs=1
+    # pubmsg.header.stamp=rospy.Time.now()
+    # forcePub.publish(pubmsg)
+    # sleep(5)
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
         
