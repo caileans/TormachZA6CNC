@@ -1,0 +1,125 @@
+header: 
+  seq: 1
+  stamp: 
+    secs: 1736992383
+    nsecs: 307596206
+  frame_id: ''
+joint_names: 
+  - joint_1
+  - joint_2
+  - joint_3
+  - joint_4
+  - joint_5
+  - joint_6
+  - tcp_lin
+  - tcp_rot
+points: 
+  - 
+    positions: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+    velocities: []
+    accelerations: []
+    effort: []
+    time_from_start: 
+      secs: 1
+      nsecs:         0
+---
+header: 
+  seq: 2
+  stamp: 
+    secs: 1736992384
+    nsecs: 207835912
+  frame_id: ''
+joint_names: 
+  - joint_1
+  - joint_2
+  - joint_3
+  - joint_4
+  - joint_5
+  - joint_6
+  - tcp_lin
+  - tcp_rot
+points: 
+  - 
+    positions: [0.3, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+    velocities: []
+    accelerations: []
+    effort: []
+    time_from_start: 
+      secs: 1
+      nsecs:         0
+---
+header: 
+  seq: 3
+  stamp: 
+    secs: 1736992385
+    nsecs: 108886003
+  frame_id: ''
+joint_names: 
+  - joint_1
+  - joint_2
+  - joint_3
+  - joint_4
+  - joint_5
+  - joint_6
+  - tcp_lin
+  - tcp_rot
+points: 
+  - 
+    positions: [0.3, -0.2, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+    velocities: []
+    accelerations: []
+    effort: []
+    time_from_start: 
+      secs: 1
+      nsecs:         0
+---
+header: 
+  seq: 4
+  stamp: 
+    secs: 1736992386
+    nsecs:   9939432
+  frame_id: ''
+joint_names: 
+  - joint_1
+  - joint_2
+  - joint_3
+  - joint_4
+  - joint_5
+  - joint_6
+  - tcp_lin
+  - tcp_rot
+points: 
+  - 
+    positions: [0.1, -0.2, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+    velocities: []
+    accelerations: []
+    effort: []
+    time_from_start: 
+      secs: 1
+      nsecs:         0
+---
+header: 
+  seq: 5
+  stamp: 
+    secs: 1736992386
+    nsecs: 910520792
+  frame_id: ''
+joint_names: 
+  - joint_1
+  - joint_2
+  - joint_3
+  - joint_4
+  - joint_5
+  - joint_6
+  - tcp_lin
+  - tcp_rot
+points: 
+  - 
+    positions: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+    velocities: []
+    accelerations: []
+    effort: []
+    time_from_start: 
+      secs: 1
+      nsecs:         0
+---
