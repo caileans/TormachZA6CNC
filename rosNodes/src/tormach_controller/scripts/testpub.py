@@ -2,6 +2,84 @@ import rospy
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
     
+
+
+
+def voft(amax, vmax, ta, tv, tmove, t):
+    """Returns the instantanious velocity at time t for a move that take tmove, a max veloctiy vmax, and a trapizoidal acceleration profile with a max amax, ramp time ta, and total tim tv
+
+
+    """
+
+    if t<= ta:
+        return amax*t*t/2/ta;
+    elif t<= tv-ta:
+        return amax*(t-ta/2);
+    elif t<=tv:
+        return vmax-amax*((t-tv)**2)/2/ta
+    elif t<=tmove-tv:
+        return vmax;
+    elif t<=tmove-tv+ta:
+        return vmax-amax*((t+tv-tmove)**2)/2/ta;
+    elif t<=tmove-ta:
+        return vmax -amax*(ta/2+t-tmove+tv-ta);
+    elif t<=tmove:
+        return amax*((tmove-t)**2)/2/ta;
+    else:
+        return 0;
+
+def genpath(hz):
+    """generates a 1d path using trapizoidal acceleration at a specified frequency hz
+
+
+     """
+    amax=3 #rad/s/s
+    ta=.075 #s
+    vmax= .3 #rad/s
+
+    tv= vmax/amax+ta;   #rad/s
+
+    tm =.5 #s
+    time=np.linspace(0,tm,num=int(hz*tm));
+    v=np.zeros(int(hz*tm))
+    pos=np.zeros(int(hz*tm)+1)
+    c=1;
+
+    alpha=1; #how much overshoot in position
+
+    for t in time:
+        vel=voft(amax,vmax,ta,tv,tm,t);
+        v[c-1]=vel
+        pos[c]=pos[c-1]+vel/hz*alpha
+        c+=1
+    # plt.plot(time,v)
+    # plt.plot(time,pos[1:])
+    # plt.show()
+def movepath(hz):
+
+    pos=genpath(hz)
+
+    rate=rospy.Rate(hz)
+    pnt=JointTrajectoryPoint()
+    # pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
+    pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
+    # pnt.positions=[600,60,830,-146,-70,-28]
+    pnt.effort=[];
+    pnt.velocities=[];
+    # pnt.velocities=[1,0,0,0,0,0,0,0]
+    pnt.accelerations=[];
+    pnt.time_from_start.secs=1/hz
+    # rospy.loginfo(pnt)
+    pubmsg=JointTrajectory();
+    pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
+        # pubmsg.joint_names=['X','Y','Z','A','B','C']
+    c=0
+    while not  rospy.is_shutdown():
+        pnt.positions=[.1+pos[c],.1,.1,.1,.1,.1,.1,.1];
+        pubmsg.points=[pnt];
+        pubmsg.header.stamp=rospy.Time.now()
+        forcePub.publish(pubmsg)
+        rate.sleep();
 # NOTE THIS NODE IS IN RADIANS!!!!!!!!!!!!!
 #publishing a new position will overwrite the current move
 #Note: this doesnt work for cartesian space
@@ -13,52 +91,54 @@ if __name__=='__main__':
     forcePub=rospy.Publisher('/position_trajectory_controller/command', JointTrajectory, queue_size=1)
     sleep(60)
     print("prob conected")
-    rate=rospy.Rate(10)
-    pnt=JointTrajectoryPoint()
-    # pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
-    pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
-    # pnt.positions=[600,60,830,-146,-70,-28]
-    pnt.effort=[];
-    pnt.velocities=[];
-    # pnt.velocities=[1,0,0,0,0,0,0,0]
-    pnt.accelerations=[];
-    pnt.time_from_start.secs=1
-    rospy.loginfo(pnt)
+    # put movement/publish rate here
+    movepath(hz)
+    # rate=rospy.Rate(10)
+    # pnt=JointTrajectoryPoint()
+    # # pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
+    # pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
+    # # pnt.positions=[600,60,830,-146,-70,-28]
+    # pnt.effort=[];
+    # pnt.velocities=[];
+    # # pnt.velocities=[1,0,0,0,0,0,0,0]
+    # pnt.accelerations=[];
+    # pnt.time_from_start.secs=1
+    # rospy.loginfo(pnt)
 
-    pubmsg=JointTrajectory();
-    pubmsg.points=[pnt];
-    pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
-    # pubmsg.joint_names=['X','Y','Z','A','B','C']
-    pubmsg.header.stamp=rospy.Time.now()
-    forcePub.publish(pubmsg)
-    print("done")
-    sleep(.9)
-    pnt.positions=[.3,.1,.1,.1,.1,.1,.1,.1];
-    pubmsg.points=[pnt];
-    pnt.time_from_start.secs=1
-    pubmsg.header.stamp=rospy.Time.now()
-    forcePub.publish(pubmsg)
-    sleep(.9)
-    # pnt.positions=[.3,.22,-.17,.63,.3,.97,25.88,-9.25]
-    pnt.positions=[.3,-.2,.1,.1,.1,.1,.1,.1];
-    pubmsg.points=[pnt];
-    pnt.time_from_start.secs=1
-    pubmsg.header.stamp=rospy.Time.now()
-    forcePub.publish(pubmsg)
-    sleep(.9)
-    pnt.positions=[.1,-.2,.1,.1,.1,.1,.1,.1];
-    pubmsg.points=[pnt];
-    pnt.time_from_start.secs=1
-    pubmsg.header.stamp=rospy.Time.now()
-    forcePub.publish(pubmsg)
-    sleep(.9)
-    pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
-    pubmsg.points=[pnt];
-    pnt.time_from_start.secs=1
-    pubmsg.header.stamp=rospy.Time.now()
-    forcePub.publish(pubmsg)
-    sleep(5)
-    #keep node running until shutdown request
-    while not  rospy.is_shutdown():
+    # pubmsg=JointTrajectory();
+    # pubmsg.points=[pnt];
+    # pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
+    # # pubmsg.joint_names=['X','Y','Z','A','B','C']
+    # pubmsg.header.stamp=rospy.Time.now()
+    # forcePub.publish(pubmsg)
+    # print("done")
+    # sleep(.9)
+    # pnt.positions=[.3,.1,.1,.1,.1,.1,.1,.1];
+    # pubmsg.points=[pnt];
+    # pnt.time_from_start.secs=1
+    # pubmsg.header.stamp=rospy.Time.now()
+    # forcePub.publish(pubmsg)
+    # sleep(.9)
+    # # pnt.positions=[.3,.22,-.17,.63,.3,.97,25.88,-9.25]
+    # pnt.positions=[.3,-.2,.1,.1,.1,.1,.1,.1];
+    # pubmsg.points=[pnt];
+    # pnt.time_from_start.secs=1
+    # pubmsg.header.stamp=rospy.Time.now()
+    # forcePub.publish(pubmsg)
+    # sleep(.9)
+    # pnt.positions=[.1,-.2,.1,.1,.1,.1,.1,.1];
+    # pubmsg.points=[pnt];
+    # pnt.time_from_start.secs=1
+    # pubmsg.header.stamp=rospy.Time.now()
+    # forcePub.publish(pubmsg)
+    # sleep(.9)
+    # pnt.positions=[.1,.1,.1,.1,.1,.1,.1,.1];
+    # pubmsg.points=[pnt];
+    # pnt.time_from_start.secs=1
+    # pubmsg.header.stamp=rospy.Time.now()
+    # forcePub.publish(pubmsg)
+    # sleep(5)
+    # #keep node running until shutdown request
+    # while not  rospy.is_shutdown():
         
-        break
+    #     break
