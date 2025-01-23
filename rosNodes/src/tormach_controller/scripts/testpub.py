@@ -53,7 +53,7 @@ def genpath(hz):
     pos=np.zeros(int(hz*tm)+1)
     c=1
 
-    alpha=2 #how much overshoot in position
+    alpha=10 #how much overshoot in position
     velprev=0;
     for t in time:
         vel=voft(amax,vmax,ta,tv,tm,t)
@@ -81,12 +81,12 @@ def movepath(hz):
     pnt.velocities=[]
     # pnt.velocities=[1,0,0,0,0,0,0,0]
     pnt.accelerations=[]
-    pnt.time_from_start.nsecs=int(2*(10**9)/hz)
+    pnt.time_from_start.nsecs=int(10*(10**9)/hz)
     # rospy.loginfo(pnt)
     pubmsg=JointTrajectory()
     pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
         # pubmsg.joint_names=['X','Y','Z','A','B','C']
-    c=0
+    c=1
     while not  rospy.is_shutdown():
         if c>= np.size(pos):
             break
@@ -95,6 +95,7 @@ def movepath(hz):
         pubmsg.header.stamp=rospy.Time.now()
         forcePub.publish(pubmsg)
         c+=1
+        break
         rate.sleep()
 
 
@@ -112,6 +113,27 @@ if __name__=='__main__':
     print("prob conected")
     # put movement/publish rate here
     movepath(20)
+
+    # for i in range(10):
+    #     i+=1
+    #     movepath(10*i)
+
+    #     pnt=JointTrajectoryPoint()
+    #     # pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
+    #     pnt.positions=[0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.1]
+    #     # pnt.positions=[600,60,830,-146,-70,-28]
+    #     pnt.effort=[]
+    #     pnt.velocities=[]
+    #     # pnt.velocities=[1,0,0,0,0,0,0,0]
+    #     pnt.accelerations=[]
+    #     pnt.time_from_start.nsecs=int(2*(10**9)/hz)
+    #     # rospy.loginfo(pnt)
+    #     pubmsg=JointTrajectory()
+    #     pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
+    #     pnt.time_from_start.secs
+        # pubmsg.joint_names=['X','Y','Z','A','B','C']
+
+        
     # rate=rospy.Rate(10)
     # pnt=JointTrajectoryPoint()
     # # pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
