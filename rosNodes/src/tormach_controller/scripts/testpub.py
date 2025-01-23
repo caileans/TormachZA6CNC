@@ -53,13 +53,14 @@ def genpath(hz):
     pos=np.zeros(int(hz*tm)+1)
     c=1
 
-    alpha=1 #how much overshoot in position
-
+    alpha=2 #how much overshoot in position
+    velprev=0;
     for t in time:
         vel=voft(amax,vmax,ta,tv,tm,t)
         v[c-1]=vel
-        pos[c]=pos[c-1]+vel/hz*alpha
+        pos[c]=pos[c-1]+vel/hz*alpha-velprev/hz*(alpha-1)
         c+=1
+        velprev=vel
     # plt.plot(time,v)
     # plt.plot(time,pos[1:])
     # plt.show()
@@ -80,7 +81,7 @@ def movepath(hz):
     pnt.velocities=[]
     # pnt.velocities=[1,0,0,0,0,0,0,0]
     pnt.accelerations=[]
-    pnt.time_from_start.nsecs=int((10**9)/hz)
+    pnt.time_from_start.nsecs=int(2*(10**9)/hz)
     # rospy.loginfo(pnt)
     pubmsg=JointTrajectory()
     pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
