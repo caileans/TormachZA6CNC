@@ -35,13 +35,19 @@ def genpath(hz):
 
 
      """
-    amax=3 #rad/s/s
-    ta=.075 #s
+    # amax=3 #rad/s/s
+    # ta=.075 #s
+    # vmax= .3 #rad/s
+    # tm =.5 #s
+
+    amax=.3 #rad/s/s
+    ta=.25 #s
     vmax= .3 #rad/s
+    tm =5 #s
 
     tv= vmax/amax+ta   #rad/s
 
-    tm =.5 #s
+
     time=np.linspace(0,tm,num=int(hz*tm))
     v=np.zeros(int(hz*tm))
     pos=np.zeros(int(hz*tm)+1)
@@ -81,6 +87,8 @@ def movepath(hz):
         # pubmsg.joint_names=['X','Y','Z','A','B','C']
     c=0
     while not  rospy.is_shutdown():
+        if c>= np.size(pos):
+            break
         pnt.positions=[pos[c],pos[c],pos[c],pos[c],pos[c],pos[c],.1,.1]
         pubmsg.points=[pnt]
         pubmsg.header.stamp=rospy.Time.now()
@@ -102,7 +110,7 @@ if __name__=='__main__':
     sleep(60)
     print("prob conected")
     # put movement/publish rate here
-    movepath(10)
+    movepath(20)
     # rate=rospy.Rate(10)
     # pnt=JointTrajectoryPoint()
     # # pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
