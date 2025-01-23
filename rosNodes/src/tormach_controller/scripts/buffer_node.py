@@ -8,9 +8,9 @@ from math import sin, cos, pi
 import csv
 from scipy.optimize import least_squares
 
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-print(sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# import os, sys
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# print(sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 # import general_robotics_toolbox
 from general_robotics_toolbox import * 
 import TrajectoryPlanner as tp
