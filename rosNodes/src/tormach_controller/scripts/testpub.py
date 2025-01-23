@@ -139,7 +139,7 @@ if __name__=='__main__':
     for i in range(9):
         i+=2
         movepath(10*i)
-
+        sleep(1)
         pnt=JointTrajectoryPoint()
         # pnt.positions=[0.15,.22,-.17,.63,.3,.97,25.88,-9.25]
         pnt.positions=[0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.1]
