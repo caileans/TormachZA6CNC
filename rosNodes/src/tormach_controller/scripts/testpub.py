@@ -138,6 +138,7 @@ if __name__=='__main__':
 
     for i in range(9):
         i+=2
+        # print
         movepath(10*i)
         sleep(1)
         pnt=JointTrajectoryPoint()
@@ -148,7 +149,7 @@ if __name__=='__main__':
         pnt.velocities=[]
         # pnt.velocities=[1,0,0,0,0,0,0,0]
         pnt.accelerations=[]
-        pnt.time_from_start.nsecs=int(2*(10**9)/hz)
+        # pnt.time_from_start.nsecs=int(2*(10**9)/hz)
         # rospy.loginfo(pnt)
         pubmsg=JointTrajectory()
         pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
