@@ -50,7 +50,7 @@ def genpath(hz):
 
     time=np.linspace(0,tm,num=int(hz*tm))
     v=np.zeros(int(hz*tm))
-    pos=np.zeros(int(hz*tm)+1)
+    pos=np.zeros(int(hz*tm)+2)
     c=1
 
     alpha=10 #how much overshoot in position
@@ -64,6 +64,7 @@ def genpath(hz):
     # plt.plot(time,v)
     # plt.plot(time,pos[1:])
     # plt.show()
+    pos[-1]=pos[-2]-velprev/hz*(alpha-1)
     return pos[1:]
 
 
