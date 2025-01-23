@@ -40,10 +40,10 @@ def genpath(hz):
     # vmax= .3 #rad/s
     # tm =.5 #s
 
-    # amax=.3 #rad/s/s
-    # ta=.25 #s
-    # vmax= .3 #rad/s
-    # tm =5 #s
+    amax=.3 #rad/s/s
+    ta=.25 #s
+    vmax= .3 #rad/s
+    tm =5 #s
 
     # amax=1#rad/s/s
     # ta=.25 #s
@@ -61,10 +61,10 @@ def genpath(hz):
     # vmax= .9 #rad/s
     # tm =1.5 #s
 
-    amax=8#rad/s/s
-    ta=.25 #s
-    vmax= 2 #rad/s
-    tm =1.2 #s
+    # amax=8#rad/s/s
+    # ta=.25 #s
+    # vmax= 2 #rad/s
+    # tm =1.2 #s
 
     tv= vmax/amax+ta   #rad/s
 
@@ -74,7 +74,7 @@ def genpath(hz):
     pos=np.zeros(int(hz*tm)+2)
     c=1
 
-    alpha=2 #how much overshoot in position
+    alpha=1 #how much overshoot in position
     velprev=0;
     for t in time:
         vel=voft(amax,vmax,ta,tv,tm,t)
@@ -103,7 +103,7 @@ def movepath(hz):
     pnt.velocities=[]
     # pnt.velocities=[1,0,0,0,0,0,0,0]
     pnt.accelerations=[]
-    pnt.time_from_start.nsecs=int(2*(10**9)/hz)
+    pnt.time_from_start.nsecs=int(1*(10**9)/hz)
     # rospy.loginfo(pnt)
     pubmsg=JointTrajectory()
     pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
