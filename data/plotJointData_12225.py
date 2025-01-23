@@ -61,12 +61,13 @@ for i in range(9):
 	i+=2
 	_, vel = tp.genpath(10*i, amax, ta, vmax, tm, overshoot)
 	vel=np.append(vel,[0,0])
-	test3vel=np.append(test1vel,vel)
+	test3vel=np.append(test3vel,vel)
 # print(test1vel)
 
 plotLineWidth = 0.5
 
 ######## First Plot
+fig1 = plt.figure(1)
 plt.plot(test1command.time[1:], test1command.pos[1:, 0], 'k.-', linewidth=plotLineWidth)
 plt.plot(test1states.time[1:],test1states.pos[1:,0],'b.-', linewidth=plotLineWidth)
 plt.plot(test1states.time[1:],test1states.pos[1:,1],'g.-', linewidth=plotLineWidth)
@@ -74,6 +75,7 @@ plt.plot(test1states.time[1:],-test1states.pos[1:,2],'r.-', linewidth=plotLineWi
 plt.plot(test1states.time[1:],test1states.pos[1:,3],'c.-', linewidth=plotLineWidth)
 plt.plot(test1states.time[1:],test1states.pos[1:,4],'m.-', linewidth=plotLineWidth)
 plt.plot(test1states.time[1:],test1states.pos[1:,5],'y.-', linewidth=plotLineWidth)
+plt.plot(test1command.time[1:], test1vel, 'k+-', linewidth=plotLineWidth)
 plt.plot(test1states.time[1:],test1states.vel[1:,0],'b+-', linewidth=plotLineWidth)
 plt.plot(test1states.time[1:],test1states.vel[1:,1],'g+-', linewidth=plotLineWidth)
 plt.plot(test1states.time[1:],-test1states.vel[1:,2],'r+-', linewidth=plotLineWidth)
@@ -83,13 +85,14 @@ plt.plot(test1states.time[1:],test1states.vel[1:,5],'y+-', linewidth=plotLineWid
 # plt.axis((11.5,16.5,-.2,.3))
 plt.ylabel('Joint Postition (rad) / Velocity (rad/s)')
 plt.xlabel('Time (s)')
-plt.legend(['Commanded pos', 'Joint 1 pos', 'Joint 2 pos', 'Joint 3 pos', 'Joint 4 pos', 'Joint 5 pos', 'Joint 6 pos', 'Joint 1 vel', 'Joint 2 vel', 'Joint 3 vel', 'Joint 4 vel', 'Joint 5 vel', 'Joint 6 vel'])
+plt.legend(['Commanded pos', 'Joint 1 pos', 'Joint 2 pos', 'Joint 3 pos', 'Joint 4 pos', 'Joint 5 pos', 'Joint 6 pos', 'Theoretical vel', 'Joint 1 vel', 'Joint 2 vel', 'Joint 3 vel', 'Joint 4 vel', 'Joint 5 vel', 'Joint 6 vel'])
 plt.title('Test 1: 8rad/sec2, 2rad/s, no overshoot')
-plt.show()
+fig1.show()
 
 
 
 ######## Second Plot
+fig2 = plt.figure(2)
 plt.plot(test2command.time[1:], test1command.pos[1:, 0], 'k.-', linewidth=plotLineWidth)
 plt.plot(test2states.time[1:],test2states.pos[1:,0],'b.-', linewidth=plotLineWidth)
 plt.plot(test2states.time[1:],test2states.pos[1:,1],'g.-', linewidth=plotLineWidth)
@@ -97,6 +100,7 @@ plt.plot(test2states.time[1:],-test2states.pos[1:,2],'r.-', linewidth=plotLineWi
 plt.plot(test2states.time[1:],test2states.pos[1:,3],'c.-', linewidth=plotLineWidth)
 plt.plot(test2states.time[1:],test2states.pos[1:,4],'m.-', linewidth=plotLineWidth)
 plt.plot(test2states.time[1:],test2states.pos[1:,5],'y.-', linewidth=plotLineWidth)
+plt.plot(test2command.time[1:], test1vel, 'k+-', linewidth=plotLineWidth)
 plt.plot(test2states.time[1:],test2states.vel[1:,0],'b+-', linewidth=plotLineWidth)
 plt.plot(test2states.time[1:],test2states.vel[1:,1],'g+-', linewidth=plotLineWidth)
 plt.plot(test2states.time[1:],-test2states.vel[1:,2],'r+-', linewidth=plotLineWidth)
@@ -106,14 +110,15 @@ plt.plot(test2states.time[1:],test2states.vel[1:,5],'y+-', linewidth=plotLineWid
 # plt.axis((11.5,16.5,-.2,.3))
 plt.ylabel('Joint Postition (rad) / Velocity (rad/s)')
 plt.xlabel('Time (s)')
-plt.legend(['Commanded pos', 'Joint 1 pos', 'Joint 2 pos', 'Joint 3 pos', 'Joint 4 pos', 'Joint 5 pos', 'Joint 6 pos', 'Joint 1 vel', 'Joint 2 vel', 'Joint 3 vel', 'Joint 4 vel', 'Joint 5 vel', 'Joint 6 vel'])
+plt.legend(['Commanded pos', 'Joint 1 pos', 'Joint 2 pos', 'Joint 3 pos', 'Joint 4 pos', 'Joint 5 pos', 'Joint 6 pos', 'Theoretical vel', 'Joint 1 vel', 'Joint 2 vel', 'Joint 3 vel', 'Joint 4 vel', 'Joint 5 vel', 'Joint 6 vel'])
 plt.title('Test 2: 8rad/sec2, 2rad/s, 2x overshoot')
-plt.show()
+fig2.show()
 
 
 
 
 ######## Third Plot
+fig3 = plt.figure(3)
 plt.plot(test3command.time[1:], test3command.pos[1:, 0], 'k.-', linewidth=plotLineWidth)
 plt.plot(test3states.time[1:],test3states.pos[1:,0],'b.-', linewidth=plotLineWidth)
 plt.plot(test3states.time[1:],test3states.pos[1:,1],'g.-', linewidth=plotLineWidth)
@@ -121,6 +126,7 @@ plt.plot(test3states.time[1:],-test3states.pos[1:,2],'r.-', linewidth=plotLineWi
 plt.plot(test3states.time[1:],test3states.pos[1:,3],'c.-', linewidth=plotLineWidth)
 plt.plot(test3states.time[1:],test3states.pos[1:,4],'m.-', linewidth=plotLineWidth)
 plt.plot(test3states.time[1:],test3states.pos[1:,5],'y.-', linewidth=plotLineWidth)
+plt.plot(test3command.time[1:], test3vel, 'k+-', linewidth=plotLineWidth)
 plt.plot(test3states.time[1:],test3states.vel[1:,0],'b+-', linewidth=plotLineWidth)
 plt.plot(test3states.time[1:],test3states.vel[1:,1],'g+-', linewidth=plotLineWidth)
 plt.plot(test3states.time[1:],-test3states.vel[1:,2],'r+-', linewidth=plotLineWidth)
@@ -130,14 +136,15 @@ plt.plot(test3states.time[1:],test3states.vel[1:,5],'y+-', linewidth=plotLineWid
 # plt.axis((11.5,16.5,-.2,.3))
 plt.ylabel('Joint Postition (rad) / Velocity (rad/s)')
 plt.xlabel('Time (s)')
-plt.legend(['Commanded pos', 'Joint 1 pos', 'Joint 2 pos', 'Joint 3 pos', 'Joint 4 pos', 'Joint 5 pos', 'Joint 6 pos', 'Joint 1 vel', 'Joint 2 vel', 'Joint 3 vel', 'Joint 4 vel', 'Joint 5 vel', 'Joint 6 vel'])
+plt.legend(['Commanded pos', 'Joint 1 pos', 'Joint 2 pos', 'Joint 3 pos', 'Joint 4 pos', 'Joint 5 pos', 'Joint 6 pos', 'Theoretical vel', 'Joint 1 vel', 'Joint 2 vel', 'Joint 3 vel', 'Joint 4 vel', 'Joint 5 vel', 'Joint 6 vel'])
 plt.title('Test 3: 0.3rad/sec2, 0.3rad/s, no overshoot')
-plt.show()
+fig3.show()
 
 
 
 
 ######## Forth Plot
+fig4 = plt.figure(4)
 plt.plot(test4command.time[1:], test3command.pos[1:, 0], 'k.-', linewidth=plotLineWidth)
 plt.plot(test4states.time[1:],test4states.pos[1:,0],'b.-', linewidth=plotLineWidth)
 plt.plot(test4states.time[1:],test4states.pos[1:,1],'g.-', linewidth=plotLineWidth)
@@ -145,6 +152,7 @@ plt.plot(test4states.time[1:],-test4states.pos[1:,2],'r.-', linewidth=plotLineWi
 plt.plot(test4states.time[1:],test4states.pos[1:,3],'c.-', linewidth=plotLineWidth)
 plt.plot(test4states.time[1:],test4states.pos[1:,4],'m.-', linewidth=plotLineWidth)
 plt.plot(test4states.time[1:],test4states.pos[1:,5],'y.-', linewidth=plotLineWidth)
+plt.plot(test4command.time[1:], test3vel, 'k+-', linewidth=plotLineWidth)
 plt.plot(test4states.time[1:],test4states.vel[1:,0],'b+-', linewidth=plotLineWidth)
 plt.plot(test4states.time[1:],test4states.vel[1:,1],'g+-', linewidth=plotLineWidth)
 plt.plot(test4states.time[1:],-test4states.vel[1:,2],'r+-', linewidth=plotLineWidth)
@@ -154,9 +162,9 @@ plt.plot(test4states.time[1:],test4states.vel[1:,5],'y+-', linewidth=plotLineWid
 # plt.axis((11.5,16.5,-.2,.3))
 plt.ylabel('Joint Postition (rad) / Velocity (rad/s)')
 plt.xlabel('Time (s)')
-plt.legend(['Commanded pos', 'Joint 1 pos', 'Joint 2 pos', 'Joint 3 pos', 'Joint 4 pos', 'Joint 5 pos', 'Joint 6 pos', 'Joint 1 vel', 'Joint 2 vel', 'Joint 3 vel', 'Joint 4 vel', 'Joint 5 vel', 'Joint 6 vel'])
+plt.legend(['Commanded pos', 'Joint 1 pos', 'Joint 2 pos', 'Joint 3 pos', 'Joint 4 pos', 'Joint 5 pos', 'Joint 6 pos', 'Theoretical vel', 'Joint 1 vel', 'Joint 2 vel', 'Joint 3 vel', 'Joint 4 vel', 'Joint 5 vel', 'Joint 6 vel'])
 plt.title('Test 2: 0.3rad/sec2, 0.3rad/s, 2x overshoot')
-plt.show()
+fig4.show()
 
 
 
