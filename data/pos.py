@@ -6,32 +6,32 @@ vel=np.array([[0,0]])
 eff=np.array([[0,0]])
 initialTime=0;
 
-c=1;
-with open('file1.txt', 'r') as file:
-	for line in file:
-		# print(line.strip())
-		temp=line.strip()
-		if (c%19)==4:
-			temp=float(temp.split(':')[1].split(' ')[-1]);
-			if c==4:
-				initialTime=temp;			
-			time=np.append(time,temp)
-		elif (c%19)==5:
-			temp=float(temp.split(':')[1].split(' ')[-1]);
-			if c==5:
-				initialTime+=temp/10.0**9
-			time[-1]+= temp/10.0**9 - initialTime
-		elif (c%19)==16:
-			temp=temp.split('[')[1].split(',')
-			pose=np.append(pose,[[float(temp[0]),float(temp[1])]], axis=0)
-		elif (c%19)==17:
-			temp=temp.split('[')[1].split(',')
-			vel=np.append(vel,[[float(temp[0]),float(temp[1])]], axis=0)
-		elif(c%19)==18:
-			temp=temp.split('[')[1].split(',')
-			eff=np.append(eff,[[float(temp[0]),float(temp[1])]], axis=0)
-		c+=1
-print(initialTime)
+# c=1;
+# with open('file1.txt', 'r') as file:
+# 	for line in file:
+# 		# print(line.strip())
+# 		temp=line.strip()
+# 		if (c%19)==4:
+# 			temp=float(temp.split(':')[1].split(' ')[-1]);
+# 			if c==4:
+# 				initialTime=temp;			
+# 			time=np.append(time,temp)
+# 		elif (c%19)==5:
+# 			temp=float(temp.split(':')[1].split(' ')[-1]);
+# 			if c==5:
+# 				initialTime+=temp/10.0**9
+# 			time[-1]+= temp/10.0**9 - initialTime
+# 		elif (c%19)==16:
+# 			temp=temp.split('[')[1].split(',')
+# 			pose=np.append(pose,[[float(temp[0]),float(temp[1])]], axis=0)
+# 		elif (c%19)==17:
+# 			temp=temp.split('[')[1].split(',')
+# 			vel=np.append(vel,[[float(temp[0]),float(temp[1])]], axis=0)
+# 		elif(c%19)==18:
+# 			temp=temp.split('[')[1].split(',')
+# 			eff=np.append(eff,[[float(temp[0]),float(temp[1])]], axis=0)
+# 		c+=1
+# print(initialTime)
 
 # print(pose)
 
@@ -144,10 +144,10 @@ def voft(amax, vmax, ta, tv, tmove, t):
 
 def genpath(hz):
     """ """
-    amax=.3 #rad/s/s
+    amax=1#rad/s/s
     ta=.25 #s
-    vmax= .3 #rad/s
-    tm =5 #s
+    vmax= .6 #rad/s
+    tm =2.5 #s
 
     tv= vmax/amax+ta;   #rad/s
 
