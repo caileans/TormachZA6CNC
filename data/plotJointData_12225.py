@@ -40,13 +40,29 @@ rFile.readJointStatesFile('data/1_22_25_test4_states.txt', test4states, initialT
 
 ######## Generate desired velocity profile:
 hz = 20
+amax=8#rad/s/s
+ta=.25 #s
+vmax= 2 #rad/s
+tm =1.2 #s
+overshoot = 1
+test1vel=np.array([]);
+for i in range(9):
+	i+=2
+	_, vel = tp.genpath(10*i, amax, ta, vmax, tm, overshoot)
+	vel=np.append(vel,[0,0])
+	test1vel=np.append(test1vel,vel)
 amax = 0.3
 ta = 0.25
 vmax = 0.3
-tm = 0.3
+tm = 5
 overshoot = 1
-_, vel = tp.genpath(hz, amax, ta, vmax, tm, overshoot)
-
+test3vel=np.array([]);
+for i in range(9):
+	i+=2
+	_, vel = tp.genpath(10*i, amax, ta, vmax, tm, overshoot)
+	vel=np.append(vel,[0,0])
+	test3vel=np.append(test1vel,vel)
+# print(test1vel)
 
 plotLineWidth = 0.5
 
