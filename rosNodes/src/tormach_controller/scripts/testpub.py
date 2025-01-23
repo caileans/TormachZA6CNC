@@ -56,10 +56,15 @@ def genpath(hz):
     # vmax= .9 #rad/s
     # tm =2 #s
 
-    amax=5#rad/s/s
+    # amax=5#rad/s/s
+    # ta=.25 #s
+    # vmax= .9 #rad/s
+    # tm =1.5 #s
+
+    amax=8#rad/s/s
     ta=.25 #s
-    vmax= .9 #rad/s
-    tm =1.5 #s
+    vmax= 2 #rad/s
+    tm =1.2 #s
 
     tv= vmax/amax+ta   #rad/s
 
