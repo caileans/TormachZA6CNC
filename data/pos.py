@@ -144,7 +144,7 @@ def voft(amax, vmax, ta, tv, tmove, t):
 
 def genpath(hz):
     """ """
-    amax=3#rad/s/s
+    amax=5#rad/s/s
     ta=.25 #s
     vmax= .9 #rad/s
     tm =1.5 #s
