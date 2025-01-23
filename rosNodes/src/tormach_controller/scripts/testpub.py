@@ -30,7 +30,7 @@ def voft(amax, vmax, ta, tv, tmove, t):
 
 
 
-def genpath(hz):
+def genpath(hz, alpha):
     """generates a 1d path using trapizoidal acceleration at a specified frequency hz
 
 
@@ -74,7 +74,7 @@ def genpath(hz):
     pos=np.zeros(int(hz*tm)+2)
     c=1
 
-    alpha=2 #how much overshoot in position
+    #how much overshoot in position
     velprev=0;
     for t in time:
         vel=voft(amax,vmax,ta,tv,tm,t)
@@ -92,7 +92,8 @@ def genpath(hz):
 
 def movepath(hz):
 
-    pos=genpath(hz)
+    alpha=2
+    pos=genpath(hz,alpha)
 
     rate=rospy.Rate(hz)
     pnt=JointTrajectoryPoint()
@@ -103,7 +104,7 @@ def movepath(hz):
     pnt.velocities=[]
     # pnt.velocities=[1,0,0,0,0,0,0,0]
     pnt.accelerations=[]
-    pnt.time_from_start.nsecs=int(2*(10**9)/hz)
+    pnt.time_from_start.nsecs=int(alpha*(10**9)/hz)
     # rospy.loginfo(pnt)
     pubmsg=JointTrajectory()
     pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
