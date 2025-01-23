@@ -153,11 +153,11 @@ if __name__=='__main__':
         # rospy.loginfo(pnt)
         pubmsg=JointTrajectory()
         pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
-        pnt.time_from_start.secs=1
+        pnt.time_from_start.secs=3
         pubmsg.points=[pnt]
         pubmsg.header.stamp=rospy.Time.now()
         forcePub.publish(pubmsg)
-        sleep(3)
+        sleep(5)
         # pubmsg.joint_names=['X','Y','Z','A','B','C']
 
 
