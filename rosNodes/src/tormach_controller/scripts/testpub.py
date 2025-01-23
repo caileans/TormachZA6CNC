@@ -91,7 +91,7 @@ def movepath(hz):
     while not  rospy.is_shutdown():
         if c>= np.size(pos):
             break
-        pnt.positions=[pos[c],pos[c],pos[c],pos[c],pos[c],pos[c],.1,.1]
+        pnt.positions=[pos[c],pos[c],-1*pos[c],pos[c],pos[c],pos[c],.1,.1]
         pubmsg.points=[pnt]
         pubmsg.header.stamp=rospy.Time.now()
         forcePub.publish(pubmsg)
