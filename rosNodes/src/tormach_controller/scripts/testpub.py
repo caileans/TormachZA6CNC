@@ -1,7 +1,7 @@
 import rospy 
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-    
+import numpy as np
 
 
 
