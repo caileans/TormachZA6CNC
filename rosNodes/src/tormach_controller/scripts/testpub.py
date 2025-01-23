@@ -57,6 +57,7 @@ def genpath(hz):
     # plt.plot(time,v)
     # plt.plot(time,pos[1:])
     # plt.show()
+    return pos[1:]
 
 
 
