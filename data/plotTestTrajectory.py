@@ -145,9 +145,9 @@ def voft(amax, vmax, ta, tv, tmove, t):
 def genpath(hz):
     """ """
     amax=8#rad/s/s
-    ta=.25 #s
+    ta=0.01 #s
     vmax= 2 #rad/s
-    tm =1.2 #s
+    tm =1.3 #s
 
     tv= vmax/amax+ta;   #rad/s
 
@@ -169,4 +169,4 @@ def genpath(hz):
     plt.show()
     print(pos[1:])
 
-genpath(20)
+genpath(200)
