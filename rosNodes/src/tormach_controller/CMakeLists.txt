@@ -166,7 +166,7 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
- catkin_install_python(PROGRAMS scripts/buffer_node.py scripts/move_pose_action.py scripts/testpub.py scripts/data.py scripts/general_robotics_toolbox.py ../../../TrajectoryPlanner.py
+ catkin_install_python(PROGRAMS scripts/test/buffer_node.py scripts/test/move_pose_action.py scripts/test/testpub.py scripts/test/data.py scripts/lib/general_robotics_toolbox.py scripts/lib/InverseKinematics.py ../../../preProcessing/TrajectoryPlanner.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
