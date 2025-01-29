@@ -31,5 +31,7 @@ if __name__=="__main__":
     print("generating trajectory")
     traj = genTrajectory(sys.argv[1])
 
+    plotTrajectory(traj)
+
     print("saving trajectory")
     saveTrajectory(sys.argv[2], traj)

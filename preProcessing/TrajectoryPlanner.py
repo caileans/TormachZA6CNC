@@ -28,10 +28,11 @@ def planTrajectory(wayPoints, a=9.0, hz=50):
         ijkf = wayPoints[i].toolVec
 
         ### if it's linear motion
-        if wayPoints[i].motion == MotionType.line:
-            points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
-        else:
-            points = genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoints[i])
+        # if wayPoints[i].motion == MotionType.line:
+        #     points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
+        # else:
+        #     points = genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoints[i])
+        points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
 
         traj.append(points)
 
@@ -51,22 +52,22 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf):
     return points
     
 
-def genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoint):
-    # pFinal=np.array([wayPoint.pos.x,wayPoint.pos.y,wayPoint.pos.z])
-    # pInitial=np.array([toolPose.x,toolPose.y,toolPose.z])
-    dtheta = 
-    vi_angular = 
-    vm_angular = 
-    vf_angular = 
-    a_angular = 
+# def genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoint):
+#     # pFinal=np.array([wayPoint.pos.x,wayPoint.pos.y,wayPoint.pos.z])
+#     # pInitial=np.array([toolPose.x,toolPose.y,toolPose.z])
+#     dtheta = 
+#     vi_angular = 
+#     vm_angular = 
+#     vf_angular = 
+#     a_angular = 
 
-    path = genPath(hz, a_angular, vi_angular, vm_angular, vf_angular, 0, dtheta)
+#     path = genPath(hz, a_angular, vi_angular, vm_angular, vf_angular, 0, dtheta)
 
-    for theta in path:
-        # compute the cart point at each theta along the circle
-        xyz = pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2
+#     for theta in path:
+#         # compute the cart point at each theta along the circle
+#         xyz = pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2
 
-    return points
+#     return points
 
 # def voft(amax, vi, vm, vf, ta, tv1, tm, tv2, t):
 #     """Returns the instantanious velocity at time t for a move that take tmove, a max veloctiy vmax, and a trapizoidal acceleration profile with a max amax, ramp time ta, and total tim tv
