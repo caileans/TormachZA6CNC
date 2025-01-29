@@ -6,14 +6,17 @@ import DataTypes
 
 def planTrajectory(wayPoints, a=9.0, hz=50):
     traj = []
+
     for i in range(len(wayPoints)):
         ### get the v and p information from the wayPoint
         if i == 0:
             vi = 0
             p0 = np.array([0,0,0])
+            ijk0 = np.array([0,0,0])
         else:
             vi = (wayPoints[i-1].vel+wayPoints[i].vel)/2.0
             p0 = wayPoints[i-1].pos
+            ijk0 = wayPoints[i-1].toolVec
 
         if i == len(wayPoints)-1:
             vf = 0
@@ -22,10 +25,11 @@ def planTrajectory(wayPoints, a=9.0, hz=50):
         
         vm = wayPoints[i].vel
         pf = wayPoints[i].pos
+        ijkf = wayPoints[i].toolVec
 
         ### if it's linear motion
         if wayPoints[i].motion == MotionType.line:
-            points = genLinPath(hz, a, vi, vm, vf, 0, pf-p0)
+            points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
         else:
             points = genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoints[i])
 

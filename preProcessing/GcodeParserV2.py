@@ -35,31 +35,44 @@ class GcodeParserV2:
 
 
     def evaluateGcode(self):
-        pos = []
-        vel = []
+        wayPoints = []
         for block in self.parsedGcode:
             if evaluateGcodeBlock(block):
-                botPose = self.calcBotPose(self.newToolPose, self.toolOffset)
+                # botPose = self.calcBotPose(self.newToolPose, self.toolOffset)
+                point = DataTypes.WayPoint(pos=np.array([self.newToolPose.x, self.newToolPose.y, self.newToolPose.z]), toolVec=np.array([self.newToolPose.i, self.newToolPose.j, self.newToolPose.k]))
                 if self.motionMode == 0:
                     # TRPLCommand = self.constructTRPLLine(self.botPose, self.rapidFeed)
-                    pos.append(botPose)
-                    vel.append(self.rapidFeed)
+                    # pos.append(botPose)
+                    # vel.append(self.rapidFeed)
+                    point.circijk=np.array([0,0,0])
+                    point.vel=self.rapidFeed
+                    point.motion=MotionType.line
+                    
                 if self.motionMode == 1:
                     # TRPLCommand = self.constructTRPLLine(self.botPose, self.feedRate)
-                    pos.append(botPose)
-                    vel.append(self.feedRate)
+                    # pos.append(botPose)
+                    # vel.append(self.feedRate)
+                    point.circijk=np.array([0,0,0])
+                    point.vel=self.feedRate
+                    point.motion=MotionType.line
                 if self.motionMode == 2:
                     # circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.circCenter[0],self.circCenter[1],self.circCenter[2]]), a= np.array([0,0,-1]))
                     # circInterBotPose = self.calcBotPose(circInterToolPose)
                     # TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
+                    point.circijk=np.array(self.circCenter)
+                    point.vel=self.feedRate
+                    point.motion=MotionType.cw
                 if self.motionMode == 3:
                     # circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.circCenter[0],self.circCenter[1],self.circCenter[2]]), a= np.array([0,0,1]))
                     # circInterBotPose = self.calcBotPose(circInterToolPose)
                     # TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
+                    point.circijk=np.array(self.circCenter)
+                    point.vel=self.feedRate
+                    point.motion=MotionType.ccw
 
+                wayPoints.append(point)
 
-
-        return [pos, vel]
+        return wayPoints
 
             
 
