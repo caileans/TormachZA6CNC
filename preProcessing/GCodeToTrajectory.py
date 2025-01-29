@@ -1,19 +1,25 @@
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import GcodeParserV2
 import TrajectoryPlanner
+import DataTypes
+import numpy as np
+import matplotlib.pyplot as plt
 import sys
 
 
 
 def genTrajectory(file):
     '''call necessary functions to plan a trajectory from gcode'''
-    parser = GcodeParserV2()
+    parser = GcodeParserV2.GcodeParserV2()
 
-    if not parser.parseFile(file):
+    if parser.parseFile(file):
         return 0
 
     wayPoints = parser.evaluateGcode()
 
-    trajectory = planTrajectory(wayPoints)
+    trajectory = TrajectoryPlanner.planTrajectory(wayPoints)
 
     return trajectory
 
@@ -23,9 +29,17 @@ def saveTrajectory(file, trajectory):
     '''write the trajectory to a file'''
     with open(file, "w") as f:
         for trajPoint in trajectory:
-            f.write(trajPoint)
+            f.write(str(trajPoint)+"\n")
 
 
+def plotTrajectory(trajectory):
+    x = []
+    y = []
+    for point in trajectory:
+        x.append(point.pos[0])
+        y.append(point.pos[1])
+    plt.plot(x, y)
+    plt.show()
 
 if __name__=="__main__":
     print("generating trajectory")

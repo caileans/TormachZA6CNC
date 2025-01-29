@@ -1,3 +1,6 @@
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import numpy as np
 import matplotlib.pyplot as plt
 import DataTypes
@@ -11,8 +14,8 @@ def planTrajectory(wayPoints, a=9.0, hz=50):
         ### get the v and p information from the wayPoint
         if i == 0:
             vi = 0
-            p0 = np.array([0,0,0])
-            ijk0 = np.array([0,0,0])
+            p0 = np.array([0.0,0.0,0.0])
+            ijk0 = np.array([0,0,1])
         else:
             vi = (wayPoints[i-1].vel+wayPoints[i].vel)/2.0
             p0 = wayPoints[i-1].pos
@@ -34,7 +37,7 @@ def planTrajectory(wayPoints, a=9.0, hz=50):
         #     points = genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoints[i])
         points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
 
-        traj.append(points)
+        traj.extend(points)
 
     return traj
 
@@ -45,7 +48,7 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf):
 
     points = []
     for point in path:
-        pos = po+dp*point
+        pos = p0+dp*point
         ijk = ijk0+dijk*point
         points.append(DataTypes.TrajPoint(pos=pos, toolVec=ijk))
 
