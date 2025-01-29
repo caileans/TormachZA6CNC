@@ -1,25 +1,6 @@
 import re
 import numpy as np
-import 
-
-@dataclass
-class ToolPose:
-    x: 0
-    y: 0
-    z: 0
-    i: 0
-    j: 0
-    k: 0
-
-
-@dataclass
-class BotPose:
-    x: 0
-    y: 0
-    z: 0
-    a: 0
-    b: 0
-    c: 0
+import DataTypes
 
 
 class GcodeParserV2:
@@ -121,7 +102,7 @@ class GcodeParserV2:
         self.toolPose.i=self.newToolPose.i
         self.toolPose.j=self.newToolPose.j
         self.toolPose.k=self.newToolPose.k
-        # self.newToolPose=ToolPose()
+        # self.newToolPose=DOF5Pose()
         newPose = False
         for i in range(len(block)):
             if block[i] == ['G', 0]:

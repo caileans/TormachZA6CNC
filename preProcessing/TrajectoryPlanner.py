@@ -1,11 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import DataTypes
+
+
 
 def planTrajectory(wayPoints, a=9.0, hz=50):
+    traj = []
     for i in range(len(wayPoints)):
+        ### get the v and p information from the wayPoint
         if i == 0:
             vi = 0
-            p0 = pInit
+            p0 = np.array([0,0,0])
         else:
             vi = (wayPoints[i-1].vel+wayPoints[i].vel)/2.0
             p0 = wayPoints[i-1].pos
@@ -18,87 +23,133 @@ def planTrajectory(wayPoints, a=9.0, hz=50):
         vm = wayPoints[i].vel
         pf = wayPoints[i].pos
 
-        genLinPath(hz, a, vi, vm, vf, p0, pf)
+        ### if it's linear motion
+        if wayPoints[i].motion == MotionType.line:
+            points = genLinPath(hz, a, vi, vm, vf, 0, pf-p0)
+        else:
+            points = genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoints[i])
+
+        traj.append(points)
+
+    return traj
+
+def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf):
+    dp = pf - p0
+    dijk = ijkf - ijk0
+    path = genPath(hz, a, vi, vm, vf, 0, np.linalg.norm(dp))/np.linalg.norm(dp)
+
+    points = []
+    for point in path:
+        pos = po+dp*point
+        ijk = ijk0+dijk*point
+        points.append(DataTypes.TrajPoint(pos=pos, toolVec=ijk))
+
+    return points
+    
+
+def genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoint):
+    # pFinal=np.array([wayPoint.pos.x,wayPoint.pos.y,wayPoint.pos.z])
+    # pInitial=np.array([toolPose.x,toolPose.y,toolPose.z])
+    dtheta = 
+    vi_angular = 
+    vm_angular = 
+    vf_angular = 
+    a_angular = 
+
+    path = genPath(hz, a_angular, vi_angular, vm_angular, vf_angular, 0, dtheta)
+
+    for theta in path:
+        # compute the cart point at each theta along the circle
+        xyz = pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2
+
+    return points
+
+# def voft(amax, vi, vm, vf, ta, tv1, tm, tv2, t):
+#     """Returns the instantanious velocity at time t for a move that take tmove, a max veloctiy vmax, and a trapizoidal acceleration profile with a max amax, ramp time ta, and total tim tv
 
 
-def lambdaOfK(amax, vi, vm, vf, ta, tv1, tm, tv2, k):
-    ta = abs(vm - vi)/amax #time to go from vi to vm
-    tc = abs(vf - vm)/amax #time to go from vm to vf
-    tb = (pf - p0 - 0.5*(vi+vm)*t1 - 0.5*(vm+vf)*t3) #time to stay at vm
+#     """
+
+#     # if t<= ta:
+#     #     return amax*t*t/2/ta
+#     if t<= tv1-ta:
+#         return np.sign(vm-vi)*amax*(t-ta/2) + vi
+#     # elif t<=tv:
+#     #     return vmax-amax*((t-tv)**2)/2/ta
+#     elif t<=tm:
+#         return vm
+#     # elif t<=tmove-tv+ta:
+#     #     return vmax-amax*((t+tv-tmove)**2)/2/ta
+#     elif t<=tv2:
+#         # return vmax -amax*(ta/2+t-tmove+tv-ta)
+#         return vm + np.sign(vf-vm)*amax*(t-tm)
+#     # elif t<=tmove:
+#     #     return amax*((tmove-t)**2)/2/ta
+#     else:
+#         return 0
+
+def genPath(hz, a=1, vi=0, vm=0.3, vf=0, p0=0, pf=1):
+    """generates a 1d path using trapizoidal acceleration at a specified frequency hz
+
+
+     """
+    ta = abs(vm - vi)/a #time to go from vi to vm
+    tc = abs(vf - vm)/a #time to go from vm to vf
+    tb = (pf - p0 - 0.5*(vi+vm)*ta - 0.5*(vm+vf)*tc) #time to stay at vm
     t1 = ta
     t2 = ta + tb
     t3 = ta + tb + tc
-    if k <= t1:
-        return
 
-def voft(amax, vi, vm, vf, ta, tv1, tm, tv2, t):
-    """Returns the instantanious velocity at time t for a move that take tmove, a max veloctiy vmax, and a trapizoidal acceleration profile with a max amax, ramp time ta, and total tim tv
+    time=np.linspace(0,t3,num=int(hz*t3))
+    pos=np.zeros(int(hz*t3))
 
+    for i in range(0, len(time)):
+        pos[i] = pOft(a, vi, vm, vf, p0, pf, t1, t2, t3, time[i])
 
-    """
+    return pos
 
-    # if t<= ta:
-    #     return amax*t*t/2/ta
-    if t<= tv1-ta:
-        return np.sign(vm-vi)*amax*(t-ta/2) + vi
-    # elif t<=tv:
-    #     return vmax-amax*((t-tv)**2)/2/ta
-    elif t<=tm:
-        return vm
-    # elif t<=tmove-tv+ta:
-    #     return vmax-amax*((t+tv-tmove)**2)/2/ta
-    elif t<=tv2:
-        # return vmax -amax*(ta/2+t-tmove+tv-ta)
-        return vm + np.sign(vf-vm)*amax*(t-tm)
-    # elif t<=tmove:
-    #     return amax*((tmove-t)**2)/2/ta
+def pOft(a, vi, vm, vf, p0, pf, t1, t2, t3, t):
+    c1 = np.sign(vm-vi)*a
+    c2 = np.sign(vf-vm)*a
+    if t <= t1:
+        return 0.5*c1*t**2 + vi*t + p0
+    elif t <= t2:
+        return (vi + c1*t1)*t - 0.5*c1*t1**2 + p0
+    elif t <= t3:
+        return 0.5*c2*t**2 + (vi + c1*t1 - c2*t2)*t - 0.5*c1*t1**2 + 0.5*c2*t2**2 + p0
     else:
         return 0
 
 
 
-def genpath(hz, amax=1, vi = 0, vm = 0.3, vf = 0, p0 = 0, pf= 1):
-    """generates a 1d path using trapizoidal acceleration at a specified frequency hz
-
-
-     """
-    ta = 0
-    t1 = abs(vm - vi)/amax #time to go from vi to vm
-    t3 = abs(vf - vm)/amax #time to go from vm to vf
-    t2 = (pf - p0 - 0.5*(vi+vm)*t1 - 0.5*(vm+vf)*t3) #time to stay at vm
-    tv1 = t1 
-    tm = t1+t2
-    tv2 = t1+t2+t3
-    # tv= vmax/amax+ta   #rad/s
-
-    if t2 < 0:
-        print("WARNING: NOT ENOUGH TIME TO CREATE TRAJECTORY WITH GIVEN PARAMETERS")
-
-
-    time=np.linspace(0,tv2,num=int(hz*tm))
-    v=np.zeros(int(hz*tm))
-    pos=np.zeros(int(hz*tm)+1)
-    c=1
-
-    # alpha=2 #how much overshoot in position
-    velprev=0
-    for t in time:
-        vel=voft(amax, vi, vm, vf, ta, tv1, tm, tv2, t)
-        v[c-1]=vel
-        pos[c]=pos[c-1]+vel/hz #*overshoot-velprev/hz*(overshoot-1)
-        c+=1
-        velprev=vel
-    # pos[-1]=pos[-2]-velprev/hz*(overshoot-1)
-    plt.plot(time,v)
-    plt.plot(time,pos[1:])
-    plt.show()
-    return pos[1:], v
-
-
-
 if __name__=="__main__":
-    genpath(200, 4, 1, 2, 1, 1, 5)
-    genpath(200, 4, 0, 2, 3, 1, 5)
-    genpath(200, 4, 5, 2, 1, 1, 5)
-    genpath(200, 4, 5, 2, 4, 1, 5)
+    # genpath(200, 4, 1, 2, 1, 1, 5)
+    # genpath(200, 4, 0, 2, 3, 1, 5)
+    # genpath(200, 4, 5, 2, 1, 1, 5)
+    # genpath(200, 4, 5, 2, 4, 1, 5)
+
+    vi = 0
+    vm = 1
+    vf = 0
+    a = 5
+    p0 = 0
+    pf = 1
+
+    hz = 50
+
+    ta = abs(vm - vi)/a #time to go from vi to vm
+    tc = abs(vf - vm)/a #time to go from vm to vf
+    tb = (pf - p0 - 0.5*(vi+vm)*ta - 0.5*(vm+vf)*tc) #time to stay at vm
+    t1 = ta
+    t2 = ta + tb
+    t3 = ta + tb + tc
+
+    time=np.linspace(0,t3,num=int(hz*t3))
+    pos=np.zeros(int(hz*t3))
+
+    for i in range(0, len(time)):
+        pos[i] = pOft(a, vi, vm, vf, p0, pf, t1, t2, t3, time[i])
+
+    plt.plot(time, pos)
+    plt.show()
 
