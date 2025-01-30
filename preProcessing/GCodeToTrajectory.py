@@ -21,6 +21,8 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
 
     trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz)
 
+    trajectory = DOFConversion.AddFixed6DOF(trajectory)
+
     return trajectory
 
 
