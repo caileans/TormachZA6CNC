@@ -6,7 +6,7 @@ import DataTypes
 
 
 def AddFixed6DOF(trajectory):
-    for point in trajectory:
-        point.rot=np.array([0.0, np.pi, 0.0])
+    for i in range(len(trajectory)):
+        trajectory[i].rot=np.array([0.0, np.pi, 0.0])
 
     return trajectory

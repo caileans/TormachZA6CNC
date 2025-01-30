@@ -3,6 +3,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import GcodeParserV2
 import TrajectoryPlanner
+import DOFConversion
 import DataTypes
 import numpy as np
 import matplotlib.pyplot as plt
