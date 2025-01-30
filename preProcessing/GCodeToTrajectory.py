@@ -6,7 +6,6 @@ import TrajectoryPlanner
 import DOFConversion
 import DataTypes
 import numpy as np
-import matplotlib.pyplot as plt
 import sys
 
 
@@ -56,6 +55,7 @@ def plotTrajectory(trajectory):
     plt.show()
 
 if __name__=="__main__":
+    import matplotlib.pyplot as plt
     print("generating trajectory")
     traj = genTrajectory(sys.argv[1], toolFrameOffset=[0.0, 20.0, 0.0])
 

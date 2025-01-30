@@ -2,7 +2,7 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
-import matplotlib.pyplot as plt
+
 import DataTypes
 import CircleFunctions
 
@@ -141,6 +141,7 @@ if __name__=="__main__":
     # genpath(200, 4, 0, 2, 3, 1, 5)
     # genpath(200, 4, 5, 2, 1, 1, 5)
     # genpath(200, 4, 5, 2, 4, 1, 5)
+    import matplotlib.pyplot as plt
 
     vi = 3.0
     vm = 3.0
