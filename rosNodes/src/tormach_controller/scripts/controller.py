@@ -18,7 +18,7 @@ if __name__=='__main__':
     #start the test node
     rospy.init_node("controller")
 
-    file ='./Gcode/TormachR.nc'
+    file ='./Gcode/circleTest.nc'
     publisher=pub.startPublisher()
     overshoot=2.0
     robot=ik.tormachZA6()
@@ -37,7 +37,7 @@ if __name__=='__main__':
 
     while not rospy.is_shutdown():
 
-    	if moveBuffer.empty()
+    	if moveBuffer.empty():
     		pub.pubMove(publisher,jprev, 1,hz)
     	else:
     		point=moveBuffer.get()
