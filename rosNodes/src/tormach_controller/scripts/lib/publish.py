@@ -26,7 +26,7 @@ def pubMove(publisher, j, alpha, hz):
     publisher.publish(pubmsg)
 
 
-def applyOvershoot(j0 j alpha):
+def applyOvershoot(j0, j, alpha):
 	"""computes joint space overshoot
 
 	Inputs:
