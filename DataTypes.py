@@ -50,10 +50,10 @@ class ToolPose:
     j: float = 0
     k: float = 0
 
-class MotionType(Enum):
-    line = 1
-    ccw = 2
-    cw = 3
+# class MotionType(Enum):
+#     line = 1
+#     ccw = 2
+#     cw = 3
 
 @dataclass
 class WayPoint:
@@ -64,7 +64,7 @@ class WayPoint:
     toolVec: np.ndarray = field(default_factory=lambda: np.array([0,0,0]))
     circijk: np.ndarray = field(default_factory=lambda: np.array([0,0,0]))
     vel: float = 0
-    motion: MotionType = MotionType.line
+    rotAxis: np.ndarray = field(default_factory=lambda: np.array([0,0,0]))
 
 @dataclass
 class TrajPoint:

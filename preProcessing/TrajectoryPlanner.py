@@ -7,7 +7,7 @@ import DataTypes
 
 
 
-def planTrajectory(wayPoints, a=9.0, hz=50):
+def planTrajectory(wayPoints, a=1, hz=50):
     traj = []
 
     for i in range(len(wayPoints)):
@@ -15,14 +15,14 @@ def planTrajectory(wayPoints, a=9.0, hz=50):
         if i == 0:
             vi = 0
             p0 = np.array([0.0,0.0,0.0])
-            ijk0 = np.array([0,0,1])
+            ijk0 = np.array([0.0,0.0,1.0])
         else:
             vi = (wayPoints[i-1].vel+wayPoints[i].vel)/2.0
             p0 = wayPoints[i-1].pos
             ijk0 = wayPoints[i-1].toolVec
 
         if i == len(wayPoints)-1:
-            vf = 0
+            vf = 0.0
         else:
             vf = (wayPoints[i+1].vel+wayPoints[i].vel)/2.0
         
@@ -31,11 +31,11 @@ def planTrajectory(wayPoints, a=9.0, hz=50):
         ijkf = wayPoints[i].toolVec
 
         ### if it's linear motion
-        # if wayPoints[i].motion == MotionType.line:
-        #     points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
-        # else:
-        #     points = genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoints[i])
-        points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
+        if wayPoints[i].rotAxis == np.array([0.0, 0.0, 0.0]):
+            points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
+        else:
+            points = genCircPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, wayPoints[i])
+        # points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
 
         traj.extend(points)
 
@@ -44,7 +44,7 @@ def planTrajectory(wayPoints, a=9.0, hz=50):
 def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf):
     dp = pf - p0
     dijk = ijkf - ijk0
-    path = genPath(hz, a, vi, vm, vf, 0, np.linalg.norm(dp))/np.linalg.norm(dp)
+    path = genPath(hz, a, vi, vm, vf, 0.0, np.linalg.norm(dp))/np.linalg.norm(dp)
 
     points = []
     for point in path:
@@ -103,7 +103,7 @@ def genPath(hz, a=1, vi=0, vm=0.3, vf=0, p0=0, pf=1):
      """
     ta = abs(vm - vi)/a #time to go from vi to vm
     tc = abs(vf - vm)/a #time to go from vm to vf
-    tb = (pf - p0 - 0.5*(vi+vm)*ta - 0.5*(vm+vf)*tc) #time to stay at vm
+    tb = (pf - p0 - 0.5*(vi+vm)*ta - 0.5*(vm+vf)*tc)/vm #time to stay at vm
     t1 = ta
     t2 = ta + tb
     t3 = ta + tb + tc
@@ -136,28 +136,32 @@ if __name__=="__main__":
     # genpath(200, 4, 5, 2, 1, 1, 5)
     # genpath(200, 4, 5, 2, 4, 1, 5)
 
-    vi = 0
-    vm = 1
-    vf = 0
-    a = 5
-    p0 = 0
-    pf = 1
+    vi = 3.0
+    vm = 3.0
+    vf = 3.0
+    a = 9.0
+    p0 = np.array([0, 0, 0])
+    pf = np.array([0.0, 5.8531, 0.0])
+    dp = pf-p0
 
     hz = 50
 
     ta = abs(vm - vi)/a #time to go from vi to vm
     tc = abs(vf - vm)/a #time to go from vm to vf
-    tb = (pf - p0 - 0.5*(vi+vm)*ta - 0.5*(vm+vf)*tc) #time to stay at vm
-    t1 = ta
-    t2 = ta + tb
+    tb = (np.linalg.norm(dp) - 0 - 0.5*(vi+vm)*ta - 0.5*(vm+vf)*tc) #time to stay at vm
+    # t1 = ta
+    # t2 = ta + tb
     t3 = ta + tb + tc
 
     time=np.linspace(0,t3,num=int(hz*t3))
-    pos=np.zeros(int(hz*t3))
+    # pos=np.zeros(int(hz*t3))
+    # pos1 = genPath(hz, a, vi, vm, vf, p0, pf)
+    pos2 = genPath(hz, a, vi, vm, vf, 0.0, np.linalg.norm(dp))/np.linalg.norm(dp)
 
-    for i in range(0, len(time)):
-        pos[i] = pOft(a, vi, vm, vf, p0, pf, t1, t2, t3, time[i])
+    # for i in range(0, len(time)):
+    #     pos[i] = pOft(a, vi, vm, vf, p0, pf, t1, t2, t3, time[i])
 
-    plt.plot(time, pos)
+    # plt.plot(time, pos1)
+    plt.plot(time, pos2)
     plt.show()
 

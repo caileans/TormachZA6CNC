@@ -19,7 +19,7 @@ def genTrajectory(file):
 
     wayPoints = parser.evaluateGcode()
 
-    trajectory = TrajectoryPlanner.planTrajectory(wayPoints)
+    trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a = 9, hz = 10)
 
     return trajectory
 
@@ -35,10 +35,21 @@ def saveTrajectory(file, trajectory):
 def plotTrajectory(trajectory):
     x = []
     y = []
+    time = []
+    lastTime = 0.0
     for point in trajectory:
         x.append(point.pos[0])
         y.append(point.pos[1])
-    plt.plot(x, y)
+        lastTime = lastTime + 1.0/50
+        time.append(lastTime)
+        # vel = np.linalg.norm
+    plt.plot(x, y, '.')
+
+
+    plt.figure(2)
+    plt.plot(time, x, '.')
+    plt.plot(time, y, '.')
+
     plt.show()
 
 if __name__=="__main__":

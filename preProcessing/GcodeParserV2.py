@@ -10,22 +10,24 @@ import DataTypes
 
 
 class GcodeParserV2:
-    def __init__(self, feedRate=0, rapidFeed=0, defaultLengthUnits="mm", defaultAngleUnits="deg", defaultTimeUnits="s", toolOffset=[0,0,0]):
-        self.setParameters(feedRate, rapidFeed, defaultLengthUnits, defaultAngleUnits, defaultTimeUnits, toolOffset)
+    def __init__(self, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0,0.0]):
+        self.setParameters(feedRate, rapidFeed, defaultLengthUnits, toolFrameOffset)
 
     
-    def setParameters(self, feedRate=0, rapidFeed=0, defaultLengthUnits="mm", defaultAngleUnits="deg", defaultTimeUnits="s", toolOffset=[0,0,0]):
-        self.rapidFeed = rapidFeed
-        self.feedRate = feedRate
+    def setParameters(self, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0,0.0]):
         self.motionMode = 1
         self.lengthUnits = defaultLengthUnits
-        self.angleUnits = defaultAngleUnits
-        self.timeUnits = defaultTimeUnits
         self.toolPose = DataTypes.ToolPose()
         self.newToolPose = DataTypes.ToolPose()
         self.circCenter = [0,0,0]
-        # self.botPose = BotPose()
-        self.toolOffset = toolOffset
+        if defaultLengthUnits=="in":
+            self.toolFrameOffset = np.array(toolFrameOffset)*25.4
+            self.rapidFeed = rapidFeed*25.4
+            self.feedRate = feedRate*25.4
+        else:
+            self.toolFrameOffset = np.array(toolFrameOffset)
+            self.rapidFeed = rapidFeed 
+            self.feedRate = feedRate
 
 
     def parseFile(self, file):
@@ -46,35 +48,30 @@ class GcodeParserV2:
         for block in self.parsedGcode:
             if self.evaluateGcodeBlock(block):
                 # botPose = self.calcBotPose(self.newToolPose, self.toolOffset)
-                point = DataTypes.WayPoint(pos=np.array([self.newToolPose.x, self.newToolPose.y, self.newToolPose.z]), toolVec=np.array([self.newToolPose.i, self.newToolPose.j, self.newToolPose.k]))
+                pos=np.array([self.newToolPose.x, self.newToolPose.y, self.newToolPose.z])
+                if self.lengthUnits == "in":
+                    pos = pos*25.4
+                pos=pos+self.toolFrameOffset
+                toolVec=np.array([self.newToolPose.i, self.newToolPose.j, self.newToolPose.k])
+                point = DataTypes.WayPoint(pos=pos, toolVec=toolVec)
                 if self.motionMode == 0:
-                    # TRPLCommand = self.constructTRPLLine(self.botPose, self.rapidFeed)
-                    # pos.append(botPose)
-                    # vel.append(self.rapidFeed)
-                    point.circijk=np.array([0,0,0])
-                    point.vel=self.rapidFeed
-                    point.motion=DataTypes.MotionType.line
+                    point.circijk=np.array([0.0,0.0,0.0])
+                    point.vel=self.rapidFeed 
+                    point.rotAxis=np.array([0.0,0.0,0.0])
                 if self.motionMode == 1:
-                    # TRPLCommand = self.constructTRPLLine(self.botPose, self.feedRate)
-                    # pos.append(botPose)
-                    # vel.append(self.feedRate)
                     point.circijk=np.array([0,0,0])
-                    point.vel=self.feedRate
-                    point.motion=DataTypes.MotionType.line
+                    point.vel=self.feedRate if self.lengthUnits == "mm" else self.feedRate*25.4/60.0
+                    point.rotAxis=np.array([0.0,0.0,0.0])
                 if self.motionMode == 2:
-                    # circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.circCenter[0],self.circCenter[1],self.circCenter[2]]), a= np.array([0,0,-1]))
-                    # circInterBotPose = self.calcBotPose(circInterToolPose)
-                    # TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
                     point.circijk=np.array(self.circCenter)
-                    point.vel=self.feedRate
-                    point.motion=DataTypes.MotionType.cw
+                    point.vel=self.feedRate if self.lengthUnits == "mm" else self.feedRate*25.4/60.0
+                    point.rotAxis=np.array([0.0,0.0,-1.0])
                 if self.motionMode == 3:
-                    # circInterToolPose = self.getMidPoint(self.toolPose, self.newToolPose, np.array([self.circCenter[0],self.circCenter[1],self.circCenter[2]]), a= np.array([0,0,1]))
-                    # circInterBotPose = self.calcBotPose(circInterToolPose)
-                    # TRPLCommand = self.constructTRPLCirc(self.botPose, circInterBotPose, self.feedRate)
                     point.circijk=np.array(self.circCenter)
-                    point.vel=self.feedRate
-                    point.motion=DataTypes.MotionType.ccw
+                    point.vel=self.feedRate if self.lengthUnits == "mm" else self.feedRate*25.4/60.0
+                    point.rotAxis=np.array([0.0,0.0,1.0])
+
+                
 
                 wayPoints.append(point)
 
@@ -132,20 +129,20 @@ class GcodeParserV2:
                 self.motionMode = 2
             elif block[i] == ['G', 3]:
                 self.motionMode = 3
-            # elif block[i][0] == 'F':
-            #     self.feedRate = block[i][1]
+            elif block[i][0] == 'F':
+                self.feedRate = block[i][1]
             elif block[i][0] == 'X':
                 newPose = True
-                # self.newToolPose.x = block[i][1]
-                self.newToolPose.y = -block[i][1]
+                self.newToolPose.x = block[i][1]
+                # self.newToolPose.y = -block[i][1]
             elif block[i][0] == 'Y':
                 newPose = True
-                # self.newToolPose.y = block[i][1]
-                self.newToolPose.z = block[i][1]
+                self.newToolPose.y = block[i][1]
+                # self.newToolPose.z = block[i][1]
             elif block[i][0] == 'Z':
                 newPose = True
-                # self.newToolPose.z = block[i][1]
-                self.newToolPose.x = -block[i][1]
+                self.newToolPose.z = block[i][1]
+                # self.newToolPose.x = -block[i][1]
             elif block[i][0] == 'I':
                 if self.motionMode == 0 or self.motionMode == 1:
                     newPose = True
@@ -166,6 +163,11 @@ class GcodeParserV2:
                     self.newToolPose.k = block[i][1]
                 else:
                     self.circCenter[2] = block[i][1]
+            elif block[i] == ['G', 20]:
+                self.lengthUnits = "in"
+            elif block[i] == ['G', 21]:
+                self.lengthUnits = "mm"
+            ###TODO: G17, 18, 19, ?(G40, G49)?, G90, G91
             else:
                 print("Error: " + str(block[i]) + " not found")
         
