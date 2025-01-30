@@ -13,8 +13,8 @@ def pubMove(publisher, j, alpha, hz):
 		hz - the publishing frequency being used (1/time for move)
 	Output:
 		NONE"""
-	pnt=JointTrajectoryPoint()
-    pnt.positions=[j[0:6], 0.1,0.1]
+    pnt=JointTrajectoryPoint()
+    pnt.positions=[j[0:6],0.1,0.1]
     pnt.effort=[]
     pnt.velocities=[]
     pnt.accelerations=[]
