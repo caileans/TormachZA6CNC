@@ -72,6 +72,23 @@ def runIK (r, r0,robot, w=[1,1,1,1,1,1,1]):
     return chooseIK(r0,sols,w)
 
 
+def tormachZA6():
+    """initializes the IK solver for the tormach ZA6 robotic arm
+
+    Inputs:
+    Output:
+        an ik_geo Robot type describing the robot arm """
+    H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
+    H=np.transpose(H)
+    P=np.array([[0,.025,0,.123,.2965,.1,.1175],[0,0,0,0,0,0,0],[.279,.171,.454,.035,0,0,0]])*1000 #approximated without 1mm offsets
+    P=np.transpose(P)
+    # print(np.shape(P))
+    robot=Robot.spherical_two_parallel(H,P)
+    return robot
+
+
+
+
 
 # ----- Testing -----
 
