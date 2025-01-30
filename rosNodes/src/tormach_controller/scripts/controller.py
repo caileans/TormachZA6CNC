@@ -18,6 +18,7 @@ if __name__=='__main__':
     #start the test node
     rospy.init_node("controller")
 
+    file ='./Gcode/TormachR.nc'
     publisher=pub.startPublisher()
     overshoot=2.0
     robot=ik.tormachZA6()
@@ -44,6 +45,6 @@ if __name__=='__main__':
     		jpub=applyOvershoot(jprev,jcur,overshoot)
     		pub.pubMove(publisher,jpub,overshoot,hz)
     		jprev=jcur;
-    		
+
     	rate=rospy.Rate(hz)
     	rate.sleep()
