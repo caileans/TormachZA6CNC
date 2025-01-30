@@ -10,16 +10,16 @@ import sys
 
 
 
-def genTrajectory(file):
+def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0, 0.0]):
     '''call necessary functions to plan a trajectory from gcode'''
-    parser = GcodeParserV2.GcodeParserV2()
+    parser = GcodeParserV2.GcodeParserV2(feedRate=feedRate, rapidFeed=rapidFeed, defaultLengthUnits=defaultLengthUnits, toolFrameOffset=toolFrameOffset)
 
     if parser.parseFile(file):
         return 0
 
     wayPoints = parser.evaluateGcode()
 
-    trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a = 9, hz = 10)
+    trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz)
 
     return trajectory
 
@@ -54,7 +54,7 @@ def plotTrajectory(trajectory):
 
 if __name__=="__main__":
     print("generating trajectory")
-    traj = genTrajectory(sys.argv[1])
+    traj = genTrajectory(sys.argv[1], toolFrameOffset=[0.0, 20.0, 0.0])
 
     plotTrajectory(traj)
 
