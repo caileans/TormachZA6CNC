@@ -13,17 +13,17 @@ def pubMove(publisher, j, alpha, hz):
 		hz - the publishing frequency being used (1/time for move)
 	Output:
 		NONE"""
-    pnt=JointTrajectoryPoint()
-    pnt.positions=[j[0:6],0.1,0.1]
-    pnt.effort=[]
-    pnt.velocities=[]
-    pnt.accelerations=[]
-    pnt.time_from_start.nsecs=int(alpha*(10**9)/hz)
-    pubmsg=JointTrajectory()
-    pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
-    pubmsg.points=[pnt]
-    pubmsg.header.stamp=rospy.Time.now()
-    publisher.publish(pubmsg)
+	pnt=JointTrajectoryPoint()
+	pnt.positions=[j[0:6],0.1,0.1]
+	pnt.effort=[]
+	pnt.velocities=[]
+	pnt.accelerations=[]
+	pnt.time_from_start.nsecs=int(alpha*(10**9)/hz)
+	pubmsg=JointTrajectory()
+	pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
+	pubmsg.points=[pnt]
+	pubmsg.header.stamp=rospy.Time.now()
+	publisher.publish(pubmsg)
 
 
 def applyOvershoot(j0, j, alpha):
@@ -46,6 +46,6 @@ def startPublisher():
 		a rospy object describing the position_trajectory_controller/command publisher"""
 
 	publisher=rospy.Publisher('/position_trajectory_controller/command', JointTrajectory, queue_size=1)
-    sleep(60)
-    print("prob conected")
-    return publisher
+	sleep(60)
+	print("prob conected")
+	return publisher
