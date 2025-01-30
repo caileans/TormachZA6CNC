@@ -4,6 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
 import matplotlib.pyplot as plt
 import DataTypes
+import CircleFunctions
 
 
 
@@ -31,10 +32,10 @@ def planTrajectory(wayPoints, a=1, hz=50):
         ijkf = wayPoints[i].toolVec
 
         ### if it's linear motion
-        if wayPoints[i].rotAxis == np.array([0.0, 0.0, 0.0]):
+        if (wayPoints[i].rotAxis == np.array([0.0,0.0,0.0])).all():
             points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
         else:
-            points = genCircPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, wayPoints[i])
+            points = genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoints[i])
         # points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
 
         traj.extend(points)
@@ -55,22 +56,27 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf):
     return points
     
 
-# def genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoint):
-#     # pFinal=np.array([wayPoint.pos.x,wayPoint.pos.y,wayPoint.pos.z])
-#     # pInitial=np.array([toolPose.x,toolPose.y,toolPose.z])
-#     dtheta = 
-#     vi_angular = 
-#     vm_angular = 
-#     vf_angular = 
-#     a_angular = 
+def genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoint):
+    rad = np.linalg.norm(wayPoint.circijk)
+    vi_angular = vi/rad
+    vm_angular = vm/rad
+    vf_angular = vf/rad
+    a_angular = a/rad
 
-#     path = genPath(hz, a_angular, vi_angular, vm_angular, vf_angular, 0, dtheta)
+    c=p0+wayPoint.circijk
 
-#     for theta in path:
-#         # compute the cart point at each theta along the circle
-#         xyz = pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2
+    theta,rcs,ar,zm = CircleFunctions.getTheta(c,p0,pf,wayPoint.rotAxis)
 
-#     return points
+    path = genPath(hz, a_angular, vi_angular, vm_angular, vf_angular, 0, theta[1])
+
+    points = []
+    for t in path:
+        # compute the cart point at each theta along the circle
+        # xyz = pCenter +r*r2dx*cos(thetaA2)+r*r2dy*sin(thetaA2)+ahat.dot(pFinal-pInitial)*ahat/2
+        pos = c + CircleFunctions.getPoint(rcs,ar,zm,t,theta[1])
+        points.append(DataTypes.TrajPoint(pos=pos, toolVec=wayPoint.toolVec))
+
+    return points
 
 # def voft(amax, vi, vm, vf, ta, tv1, tm, tv2, t):
 #     """Returns the instantanious velocity at time t for a move that take tmove, a max veloctiy vmax, and a trapizoidal acceleration profile with a max amax, ramp time ta, and total tim tv
