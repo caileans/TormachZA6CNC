@@ -2,7 +2,7 @@ import rospy
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import numpy as np
-import tormach_controller.InverseKinematics as ik
+import InverseKinematics as ik
 import publisher31 as pub
 import DataTypes
 import GCodeToTrajectory as gct
