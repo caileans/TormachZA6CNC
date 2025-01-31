@@ -2,7 +2,7 @@ import rospy
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import numpy as np
-import InverseKinematics as ik
+import tormach_controller.InverseKinematics as ik
 import publisher31 as pub
 import DataTypes
 import GCodeToTrajectory as gct
@@ -17,7 +17,7 @@ if __name__=='__main__':
     
     #start the test node
     rospy.init_node("controller")
-    x=DataTypes.TrajPoint()
+    # x=DataTypes.TrajPoint()
     file ='./Gcode/circleTest.nc'
     # publisher=pub.startPublisher()
     overshoot=2.0
