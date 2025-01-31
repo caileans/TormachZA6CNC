@@ -1,3 +1,5 @@
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from ik_geo import Robot # pip install ik-geo
 import numpy as np
 import general_robotics_toolbox as grtb

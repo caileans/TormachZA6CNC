@@ -1,3 +1,5 @@
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import rospy 
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
@@ -19,7 +21,7 @@ if __name__=='__main__':
     rospy.init_node("controller")
     # x=DataTypes.TrajPoint()
     file ='./Gcode/circleTest.nc'
-    # publisher=pub.startPublisher()
+    publisher=pub.startPublisher()
     overshoot=2.0
     robot=ik.tormachZA6()
 
