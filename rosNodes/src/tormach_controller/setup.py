@@ -9,3 +9,10 @@ setup_args = generate_distutils_setup(
 )
 
 setup(**setup_args)
+
+setup_args = generate_distutils_setup(
+     packages=['preProcessing'],
+     package_dir={'': '../../../preProcessing'}
+)
+
+setup(**setup_args)
