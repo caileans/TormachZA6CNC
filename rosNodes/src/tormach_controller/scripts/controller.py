@@ -6,7 +6,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # print(os.path.abspath(__file__.split("controller.py")[0]+"/lib"))
 sys.path.append(os.path.abspath(__file__.split("controller.py")[0]))
 sys.path.append(os.path.abspath(__file__.split("controller.py")[0]+"/lib"))
-sys.path.append(os.path.abspath(__file__.split("controller.py")[0]+"../../../../preProcessing"))
+sys.path.append(os.path.abspath(__file__.split("controller.py")[0]+"/lib/preProcessing"))
+# sys.path.append(os.path.abspath(__file__.split("controller.py")[0]+"../../../../preProcessing"))
 # print(sys.path)
 import rospy 
 from time import sleep
