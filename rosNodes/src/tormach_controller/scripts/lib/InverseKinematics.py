@@ -67,7 +67,7 @@ def runIK (r, r0,robot, w=[1,1,1,1,1,1,1]):
         a np array of length 6 containing the selected joint angles"""
 
     w=np.array(w)
-    abc=[r[3]*pi/180,r[4]*pi/180,r[5]*pi/180];
+    abc=[r[-3]*pi/180,r[-2]*pi/180,r[-1]*pi/180];
     R=abcToR(abc)
     # print(R)
     sols=getIK(r,R,robot)
