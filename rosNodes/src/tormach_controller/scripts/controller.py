@@ -1,6 +1,7 @@
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__).split("controller.py")[0]+"/scripts/lib")))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__).split("controller.py")[0]+"/scripts/lib/__init__.py")))
 # print(os.path.dirname(os.path.dirname('/scripts/lib')))
 # print(os.path.abspath(__file__.split("controller.py")[0]+"/lib"))
 print(sys.path)
