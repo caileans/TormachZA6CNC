@@ -4,8 +4,8 @@ import rospy
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import numpy as np
-import InverseKinematics as ik
-import publisher31 as pub
+import lib.InverseKinematics as ik
+import lib.publisher31 as pub
 import DataTypes
 import GCodeToTrajectory as gct
 from queue import Queue
