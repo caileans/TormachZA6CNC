@@ -6,3 +6,4 @@ from .DataTypes import *
 from .DOFConversion import *
 from .GCodeToTrajectory import *
 from .TrajectoryPlanner import *
+from .GCodeParserV2 import *
