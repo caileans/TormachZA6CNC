@@ -1,11 +1,12 @@
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname('lib')))
 import rospy 
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import numpy as np
-import lib.InverseKinematics as ik
-import lib.publisher31 as pub
+import InverseKinematics as ik
+import publisher31 as pub
 import DataTypes
 import GCodeToTrajectory as gct
 from queue import Queue
