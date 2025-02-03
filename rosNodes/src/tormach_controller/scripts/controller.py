@@ -1,8 +1,8 @@
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)+"/scripts/lib")))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)+"/scripts/lib")))
 # print(os.path.dirname(os.path.dirname('/scripts/lib')))
-print(os.path.dirname(os.path.dirname(os.path.abspath(__file__)+"/scripts/lib")))
+print(os.path.abspath())
 print(sys.path)
 import rospy 
 from time import sleep
