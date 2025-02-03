@@ -1,6 +1,7 @@
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.dirname(os.path.dirname('lib')))
+print(sys.path)
 import rospy 
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
