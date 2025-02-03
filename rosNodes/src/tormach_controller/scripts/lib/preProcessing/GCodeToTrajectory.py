@@ -13,7 +13,7 @@ import sys
 def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0, 0.0]):
     '''call necessary functions to plan a trajectory from gcode'''
     parser = GcodeParserV2.GcodeParserV2(feedRate=feedRate, rapidFeed=rapidFeed, defaultLengthUnits=defaultLengthUnits, toolFrameOffset=toolFrameOffset)
-    print(os.getcwd())
+    # print(os.getcwd())
     if parser.parseFile(file):
         return 0
 
