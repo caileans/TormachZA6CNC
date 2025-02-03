@@ -29,8 +29,8 @@ if __name__=='__main__':
     #start the test node
     rospy.init_node("controller")
     # x=DataTypes.TrajPoint()
-    file ='../../../Gcode/circleTest.nc'
-    publisher=pub.startPublisher()
+    file ='../../../../Gcode/circleTest.nc'
+    # publisher=pub.startPublisher()
     overshoot=2.0
     robot=ik.tormachZA6()
 
