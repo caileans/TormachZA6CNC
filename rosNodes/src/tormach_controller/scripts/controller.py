@@ -42,21 +42,21 @@ if __name__=='__main__':
 
     pointList=gct.genTrajectory(file)
     for point in pointList:
-    	moveBuffer.put(point)
+        moveBuffer.put(point)
 
     rate=rospy.Rate(hz)
 
     while not rospy.is_shutdown():
 
-    	if moveBuffer.empty():
-    		pub.pubMove(publisher,jprev, 1,hz)
-    	else:
+        if moveBuffer.empty():
+            pub.pubMove(publisher,jprev, 1,hz)
+        else:
             print(np.array([point.pos[0:3],point.rot[0:3]]))
-    		point=moveBuffer.get()
-    		jcur=ik.runIK(np.array([point.pos[0:3],point.rot[0:3]]),jprev,robot)
-    		jpub=applyOvershoot(jprev,jcur,overshoot)
-    		pub.pubMove(publisher,jpub,overshoot,hz)
-    		jprev=jcur;
+            point=moveBuffer.get()
+            jcur=ik.runIK(np.array([point.pos[0:3],point.rot[0:3]]),jprev,robot)
+            jpub=applyOvershoot(jprev,jcur,overshoot)
+            pub.pubMove(publisher,jpub,overshoot,hz)
+            jprev=jcur;
 
-    	rate=rospy.Rate(hz)
-    	rate.sleep()
+        rate=rospy.Rate(hz)
+        rate.sleep()
