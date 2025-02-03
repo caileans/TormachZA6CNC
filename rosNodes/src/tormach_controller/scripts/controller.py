@@ -14,8 +14,8 @@ from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import numpy as np
 import lib.InverseKinematics as ik
 import lib.publisher31 as pub
-import DataTypes
-import GCodeToTrajectory as gct
+import preProcessing.DataTypes
+import preProcessing.GCodeToTrajectory as gct
 from queue import Queue
 
 
