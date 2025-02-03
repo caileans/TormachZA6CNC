@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.abspath(__file__.split("controller.py")[0]))
 sys.path.append(os.path.abspath(__file__.split("controller.py")[0]+"/lib"))
 sys.path.append(os.path.abspath(__file__.split("controller.py")[0]+"../../../../preProcessing"))
-# print(sys.path)
+print(sys.path)
 import rospy 
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
