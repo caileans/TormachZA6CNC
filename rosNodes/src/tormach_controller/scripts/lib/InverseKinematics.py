@@ -42,6 +42,7 @@ def chooseIK(r0, sols, w):
     i=0;
     minindex=0;
     minval=102390239023
+    print(sols)
     for col in sols:
         newsol=np.array(col[0])-r0
         newvalue=w[-1]*(col[1]-minerror)
