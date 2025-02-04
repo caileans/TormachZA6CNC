@@ -15,7 +15,7 @@ def planTrajectory(wayPoints, a=1, hz=50):
         ### get the v and p information from the wayPoint
         if i == 0:
             vi = 0
-            p0 = np.array([560.0,0.0,940.0])
+            p0 = np.array([562.0,0.0,866.0])
             ijk0 = np.array([0.0,0.0,1.0])
         else:
             vi = (wayPoints[i-1].vel+wayPoints[i].vel)/2.0

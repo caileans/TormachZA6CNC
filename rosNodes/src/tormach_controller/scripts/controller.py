@@ -35,6 +35,8 @@ if __name__=='__main__':
     robot=ik.tormachZA6()
 
     jprev = np.zeros(6)
+    jprev[2]=10;
+    jprev[4]=-10
     jcur =np.zeros(6)
     jpub=np.zeros(6)
     hz=10
