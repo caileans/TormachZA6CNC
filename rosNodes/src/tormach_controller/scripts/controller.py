@@ -54,7 +54,7 @@ if __name__=='__main__':
             # print(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0))
             point=moveBuffer.get()
             jcur=ik.runIK(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0),jprev,robot)
-            # print(jcur)
+            print(jcur)
             jpub=pub.applyOvershoot(jprev,jcur,overshoot)
             # print(jpub)
             pub.pubMove(publisher,jpub,overshoot,hz)
