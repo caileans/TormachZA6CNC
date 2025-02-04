@@ -68,7 +68,7 @@ def runIK (r, r0,robot, w=[1,1,1,1,1,1,1]):
 
     w=np.array(w)
     abc=[r[-3]*pi/180,r[-2]*pi/180,r[-1]*pi/180];
-    # print(r)
+    print(r)
     R=abcToR(abc)
     # print(R)
     sols=getIK(r,R,robot)
