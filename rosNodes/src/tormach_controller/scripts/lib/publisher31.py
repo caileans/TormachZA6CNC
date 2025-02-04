@@ -38,7 +38,7 @@ def applyOvershoot(j0, j, alpha):
 	Output:
 		the overshoot adjusted joint space pose"""
 	j+=(alpha-1)*(j-j0)
-	return j
+	return np.array(j)
 
 def startPublisher():
 	"""starts the /position_trajectory_controller/command publisher
