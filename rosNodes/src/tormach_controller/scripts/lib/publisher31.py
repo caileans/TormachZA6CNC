@@ -2,6 +2,7 @@ import rospy
 from time import sleep
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import numpy as np
+from math import pi
 
 def pubMove(publisher, j, alpha, hz):
 	"""publishes a move to the position_trajectory_controller/command topic
