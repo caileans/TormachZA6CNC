@@ -55,7 +55,8 @@ if __name__=='__main__':
             point=moveBuffer.get()
             jcur=ik.runIK(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0),jprev,robot)
             # print(jcur)
-            jpub=pub.applyOvershoot(jprev,jcur,overshoot)
+            # jpub=pub.applyOvershoot(jprev,jcur,overshoot)
+            jpub=jcur
             print(jpub)
             pub.pubMove(publisher,jpub,overshoot,hz)
             jprev=jcur;
