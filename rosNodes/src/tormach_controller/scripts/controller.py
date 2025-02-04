@@ -40,7 +40,7 @@ if __name__=='__main__':
     hz=10
     moveBuffer=Queue(maxsize=0)
 
-    pointList=gct.genTrajectory(file, hz=hz,feedRate=10,rapidFeed=20)
+    pointList=gct.genTrajectory(file, hz=hz,feedRate=100,rapidFeed=200)
     for point in pointList:
         moveBuffer.put(point)
 
