@@ -37,10 +37,10 @@ if __name__=='__main__':
     jprev = np.zeros(6)
     jcur =np.zeros(6)
     jpub=np.zeros(6)
-    hz=50
+    hz=10
     moveBuffer=Queue(maxsize=0)
 
-    pointList=gct.genTrajectory(file)
+    pointList=gct.genTrajectory(file, hz=hz)
     for point in pointList:
         moveBuffer.put(point)
 
