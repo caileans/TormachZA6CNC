@@ -31,7 +31,7 @@ if __name__=='__main__':
     # x=DataTypes.TrajPoint()
     file ='/home/pathpilot/Downloads/TormachZA6CNC/Gcode/circleTest.nc'
     publisher=pub.startPublisher()
-    overshoot=2.0
+    overshoot=1.0
     robot=ik.tormachZA6()
 
     jprev = np.zeros(6)
