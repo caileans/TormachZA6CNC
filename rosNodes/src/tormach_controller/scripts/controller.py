@@ -31,7 +31,7 @@ if __name__=='__main__':
     # x=DataTypes.TrajPoint()
     file ='/home/pathpilot/Downloads/TormachZA6CNC/Gcode/circleTest.nc'
     publisher=pub.startPublisher()
-    overshoot=1.0
+    overshoot=2.0
     robot=ik.tormachZA6()
 
     jprev = np.zeros(6)
@@ -42,7 +42,7 @@ if __name__=='__main__':
     hz=10
     moveBuffer=Queue(maxsize=0)
 
-    pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=30,rapidFeed=120)
+    pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=60,rapidFeed=120)
     for point in pointList:
         moveBuffer.put(point)
 
@@ -61,6 +61,8 @@ if __name__=='__main__':
             pubmsg.points=[pnt]
             pubmsg.header.stamp=rospy.Time.now()
             publisher.publish(pubmsg)
+            break
+            
         else:
             # print(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0))
             point=moveBuffer.get()
@@ -69,7 +71,7 @@ if __name__=='__main__':
             # print(jcur)
             jpub=pub.applyOvershoot(jprev,jcur,overshoot)
             # jpub=jcur
-            print(jpub)
+            # print(jpub)
             pub.pubMove(publisher,jpub,overshoot,hz)
             jprev=jcur;
         # pub.pubMove(publisher,[0,0,np.pi/18,0,-np.pi/18,0],1,)
