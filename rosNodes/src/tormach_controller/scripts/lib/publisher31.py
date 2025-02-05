@@ -55,7 +55,7 @@ def startPublisher():
 	return publisher
 
 
-def home():
+def home(publisher):
 
 	pnt=JointTrajectoryPoint()
 	pnt.positions=[0,0,np.pi/18,0,-np.pi/18,0,0.1,0.1]

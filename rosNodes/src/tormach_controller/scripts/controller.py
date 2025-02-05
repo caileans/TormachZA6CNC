@@ -71,4 +71,4 @@ if __name__=='__main__':
 
         rate=rospy.Rate(hz)
         rate.sleep()
-    pub.home()
+    pub.home(robot)
