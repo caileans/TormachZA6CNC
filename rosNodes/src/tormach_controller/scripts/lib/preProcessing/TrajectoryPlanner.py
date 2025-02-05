@@ -8,15 +8,15 @@ import CircleFunctions
 
 
 
-def planTrajectory(wayPoints, a=1, hz=50):
+def planTrajectory(wayPoints, a=1, hz=50, pInit=[562.0,0.0,866.0], ijkInit=[0.0,0.0,1.0]):
     traj = []
 
     for i in range(len(wayPoints)):
         ### get the v and p information from the wayPoint
         if i == 0:
             vi = 0
-            p0 = np.array([562.0,0.0,866.0])
-            ijk0 = np.array([0.0,0.0,1.0])
+            p0 = np.array(pInit)
+            ijk0 = np.array(ijkInit)
         else:
             vi = (wayPoints[i-1].vel+wayPoints[i].vel)/2.0
             p0 = wayPoints[i-1].pos
