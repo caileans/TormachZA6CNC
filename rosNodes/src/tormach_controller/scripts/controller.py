@@ -34,41 +34,43 @@ if __name__=='__main__':
     overshoot=2.0
     robot=ik.tormachZA6()
 
-    jprev = np.zeros(6)
-    jprev[2]=np.pi/18;
-    jprev[4]=-np.pi/18
-    jcur =np.zeros(6)
-    jpub=np.zeros(6)
-    hz=10
-    moveBuffer=Queue(maxsize=0)
+    while True:
+        jprev = np.zeros(6)
+        jprev[2]=np.pi/18;
+        jprev[4]=-np.pi/18
+        jcur =np.zeros(6)
+        jpub=np.zeros(6)
+        hz=50
+        moveBuffer=Queue(maxsize=0)
 
-    pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=30,rapidFeed=120,toolFrameOffset=[426.7,110,528.6])
-    for point in pointList:
-        moveBuffer.put(point)
-
-    rate=rospy.Rate(hz)
-
-    while not rospy.is_shutdown():
-
-        if moveBuffer.empty():
-            pub.pubMove(publisher,jprev, 1,hz)
-            sleep(3)
-            
-            break
-            
-        else:
-            # print(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0))
-            point=moveBuffer.get()
-            # print(point)
-            jcur=ik.runIK(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0),jprev,robot)
-            # print(jcur)
-            jpub=pub.applyOvershoot(jprev,jcur,overshoot)
-            # jpub=jcur
-            # print(jpub)
-            pub.pubMove(publisher,jpub,overshoot,hz)
-            jprev=jcur;
-        # pub.pubMove(publisher,[0,0,np.pi/18,0,-np.pi/18,0],1,)
+        pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=30,rapidFeed=120,toolFrameOffset=[426.7,110,528.6])
+        for point in pointList:
+            moveBuffer.put(point)
 
         rate=rospy.Rate(hz)
-        rate.sleep()
-    pub.home(publisher)
+
+        while not rospy.is_shutdown():
+
+            if moveBuffer.empty():
+                pub.pubMove(publisher,jprev, 1,hz)
+                sleep(3)
+                
+                break
+                
+            else:
+                # print(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0))
+                point=moveBuffer.get()
+                # print(point)
+                jcur=ik.runIK(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0),jprev,robot)
+                # print(jcur)
+                jpub=pub.applyOvershoot(jprev,jcur,overshoot)
+                # jpub=jcur
+                # print(jpub)
+                pub.pubMove(publisher,jpub,overshoot,hz)
+                jprev=jcur;
+            # pub.pubMove(publisher,[0,0,np.pi/18,0,-np.pi/18,0],1,)
+
+            rate=rospy.Rate(hz)
+            rate.sleep()
+        pub.home(publisher)
+        break
