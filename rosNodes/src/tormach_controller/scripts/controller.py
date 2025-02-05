@@ -53,25 +53,26 @@ if __name__=='__main__':
         if moveBuffer.empty():
             pub.pubMove(publisher,jprev, 1,hz)
             sleep(3)
+            pnt=JointTrajectoryPoint()
+            pnt.positions=[0,0,np.pi/18,0,-np.pi/18,0,0.1,0.1]
+            pnt.time_from_start.secs=3
+            pubmsg=JointTrajectory()
+            pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
+            pubmsg.points=[pnt]
+            pubmsg.header.stamp=rospy.Time.now()
+            publisher.publish(pubmsg)
         else:
             # print(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0))
             point=moveBuffer.get()
             # print(point)
             jcur=ik.runIK(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0),jprev,robot)
             # print(jcur)
-            # jpub=pub.applyOvershoot(jprev,jcur,overshoot)
-            jpub=jcur
+            jpub=pub.applyOvershoot(jprev,jcur,overshoot)
+            # jpub=jcur
             print(jpub)
             pub.pubMove(publisher,jpub,overshoot,hz)
             jprev=jcur;
         # pub.pubMove(publisher,[0,0,np.pi/18,0,-np.pi/18,0],1,)
-        pnt=JointTrajectoryPoint()
-        pnt.positions=[0,0,np.pi/18,0,-np.pi/18,0,0.1,0.1]
-        pnt.time_from_start.secs=3
-        pubmsg=JointTrajectory()
-        pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
-        pubmsg.points=[pnt]
-        pubmsg.header.stamp=rospy.Time.now()
-        publisher.publish(pubmsg)
+
         rate=rospy.Rate(hz)
         rate.sleep()
