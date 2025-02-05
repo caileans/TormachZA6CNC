@@ -40,7 +40,8 @@ if __name__=='__main__':
         offset=[0,0,0]
         # print(userfile)
         hz=float(input("hz: ").strip())
-        if userfile==0:
+        overshoot=float(input("overshoot: ").strip())
+        if userfile=='0':
             exit()
         elif userfile =='1':
             file=file+"circleTest.nc"
