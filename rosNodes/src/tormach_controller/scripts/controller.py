@@ -86,7 +86,7 @@ if __name__=='__main__':
                 jprev=jcur;
             # pub.pubMove(publisher,[0,0,np.pi/18,0,-np.pi/18,0],1,)
 
-            rate=rospy.Rate(hz)
+            # rate=rospy.Rate(hz)
             rate.sleep()
         pub.home(publisher)
         # break
