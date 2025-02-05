@@ -37,7 +37,7 @@ def applyOvershoot(j0, j, alpha):
 		alpha - the overshoot multiplier (alpha=1 is just j, alpha=2 is double the distance)
 	Output:
 		the overshoot adjusted joint space pose"""
-	j=j+(alpha-1)*(j-j0)
+	j+=(alpha-1.0)*(j-j0)
 	# for i in range(np.shape(j)[0]):
 	# 	j[i]+=(alpha-1)*(j[i]-j0[i])
 	return np.array(j)
@@ -53,3 +53,16 @@ def startPublisher():
 	sleep(60)
 	print("prob conected")
 	return publisher
+
+
+def home():
+
+	pnt=JointTrajectoryPoint()
+	pnt.positions=[0,0,np.pi/18,0,-np.pi/18,0,0.1,0.1]
+	pnt.time_from_start.secs=3
+	pubmsg=JointTrajectory()
+	pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
+	pubmsg.points=[pnt]
+	pubmsg.header.stamp=rospy.Time.now()
+	publisher.publish(pubmsg)
+	return
