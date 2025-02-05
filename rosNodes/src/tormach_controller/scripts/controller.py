@@ -42,7 +42,7 @@ if __name__=='__main__':
     hz=10
     moveBuffer=Queue(maxsize=0)
 
-    pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=60,rapidFeed=120)
+    pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=30,rapidFeed=120)
     for point in pointList:
         moveBuffer.put(point)
 
@@ -60,7 +60,7 @@ if __name__=='__main__':
             jcur=ik.runIK(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0),jprev,robot)
             # print(jcur)
             jpub=pub.applyOvershoot(jprev,jcur,overshoot)
-            jpub=jcur
+            # jpub=jcur
             print(jpub)
             pub.pubMove(publisher,jpub,overshoot,hz)
             jprev=jcur;
