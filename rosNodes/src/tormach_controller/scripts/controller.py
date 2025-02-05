@@ -29,12 +29,25 @@ if __name__=='__main__':
     #start the test node
     rospy.init_node("controller")
     # x=DataTypes.TrajPoint()
-    file ='/home/pathpilot/Downloads/TormachZA6CNC/Gcode/TormachR.nc'
+    filepath ='/home/pathpilot/Downloads/TormachZA6CNC/Gcode/'
     publisher=pub.startPublisher()
     overshoot=2.0
     robot=ik.tormachZA6()
 
     while True:
+        userfile=input("file name:").strip()
+        file=filepath
+        offset=[0,0,0]
+        if userfile==0:
+            break
+        elif userfile ==1:
+            file=file+"circleTest.nc"
+        elif userfile ==2:
+            file=file+"TormachR.nc"
+            offset=[426.7,110,528.6]
+        else:
+            file=file+userfile
+            offset=[float(input("offset x").strip()),float(input("offset y").strip()),float(input("offset z").strip())]
         jprev = np.zeros(6)
         jprev[2]=np.pi/18;
         jprev[4]=-np.pi/18
@@ -43,7 +56,7 @@ if __name__=='__main__':
         hz=50
         moveBuffer=Queue(maxsize=0)
 
-        pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=30,rapidFeed=120,toolFrameOffset=[426.7,110,528.6])
+        pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=30,rapidFeed=120,toolFrameOffset=offset)
         for point in pointList:
             moveBuffer.put(point)
 
@@ -73,4 +86,4 @@ if __name__=='__main__':
             rate=rospy.Rate(hz)
             rate.sleep()
         pub.home(publisher)
-        break
+        # break
