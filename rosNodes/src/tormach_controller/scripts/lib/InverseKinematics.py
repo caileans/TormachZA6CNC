@@ -42,13 +42,18 @@ def chooseIK(r0, sols, w):
     i=0;
     minindex=0;
     minval=102390239023
-    print(sols)
+    print(r0)
+    # fkrobot=tormachZA6fk();
+
     for col in sols:
-        newsol=np.array(col[0])-r0
-        newvalue=w[-1]*(col[1]-minerror)
+        newsol=np.array(col[0])
+        # newvalue=w[-1]*(col[1]-minerror)
+        newvalue=0
+        # print(np.shape(newsol)[0])
         for j in range(np.shape(newsol)[0]):
-            newvalue+=w[j]*newsol[j]**2
+            newvalue+=w[j]*(newsol[j]-r0[j])**2
         # print(newvalue)
+        # newvalue=(newsol[0]-r0[0])**2+(newsol[5]-r0[5])**2
         if newvalue<minval:
             minval=newvalue
             minindex=i;
@@ -56,23 +61,23 @@ def chooseIK(r0, sols, w):
     return np.array(sols[minindex][0])
 
 
-def runIK (r, r0,robot, w=[1,1,1,1,1,1,1]):
+def runIK (r, r0, ikrobot, w=[1,1,1,1,1,1,0]):
     """ calculates and chooses the best inverse kinematics solution 
 
     inputs: 
         r - a numpy array of length 6 with the entries [x pose, y pose, z pose, a, b, c] where a b and c are the static frame roll, pitch, and yaw orientation in degrees
         r0 - a np array of length 6 containing the previous joint angles in radians
-        robot - an ik_geo Robot type describing the robot arm
+        ikrobot - an ik_geo Robot type describing the robot arm
         w - the weighting factor of the deviations 1x7 array of j1-j6 then ik solution error
     output:
         a np array of length 6 containing the selected joint angles"""
 
     w=np.array(w)
     abc=[r[-3]*pi/180,r[-2]*pi/180,r[-1]*pi/180];
-    print(r)
+    # print(r0)
     R=abcToR(abc)
-    # print(R)
-    sols=getIK(r,R,robot)
+    print(R)
+    sols=getIK(r,R, ikrobot)
     return chooseIK(r0,sols,w)
 
 
@@ -84,13 +89,26 @@ def tormachZA6():
         an ik_geo Robot type describing the robot arm """
     H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
     H=np.transpose(H)
-    P=np.array([[0,.025,0,.123,.2965,.1,.1175],[0,0,0,0,0,0,0],[.279,.171,.454,.035,0,0,0]])*1000 #approximated without 1mm offsets
+    P=np.array([[.0,.025,.0,.123+.2965,.0,.0,.2175],[.0,.0,.0,.0,.0,.0,.0],[.279,.171,.454,.035,.0,.0,.0]])*1000.0 
     P=np.transpose(P)
-    # print(np.shape(P))
+    # print(P)
     robot=Robot.spherical_two_parallel(H,P)
     return robot
 
 
+def tormachZA6fk():
+    """initializes the IK solver for the tormach ZA6 robotic arm
+
+    Inputs:
+    Output:
+        an general robotics toolbox Robot type describing the robot arm """
+    H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
+    # H=np.transpose(H)
+    P=np.array([[0,.025,0,.123,.2965,.1,.1175],[0,0,0,0,0,0,0],[.279,.171,.454,.035,0,0,0]])*1000 #approximated without 1mm offsets
+    # P=np.transpose(P)
+    # print(np.shape(P))
+    robot=grtb.Robot(H,P,[0,0,0,0,0,0])
+    return robot
 
 
 
@@ -105,4 +123,4 @@ def tormachZA6():
 
 # r=np.array([500,50,500,90,0,0])
 # r0=np.array([0,1.6,-2.08,-1.9,2.2,1.0])
-# print(runIK(r,r0,robot))
+# print(runIK(r,r0, ikrobot))

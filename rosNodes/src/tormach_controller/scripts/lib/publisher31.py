@@ -16,7 +16,7 @@ def pubMove(publisher, j, alpha, hz):
 		NONE"""
 	# print(j)
 	pnt=JointTrajectoryPoint()
-	pnt.positions=[j[0]*pi/180,j[1]*pi/180,j[2]*pi/180,j[3]*pi/180,j[4]*pi/180,j[5]*pi/180,0.1,0.1]
+	pnt.positions=[j[0],j[1],j[2],j[3],j[4],j[5],0.1,0.1]
 	pnt.effort=[]
 	pnt.velocities=[]
 	pnt.accelerations=[]
