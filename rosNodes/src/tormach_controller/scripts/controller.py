@@ -38,9 +38,10 @@ if __name__=='__main__':
         userfile=input("file name:").strip()
         file=filepath
         offset=[0,0,0]
-        print(userfile)
+        # print(userfile)
+        hz=float(input("hz: ").strip())
         if userfile==0:
-            break
+            exit()
         elif userfile =='1':
             file=file+"circleTest.nc"
         elif userfile =='2':
@@ -54,7 +55,7 @@ if __name__=='__main__':
         jprev[4]=-np.pi/18
         jcur =np.zeros(6)
         jpub=np.zeros(6)
-        hz=50
+        # hz=50
         moveBuffer=Queue(maxsize=0)
 
         pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=30,rapidFeed=30,toolFrameOffset=offset)
