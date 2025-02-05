@@ -37,9 +37,9 @@ def applyOvershoot(j0, j, alpha):
 		alpha - the overshoot multiplier (alpha=1 is just j, alpha=2 is double the distance)
 	Output:
 		the overshoot adjusted joint space pose"""
-	# j=j+(alpha-1)*(j-j0)
-	for i in range(np.shape(j)[0]):
-		j[i]+=(alpha-1)*(j[i]-j0[i])
+	j=j+(alpha-1)*(j-j0)
+	# for i in range(np.shape(j)[0]):
+	# 	j[i]+=(alpha-1)*(j[i]-j0[i])
 	return np.array(j)
 
 def startPublisher():
