@@ -38,11 +38,12 @@ if __name__=='__main__':
         userfile=input("file name:").strip()
         file=filepath
         offset=[0,0,0]
+        print(userfile)
         if userfile==0:
             break
-        elif userfile ==1:
+        elif userfile =='1':
             file=file+"circleTest.nc"
-        elif userfile ==2:
+        elif userfile =='2':
             file=file+"TormachR.nc"
             offset=[426.7,110,528.6]
         else:
@@ -56,7 +57,7 @@ if __name__=='__main__':
         hz=50
         moveBuffer=Queue(maxsize=0)
 
-        pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=30,rapidFeed=120,toolFrameOffset=offset)
+        pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=30,rapidFeed=30,toolFrameOffset=offset)
         for point in pointList:
             moveBuffer.put(point)
 
