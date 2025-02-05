@@ -42,7 +42,7 @@ def chooseIK(r0, sols, w):
     i=0;
     minindex=0;
     minval=102390239023
-    print(r0)
+    # print(r0)
     # fkrobot=tormachZA6fk();
 
     for col in sols:
@@ -76,7 +76,7 @@ def runIK (r, r0, ikrobot, w=[1,1,1,1,1,1,0]):
     abc=[r[-3]*pi/180,r[-2]*pi/180,r[-1]*pi/180];
     # print(r0)
     R=abcToR(abc)
-    print(R)
+    # print(R)
     sols=getIK(r,R, ikrobot)
     return chooseIK(r0,sols,w)
 
