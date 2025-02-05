@@ -115,7 +115,7 @@ g*(L6*m6 + Lc5*m5 + Lc6*m6)*(cos(q2)*sin(q3)*sin(q5) + cos(q3)*sin(q2)*sin(q5) -
     L4z=35
     L4x=123
     L5=296.5
-    L6=100
+    L6=000
     LT=117.5
 
     #interperate inputs
@@ -190,4 +190,4 @@ def calibrate(csvFile):
         return adjustedTau
 
 
-calibrate("data.csv")
+# calibrate("gravityIsolationData.csv")
