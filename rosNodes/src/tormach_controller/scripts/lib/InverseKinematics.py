@@ -89,7 +89,7 @@ def tormachZA6():
         an ik_geo Robot type describing the robot arm """
     H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
     H=np.transpose(H)
-    P=np.array([[.0,.025,.0,.123+.2965,.0,.0,.2175],[.0,.0,.0,.0,.0,.0,.0],[.279,.171,.454,.035,.0,.0,.0]])*1000.0 
+    P=np.array([[.0,.025,.0,.123+.2965,.0,.0,.2175-.1],[.0,.0,.0,.0,.0,.0,.0],[.279,.171,.454,.035,.0,.0,.0]])*1000.0 
     P=np.transpose(P)
     # print(P)
     robot=Robot.spherical_two_parallel(H,P)
@@ -104,7 +104,7 @@ def tormachZA6fk():
         an general robotics toolbox Robot type describing the robot arm """
     H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
     # H=np.transpose(H)
-    P=np.array([[0,.025,0,.123,.2965,.1,.1175],[0,0,0,0,0,0,0],[.279,.171,.454,.035,0,0,0]])*1000 #approximated without 1mm offsets
+    P=np.array([[0,.025,0,.123,.2965,.1,.1175-.1],[0,0,0,0,0,0,0],[.279,.171,.454,.035,0,0,0]])*1000 #approximated without 1mm offsets
     # P=np.transpose(P)
     # print(np.shape(P))
     robot=grtb.Robot(H,P,[0,0,0,0,0,0])
