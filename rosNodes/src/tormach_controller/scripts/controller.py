@@ -47,7 +47,7 @@ if __name__=='__main__':
             file=file+"circleTest.nc"
         elif userfile =='2':
             file=file+"TormachR.nc"
-            offset=[426.7,110,528.6]
+            offset=[432.1,89,427]
         else:
             file=file+userfile
             offset=[float(input("offset x").strip()),float(input("offset y").strip()),float(input("offset z").strip())]
