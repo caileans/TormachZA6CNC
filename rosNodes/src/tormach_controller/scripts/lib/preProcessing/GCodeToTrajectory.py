@@ -16,10 +16,10 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultGcodeLen
     # print(os.getcwd())
     if parser.parseFile(file):
         return 0 
-        
+
     wayPoints = parser.evaluateGcode()
 
-    wayPoints.append(DataTypes.WayPoint(pos=origin, toolVec=toolIJKInit)) #add the origin to the end
+    wayPoints.append(DataTypes.WayPoint(pos=origin, toolVec=toolIJKInit, vel=(rapidFeed if defaultGcodeLengthUnits=="mm" else rapidFeed*25.4/60.0))) #add the origin to the end
 
     trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz, pInit=origin, ijkInit=toolIJKInit)
 
