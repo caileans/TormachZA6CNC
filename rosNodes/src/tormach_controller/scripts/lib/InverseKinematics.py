@@ -77,7 +77,7 @@ def runIK (r, r0, ikrobot, w=[1,1,1,1,1,1,0]):
     # print(r0)
     R=abcToR(abc)
     # print(R)
-    sols=getIK(r,R, ikrobot)
+    sols=getIK(r,np.transpose(R), ikrobot)
     return chooseIK(r0,sols,w)
 
 
