@@ -86,6 +86,7 @@ def genpath(hz, alpha):
     # plt.plot(time,pos[1:])
     # plt.show()
     pos[-1]=pos[-2]-velprev/hz*(alpha-1)
+    v[-1]=v[-2]-velprev/hz*(alpha-1)
     return pos[1:], v[0:] #assuming vel has same structure as pos
 
 
