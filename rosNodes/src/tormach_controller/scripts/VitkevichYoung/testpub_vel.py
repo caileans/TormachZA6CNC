@@ -86,7 +86,7 @@ def genpath(hz, alpha):
     # plt.plot(time,pos[1:])
     # plt.show()
     pos[-1]=pos[-2]-velprev/hz*(alpha-1)
-    return pos[1:], v[1:] #assuming vel has same structure as pos
+    return pos[1:], v[0:] #assuming vel has same structure as pos
 
 
 
@@ -114,7 +114,7 @@ def movepath(hz):
         if c>= np.size(pos):
             break
         pnt.positions=[pos[c],pos[c],-1*pos[c],pos[c],pos[c],pos[c],.1,.1]
-        pnt.velocities = [vel[c-1],vel[c-1],vel[c-1],vel[c-1],vel[c-1],vel[c-1],vel[c-1],0] #???
+        pnt.velocities = [vel[c],vel[c],vel[c],vel[c],vel[c],vel[c],vel[c],0] #???
         pubmsg.points=[pnt]
         pubmsg.header.stamp=rospy.Time.now()
         forcePub.publish(pubmsg)
