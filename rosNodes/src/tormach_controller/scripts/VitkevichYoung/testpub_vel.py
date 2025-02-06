@@ -94,6 +94,8 @@ def movepath(hz):
 
     alpha=2
     pos, vel = genpath(hz,alpha)
+    print(np.shape(pos))
+    print(np.shape(vel))
 
     rate=rospy.Rate(hz)
     pnt=JointTrajectoryPoint()
