@@ -114,7 +114,7 @@ def movepath(hz):
         if c>= np.size(pos):
             break
         pnt.positions=[pos[c],pos[c],-1*pos[c],pos[c],pos[c],pos[c],.1,.1]
-        pnt.velocities = [vel[c],vel[c],vel[c],vel[c],vel[c],vel[c],vel[c],0] #???
+        pnt.velocities = [vel[c-1],vel[c-1],vel[c-1],vel[c-1],vel[c-1],vel[c-1],vel[c-1],0] #???
         pubmsg.points=[pnt]
         pubmsg.header.stamp=rospy.Time.now()
         forcePub.publish(pubmsg)
