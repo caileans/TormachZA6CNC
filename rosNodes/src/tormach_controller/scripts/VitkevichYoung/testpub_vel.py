@@ -70,7 +70,7 @@ def genpath(hz, alpha):
 
 
     time=np.linspace(0,tm,num=int(hz*tm))
-    v=np.zeros(int(hz*tm))
+    v=np.zeros(int(hz*tm)+1)
     pos=np.zeros(int(hz*tm)+2)
     c=1
 
