@@ -1,13 +1,17 @@
 import numpy as np
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+
+#TODO: this appends to np arrays, which is horrible practice and makes it slow
+
 
 @dataclass
 class JointState:
-    time: np.array([])
-    pos: np.array([])
-    vel: np.array([])
-    accel: np.array([])
-    eff: np.array([])
+    time: np.ndarray = field(default_factory=lambda: np.zeros([0,1]))
+    pos: np.ndarray = field(default_factory=lambda: np.zeros([0,8]))
+    vel: np.ndarray = field(default_factory=lambda: np.zeros([0,8]))
+    accel: np.ndarray = field(default_factory=lambda: np.zeros([0,8]))
+    eff: np.ndarray = field(default_factory=lambda: np.zeros([0,8]))
 
 def readJointStatesFile(fileName, data, initialTime):
     c=1
@@ -38,7 +42,7 @@ def readJointStatesFile(fileName, data, initialTime):
             c+=1
 
 
-def readJointCommandFile(fileName, data, initialTime):
+def readJointCommandFile(fileName, data, initialTime, colPos=1, colVel=0, colAccel=0, colEff=0):
     c=1
     # initialTime=0
     with open(fileName, 'r') as file:
@@ -55,16 +59,16 @@ def readJointCommandFile(fileName, data, initialTime):
                 # if c==5:
                 #     initialTime+=temp/10.0**9
                 data.time[-1]+= temp/10.0**9 - initialTime
-            elif (c%25)==18: #position
+            elif (c%25)==18 and colPos: #position
                 temp=temp.split('[')[1][0:-1].split(',')
                 data.pos=np.append(data.pos,[np.array(temp, dtype=float)], axis=0)
-            # elif (c%25)==19: #velocity
-            #     temp=temp.split('[')[1][0:-1].split(',')
-            #     data.vel=np.append(data.vel,[np.array(temp, dtype=float)], axis=0)
-            # elif (c%25)==20: #accel
-            #     temp=temp.split('[')[1][0:-1].split(',')
-            #     data.accel=np.append(data.accel,[np.array(temp, dtype=float)], axis=0)
-            # elif(c%19)==21: #effort
-            #     temp=temp.split('[')[1][0:-1].split(',')
-            #     data.eff=np.append(data.eff,[np.array(temp, dtype=float)], axis=0)
+            elif (c%25)==19 and colVel: #velocity
+                temp=temp.split('[')[1][0:-1].split(',')
+                data.vel=np.append(data.vel,[np.array(temp, dtype=float)], axis=0)
+            elif (c%25)==20 and colAccel: #accel
+                temp=temp.split('[')[1][0:-1].split(',')
+                data.accel=np.append(data.accel,[np.array(temp, dtype=float)], axis=0)
+            elif(c%19)==21 and colEff: #effort
+                temp=temp.split('[')[1][0:-1].split(',')
+                data.eff=np.append(data.eff,[np.array(temp, dtype=float)], axis=0)
             c+=1
