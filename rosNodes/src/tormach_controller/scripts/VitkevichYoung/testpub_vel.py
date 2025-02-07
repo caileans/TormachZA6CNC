@@ -93,7 +93,7 @@ def genpath(hz, alpha):
 
 def movepath(hz):
 
-    alpha=2
+    alpha=0
     pos, vel = genpath(hz,alpha)
     print(np.shape(pos))
     print(np.shape(vel))
