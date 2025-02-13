@@ -3,7 +3,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from ik_geo import Robot # pip install ik-geo
 import numpy as np
 import general_robotics_toolbox as grtb
-from math import pi
+from math import pi, cos, acos, sin
 
 
 
@@ -111,6 +111,23 @@ def tormachZA6fk():
     return robot
 
 
+def j62R(j6):
+
+    j6/=np.linalg.norm(j6)
+    x=np.array([1,0,0])
+    theta=acos(np.dot(j6,x))
+    axis=np.cross(x,j6)
+    R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
+    return R
+
+def R2rpy(R):
+
+    abc=grtb.R2rpy(R)
+    return np.array([abc[-1],abc[-2],abc[-3]])
+
+def j62rpy(j6):
+
+    return R2rpy(j62R(j6))
 
 # ----- Testing -----
 
