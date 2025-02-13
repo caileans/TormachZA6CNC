@@ -116,7 +116,7 @@ def j62R(j6):
     j6/=np.linalg.norm(j6)
     x=np.array([1,0,0])
     theta=acos(np.dot(j6,x))
-    axis=np.cross(x,j6)
+    axis=-1*np.cross(x,j6)
     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
     return R
 
