@@ -123,6 +123,7 @@ def j62R(j6):
 def R2rpy(R):
     print(R)
     print(np.linalg.norm(R[0:2,0]))
+    print(R[0:2,0])
     abc=grtb.R2rpy(R)
     return np.array([abc[-1],abc[-2],abc[-3]])
 
