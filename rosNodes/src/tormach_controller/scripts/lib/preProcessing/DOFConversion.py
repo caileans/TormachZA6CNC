@@ -1,8 +1,11 @@
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))+"/../"))
+
 
 import numpy as np
 import DataTypes
+import InverseKinematics
 
 
 def AddFixed6DOF(trajectory):
@@ -45,7 +48,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
             j6IJK = calcJ6IJK(toolIJK, j6ProjAngle)
 
 
-        trajectory[i].rot=calcABC(j6IJK)
+        trajectory[i].rot=InverseKinematics.j62rpy(j6IJK)
 
     return trajectory
 
@@ -60,5 +63,3 @@ def calcJ6IJK(toolIJK, angle):
 
     return j6IJK
 
-def calcABC(ijk):
-    return 0
