@@ -121,7 +121,7 @@ def j62R(j6):
     return R
 
 def R2rpy(R):
-
+    print(R)
     abc=grtb.R2rpy(R)
     return np.array([abc[-1],abc[-2],abc[-3]])
 
