@@ -50,7 +50,7 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf):
 
     if distance == 0:
         if not np.linalg.norm(dijk) == 0:
-            distance = np.linalg.norm(dijk)
+            distance = np.linalg.norm(dijk)*100
         else:
             print("neither ijk or p change. can't generate trajectory")
             return []
