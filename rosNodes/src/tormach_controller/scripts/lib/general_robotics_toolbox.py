@@ -290,7 +290,7 @@ def rpy2R(rpy):
     return np.matmul(np.matmul(rot([0,0,1],rpy[2]),rot([0,1,0],rpy[1])),rot([1,0,0],rpy[0]))
 
 def R2rpy(R):
-    # assert np.linalg.norm(R[0:2,0]) > np.finfo(float).eps * 10.0, "Singular rpy requested"
+    assert np.linalg.norm(R[0:2,0]) > np.finfo(float).eps * 10.0, "Singular rpy requested"
     
     r=np.arctan2(R[2,1],R[2,2])
     y=np.arctan2(R[1,0], R[0,0])
