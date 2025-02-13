@@ -57,7 +57,7 @@ def calcJ6IJK(toolIJK, angle):
     j6IJK = np.array([0, 0, 0.0])
     j6IJK[0] = np.cos(angle)
     j6IJK[1] = np.sin(angle)
-    j6IJK[2] = (-toolIJK[0] * x_j6 - toolIJK[1] * y_j6)/toolIJK[2]
+    j6IJK[2] = (-toolIJK[0] * j6IJK[0] - toolIJK[1] * j6IJK[1])/toolIJK[2]
 
     j6IJK = j6IJK/np.linalg.norm(j6IJK)
 
