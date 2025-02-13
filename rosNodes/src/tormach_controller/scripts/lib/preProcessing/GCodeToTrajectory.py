@@ -10,16 +10,16 @@ import sys
 
 
 
-def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultGcodeLengthUnits="mm", toolGcodeFrameOffset=[0.0,0.0, 0.0], origin=[562.0,0.0,866.0], toolIJKInit=[0.0,0.0,1.0]):
+def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0, 0.0], origin=[562.0,0.0,866.0], toolIJKInit=[0.0,0.0,1.0]):
     '''call necessary functions to plan a trajectory from gcode'''
-    parser = GcodeParserV2.GcodeParserV2(feedRate=feedRate, rapidFeed=rapidFeed, defaultLengthUnits=defaultGcodeLengthUnits, toolFrameOffset=toolGcodeFrameOffset)
+    parser = GcodeParserV2.GcodeParserV2(feedRate=feedRate, rapidFeed=rapidFeed, defaultLengthUnits=defaultLengthUnits, toolFrameOffset=toolFrameOffset)
     # print(os.getcwd())
     if parser.parseFile(file):
         return 0 
 
     wayPoints = parser.evaluateGcode()
 
-    wayPoints.append(DataTypes.WayPoint(pos=origin, toolVec=toolIJKInit, vel=(rapidFeed if defaultGcodeLengthUnits=="mm" else rapidFeed*25.4/60.0))) #add the origin to the end
+    wayPoints.append(DataTypes.WayPoint(pos=origin, toolVec=toolIJKInit, vel=(rapidFeed if defaultLengthUnits=="mm" else rapidFeed*25.4/60.0))) #add the origin to the end
 
     trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz, pInit=origin, ijkInit=toolIJKInit)
 
