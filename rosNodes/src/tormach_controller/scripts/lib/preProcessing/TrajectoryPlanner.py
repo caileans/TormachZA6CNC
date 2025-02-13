@@ -45,7 +45,16 @@ def planTrajectory(wayPoints, a=1, hz=50, pInit=[562.0,0.0,866.0], ijkInit=[0.0,
 def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf):
     dp = pf - p0
     dijk = ijkf - ijk0
-    path = genPath(hz, a, vi, vm, vf, 0.0, np.linalg.norm(dp))/np.linalg.norm(dp)
+
+    distance = np.linalg.norm(dp)
+
+    if distance == 0 and not np.linalg.norm(dijk) == 0:
+        distance = np.linalg.norm(dijk)
+    else:
+        print("neither ijk or p change. can't generate trajectory")
+        return []
+
+    path = genPath(hz, a, vi, vm, vf, 0.0, distance)/distance
 
     points = []
     for point in path:
@@ -113,6 +122,9 @@ def genPath(hz, a=1, vi=0, vm=0.3, vf=0, p0=0, pf=1):
     t1 = ta
     t2 = ta + tb
     t3 = ta + tb + tc
+
+    if tb < 0:
+        print(f"Trajectory Planner Error: Not enough time to move from {p0} to {pf}")
 
     time=np.linspace(0,t3,num=int(hz*t3))
     pos=np.zeros(int(hz*t3))

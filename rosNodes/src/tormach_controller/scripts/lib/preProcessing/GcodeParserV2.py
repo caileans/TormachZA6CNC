@@ -167,9 +167,11 @@ class GcodeParserV2:
                 self.lengthUnits = "in"
             elif block[i] == ['G', 21]:
                 self.lengthUnits = "mm"
+            elif block[i][0] == 'N': #line numbers
+                pass
             ###TODO: G17, 18, 19, ?(G40, G49)?, G90, G91
             else:
-                print("Error: " + str(block[i]) + " not found")
+                print("Gcode Parser Error: " + str(block[i]) + " not found in block " + i)
         
         return newPose
 

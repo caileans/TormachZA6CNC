@@ -25,7 +25,7 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultGcodeLen
 
     ### uncomment whichever one you want to use. Fixed will keep tool upright
     # trajectory = DOFConversion.AddFixed6DOF(trajectory)
-    trajectory = DOFConversion.Add6DofFrom5(trajectory)
+    trajectory = DOFConversion.Add6DofFrom5(trajectory, quadrant=2)
 
     return trajectory
 
