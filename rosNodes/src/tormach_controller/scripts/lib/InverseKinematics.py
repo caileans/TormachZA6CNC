@@ -3,7 +3,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from ik_geo import Robot # pip install ik-geo
 import numpy as np
 import general_robotics_toolbox as grtb
-from math import pi, cos, acos, sin
+from math import pi, cos, acos, sin, copysign
 
 
 
@@ -124,7 +124,7 @@ def tool2R(j6,tool,rj6):
     z=rj6*np.array([[0],[0],[1]])
     z=np.array(z[:,0])
     theta=acos(np.dot(tool,z))
-    axis=np.cross(z,tool)
+    axis=j6*copysign(1,np.dot(np.cross(z,tool),j6))
     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
     return R
 
