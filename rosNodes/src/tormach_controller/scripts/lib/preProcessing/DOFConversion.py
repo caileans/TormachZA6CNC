@@ -18,7 +18,6 @@ def Add6DofFrom5(trajectory, quadrant=2):
     j6ProjAngle_prev = 0
     for i in range(len(trajectory)):
         toolIJK = trajectory[i].toolVec
-        print(toolIJK)
         toolIJK = toolIJK/np.linalg.norm(toolIJK)
 
         if toolIJK[2] == 0: #if the tool is horizontal
@@ -49,6 +48,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
             j6IJK = calcJ6IJK(toolIJK, j6ProjAngle)
 
+            # print(f"tool vec = {str(toolIJK)}    proj angle = {str(j6ProjAngle)}   ijk  = {str(j6IJK)}")
 
         trajectory[i].rot=InverseKinematics.j62rpy(j6IJK)
 
