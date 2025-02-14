@@ -119,6 +119,13 @@ def j62R(j6):
     axis=np.cross(x,j6)
     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
     return R
+def tool2R(j6,tool):
+    tool/=np.linalg.norm(tool)
+    =np.array([0,0,1])
+    theta=acos(np.dot(tool,z))
+    axis=j6
+    R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
+    return R
 
 def R2rpy(R):
     # print(R)
@@ -129,9 +136,9 @@ def R2rpy(R):
     # assert np.linalg.norm(R[0:2,0]) > np.finfo(float).eps * 10.0, "Singular rpy requested"
     return np.array([abc[-1],abc[-2],abc[-3]])
 
-def j62rpy(j6):
+def j62rpy(j6,toolVector):
 
-    return R2rpy(j62R(j6))*180/pi
+    return R2rpy(tool2R(j6,toolVector)*j62R(j6))*180/pi
 
 # ----- Testing -----
 
