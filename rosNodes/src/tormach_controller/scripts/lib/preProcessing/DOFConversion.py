@@ -18,6 +18,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
     j6ProjAngle_prev = 0
     for i in range(len(trajectory)):
         toolIJK = trajectory[i].toolVec
+        print(toolIJK)
         toolIJK = toolIJK/np.linalg.norm(toolIJK)
 
         if toolIJK[2] == 0: #if the tool is horizontal
