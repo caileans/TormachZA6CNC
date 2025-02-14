@@ -8,7 +8,7 @@ import CircleFunctions
 
 
 
-def planTrajectory(wayPoints, a=1, hz=50, pInit=[562.0,0.0,866.0], ijkInit=[0.0,0.0,1.0]):
+def planTrajectory(wayPoints, a=1, hz=50, pInit=[562.0,0.0,866.0], ijkInit=[0.0,0.0,1.0], pureRotVel = np.pi/2):
     traj = []
 
     for i in range(len(wayPoints)):
@@ -33,7 +33,7 @@ def planTrajectory(wayPoints, a=1, hz=50, pInit=[562.0,0.0,866.0], ijkInit=[0.0,
 
         ### if it's linear motion
         if (wayPoints[i].rotAxis == np.array([0.0,0.0,0.0])).all():
-            points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
+            points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, pureRotVel)
         else:
             points = genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoints[i])
         # points = genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf)
@@ -42,7 +42,7 @@ def planTrajectory(wayPoints, a=1, hz=50, pInit=[562.0,0.0,866.0], ijkInit=[0.0,
 
     return traj
 
-def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf):
+def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, rotVel):
     dp = pf - p0
     dijk = ijkf - ijk0
 
@@ -50,7 +50,8 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf):
 
     if distance == 0:
         if not np.linalg.norm(dijk) == 0:
-            distance = np.linalg.norm(dijk)*100
+            distance = np.acos(np.dot(ijkf/np.linalg.norm(ijkf), ijk0/np.linalg.norm(ijk0)))
+            vi = vm = vf = rotVel
         else:
             print("neither ijk or p change. can't generate trajectory")
             return []

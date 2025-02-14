@@ -86,7 +86,7 @@ def plot3DTrajectory(trajectory, hz=50):
         pitch = np.deg2rad(point.rot[1])
 
         
-        print(f"ti: {i[n]}    tj: {j[n]}    tk: {k[n]}   roll: {point.rot[2]}   pitch: {point.rot[1]}   yaw: {point.rot[0]}")
+        # print(f"ti: {i[n]}    tj: {j[n]}    tk: {k[n]}   roll: {point.rot[2]}   pitch: {point.rot[1]}   yaw: {point.rot[0]}")
         
         i_j6[n] = np.cos(yaw)*np.cos(pitch)
         j_j6[n] = np.sin(yaw)*np.cos(pitch)
@@ -96,8 +96,8 @@ def plot3DTrajectory(trajectory, hz=50):
 
     ax = plt.figure().add_subplot(projection='3d')
 
-    nmin = 190
-    nmax = 200 #len(x)
+    nmin = 0
+    nmax = len(x)
     ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i[nmin:nmax], j[nmin:nmax], k[nmin:nmax], length=10, normalize=True, color='b')
     ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i_j6[nmin:nmax], j_j6[nmin:nmax], k_j6[nmin:nmax], length=10, normalize=True, color='r')
     
@@ -108,10 +108,10 @@ def plot3DTrajectory(trajectory, hz=50):
 if __name__=="__main__":
     import matplotlib.pyplot as plt
     print("generating trajectory")
-    traj = genTrajectory(sys.argv[1], hz=1, feedRate=10, rapidFeed=10, toolFrameOffset=[0.0, 20.0, 0.0])
+    traj = genTrajectory(sys.argv[1], hz=10, feedRate=10, rapidFeed=10, toolFrameOffset=[0.0, 20.0, 0.0])
 
     # plotTrajectory(traj)
-    plot3DTrajectory(traj, hz=1)
+    plot3DTrajectory(traj, hz=10)
 
     # print("saving trajectory")
     # saveTrajectory(sys.argv[2], traj)
