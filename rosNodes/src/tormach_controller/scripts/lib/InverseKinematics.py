@@ -131,7 +131,7 @@ def R2rpy(R):
 
 def j62rpy(j6):
 
-    return R2rpy(j62R(j6))*180/pi
+    return R2rpy(j62R(j6))*180/pi,j6
 
 # ----- Testing -----
 
