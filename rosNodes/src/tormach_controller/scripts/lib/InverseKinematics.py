@@ -123,8 +123,9 @@ def tool2R(j6,tool,rj6):
     tool/=np.linalg.norm(tool)
     z=rj6*np.array([[0],[0],[-1]])
     z=np.array(z[:,0])
+    # z=np.array([0,0,1])
     theta=acos(np.dot(tool,z))
-    axis=j6*copysign(1,np.dot(np.cross(z,tool),j6))
+    axis=np.array([0,0,1])*copysign(1,np.dot(np.cross(z,tool),j6))
     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
     return R
 
@@ -139,7 +140,7 @@ def R2rpy(R):
 
 def j62rpy(j6,toolVector):
     rj6=j62R(j6)
-    return R2rpy(tool2R(j6,toolVector,rj6)*rj6)*180/pi
+    return R2rpy(rj6*tool2R(j6,toolVector,rj6))*180/pi
 
 # ----- Testing -----
 
