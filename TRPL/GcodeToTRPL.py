@@ -243,7 +243,7 @@ class GcodeToTRPL:
         # # calculate the angle A
         # A=atan2(-qprime[1],-qprime[2])
 
-        # calculate the angle B
+        # calculate the angle . down from xy plane
         # B=atan2((qprime[2]-cos(A)),qprime[0])
         B=atan2(-toolPose.k,sqrt(toolPose.i*toolPose.i+toolPose.j*toolPose.j))
 
