@@ -30,7 +30,7 @@ if __name__=='__main__':
     rospy.init_node("controller")
     # x=DataTypes.TrajPoint()
     filepath ='/home/pathpilot/Downloads/TormachZA6CNC/Gcode/'
-    publisher=pub.startPublisher()
+    # publisher=pub.startPublisher()
     overshoot=2.0
     robot=ik.tormachZA6()
 
