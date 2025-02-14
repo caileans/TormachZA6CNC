@@ -121,12 +121,12 @@ def j62R(j6):
     return R
 
 def R2rpy(R):
-    print(R)
-    print(np.linalg.norm(R[0:2,0]))
-    print(R[0:2,0])
+    # print(R)
+    # print(np.linalg.norm(R[0:2,0]))
+    # print(R[0:2,0])
     abc=grtb.R2rpy(R)
-    print(abc)
-    assert np.linalg.norm(R[0:2,0]) > np.finfo(float).eps * 10.0, "Singular rpy requested"
+    # print(abc)
+    # assert np.linalg.norm(R[0:2,0]) > np.finfo(float).eps * 10.0, "Singular rpy requested"
     return np.array([abc[-1],abc[-2],abc[-3]])
 
 def j62rpy(j6):
