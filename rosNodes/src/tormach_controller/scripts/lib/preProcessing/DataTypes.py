@@ -62,11 +62,11 @@ class WayPoint:
     # pos: Position = field(default_factory=Position)
     # toolVec: IJKVector = field(default_factory=IJKVector)
     # circ: IJKVector = field(default_factory=IJKVector)
-    pos: np.ndarray = field(default_factory=lambda: np.array([0,0,0]))
-    toolVec: np.ndarray = field(default_factory=lambda: np.array([0,0,0]))
-    circijk: np.ndarray = field(default_factory=lambda: np.array([0,0,0]))
+    pos: np.ndarray = field(default_factory=lambda: np.array([0.0,0.0,0.0]))
+    toolVec: np.ndarray = field(default_factory=lambda: np.array([0.0,0.0,0.0]))
+    circijk: np.ndarray = field(default_factory=lambda: np.array([0.0,0.0,0.0]))
     vel: float = 0
-    rotAxis: np.ndarray = field(default_factory=lambda: np.array([0,0,0]))
+    rotAxis: np.ndarray = field(default_factory=lambda: np.array([0.0,0.0,0.0]))
 
 @dataclass
 class TrajPoint:
@@ -74,6 +74,6 @@ class TrajPoint:
     # toolVec: IJKVector = field(default_factory=IJKVector)
     # rot: EulerAngles = field(default_factory=EulerAngles)
     # vel: float = 0
-    pos: np.ndarray = field(default_factory=lambda: np.array([0,0,0]))
-    toolVec: np.ndarray = field(default_factory=lambda: np.array([0,0,0]))
-    rot: np.ndarray = field(default_factory=lambda: np.array([0,0,0]))
+    pos: np.ndarray = field(default_factory=lambda: np.array([0.0,0.0,0.0]))
+    toolVec: np.ndarray = field(default_factory=lambda: np.array([0.0,0.0,0.0]))
+    rot: np.ndarray = field(default_factory=lambda: np.array([0.0,0.0,0.0]))
