@@ -125,7 +125,7 @@ def tool2R(j6,tool,rj6):
     z=np.array(z[:,0])
     # z=np.array([0,0,1])
     theta=acos(np.dot(tool,z))
-    axis=np.array([0,0,1])*copysign(1,np.dot(np.cross(z,tool),j6))
+    axis=np.array([1,0,0])*copysign(1,np.dot(np.cross(z,tool),j6))
     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
     return R
 
