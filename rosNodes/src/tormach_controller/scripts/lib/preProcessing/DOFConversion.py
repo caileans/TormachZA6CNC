@@ -50,7 +50,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
             # print(f"tool vec = {str(toolIJK)}    proj angle = {str(j6ProjAngle)}   ijk  = {str(j6IJK)}")
 
-        trajectory[i].rot=InverseKinematics.j62rpy(j6IJK)
+        trajectory[i].rot=InverseKinematics.j62rpy(j6IJK, toolIJK)
 
     return trajectory
 
