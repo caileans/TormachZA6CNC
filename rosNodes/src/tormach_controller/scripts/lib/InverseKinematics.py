@@ -26,7 +26,7 @@ def abcToR(abc):
         abc - an array of length 3 that contains the alpha, beta, and gamma euler angles in radians
     Output:
         a 3x3 rotation matrix describing the orientation"""
-    return np.transpose(grtb.rpy2R([abc[-1],abc[-2],abc[-3]]))
+    return (grtb.rpy2R([abc[-1],abc[-2],abc[-3]]))
 
 def chooseIK(r0, sols, w):
     """chooses the best ik solution by minimizing the error in the solution and change from joint position r0
@@ -116,7 +116,7 @@ def j62R(j6):
     j6/=np.linalg.norm(j6)
     x=np.array([1,0,0])
     theta=acos(np.dot(j6,x))
-    axis=-1*np.cross(x,j6)
+    axis=np.cross(x,j6)
     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
     return R
 
