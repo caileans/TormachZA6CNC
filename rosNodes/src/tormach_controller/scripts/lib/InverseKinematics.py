@@ -122,9 +122,9 @@ def j62R(j6):
 def tool2R(j6,tool,rj6):
     tool/=np.linalg.norm(tool)
     z=rj6*np.array([[0],[0],[1]])
-    z=np.transpose(z)
-    theta=-1*acos(np.dot(tool,z))
-    axis=j6
+    z=np.array(z[:,0])
+    theta=acos(np.dot(tool,z))
+    axis=np.cross(z,tool)
     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
     return R
 
