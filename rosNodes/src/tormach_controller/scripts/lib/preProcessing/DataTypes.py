@@ -50,7 +50,7 @@ class ToolPose:
     z: float = 0
     i: float = 0
     j: float = 0
-    k: float = 0
+    k: float = 1
 
 # class MotionType(Enum):
 #     line = 1
