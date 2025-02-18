@@ -2,7 +2,7 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
-
+import math
 import DataTypes
 import CircleFunctions
 
@@ -50,7 +50,7 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, rotVel):
 
     if distance == 0:
         if not np.linalg.norm(dijk) == 0:
-            distance = np.acos(np.dot(ijkf/np.linalg.norm(ijkf), ijk0/np.linalg.norm(ijk0)))
+            distance = math.acos(np.dot(ijkf/np.linalg.norm(ijkf), ijk0/np.linalg.norm(ijk0)))
             vi = vm = vf = rotVel
         else:
             print("neither ijk or p change. can't generate trajectory")
