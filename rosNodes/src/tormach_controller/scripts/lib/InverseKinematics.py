@@ -142,7 +142,10 @@ def j62rpy(j6,toolVector):
     rj6=j62R(j6)
     c=R2rpy(rj6)
     return np.array([c[0],c[1],tool2R(j6,toolVector,rj6)])*180/pi
-
+def getR(axis, angle):
+    theta=angle
+    R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
+    return R
 # ----- Testing -----
 
 # H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
