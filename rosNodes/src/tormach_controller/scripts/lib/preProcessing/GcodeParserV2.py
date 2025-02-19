@@ -95,7 +95,8 @@ class GcodeParserV2:
     @staticmethod
     def parseLine(line):
         #strip all whitespace,
-        line = (''.join(line.split())).replace(";", "").upper()
+        # line = (''.join(line.split())).replace(";", "").upper()
+        line = (''.join(line.split(';')[0].split())).upper()
         line = re.sub(r"[\(\[].*?[\)\]]", "", line) #remove comments
         if line == "":
             return [], []
