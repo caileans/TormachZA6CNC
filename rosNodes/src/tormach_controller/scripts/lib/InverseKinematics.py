@@ -53,8 +53,8 @@ def chooseIK(r0, sols, w):
         # print(np.shape(newsol)[0])
 
         for j in range(np.shape(newsol)[0]):
-            if (j==3 or j==5) and newsol[j]**2<.0025:
-                print(w)
+            if (j==3 or j==5) and newsol[4]**2<.0025:
+                print(newsol)
                 w[7+j]=100
             newvalue+=w[j]*(newsol[j]-r0[j])**2+w[7+j]*newsol[j]**2
         # print(newvalue)
