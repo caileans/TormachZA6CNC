@@ -35,7 +35,7 @@ def chooseIK(r0, sols, w):
     Inputs:
         r0 - an np array of length 6 that describes the previous joint state
         sols - the solution set returned by ik_geo
-        w - an array of legnth 7 that contains the weighing factors for each state
+        w - an array of legnth 13 that contains the weighing factors for each state
     Output:
         a np array of length 6 containing the best IK solution"""
         
@@ -52,7 +52,7 @@ def chooseIK(r0, sols, w):
         newvalue=0
         # print(np.shape(newsol)[0])
         for j in range(np.shape(newsol)[0]):
-            newvalue+=w[j]*(newsol[j]-r0[j])**2
+            newvalue+=w[j]*(newsol[j]-r0[j])**2+w[7+j]*newsol[j]**2
         # print(newvalue)
         # newvalue=(newsol[0]-r0[0])**2+(newsol[5]-r0[5])**2
         if newvalue<minval:
@@ -62,7 +62,7 @@ def chooseIK(r0, sols, w):
     return np.array(sols[minindex][0])
 
 
-def runIK (r, r0, ikrobot, w=[1,1,1,1,1,1,0]):
+def runIK (r, r0, ikrobot, w=[1,1,1,1,1,1,0,.01,.01,.01,.1,.01,.1]):
     """ calculates and chooses the best inverse kinematics solution 
 
     inputs: 
