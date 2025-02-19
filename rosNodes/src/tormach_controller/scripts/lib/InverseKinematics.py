@@ -121,12 +121,16 @@ def j62R(j6):
     return R
 def tool2R(j6,tool,rj6):
     tool/=np.linalg.norm(tool)
+    # print(tool)
     z=rj6*np.array([[0],[0],[1]])
-    z=np.array(z[:,0])
+    # print(z)
+    z=np.array(z[:,2])
+    # print(z)
     # z=np.array([0,0,1])
     theta=acos(np.dot(tool,z))
-    axis=np.array([1,0,0])*copysign(1,np.dot(np.cross(z,tool),j6))
-    R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
+    # print(theta)
+    # axis=np.array([1,0,0])*copysign(1,np.dot(np.cross(z,tool),j6))
+    # R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
     return theta*copysign(1,np.dot(np.cross(z,tool),j6))
 
 def R2rpy(R):
@@ -142,6 +146,7 @@ def j62rpy(j6,toolVector):
     rj6=j62R(j6)
     c=R2rpy(rj6)
     return np.array([c[0],c[1],tool2R(j6,toolVector,rj6)])*180/pi
+
 def getR(axis, angle):
     theta=angle
     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
@@ -158,3 +163,5 @@ def getR(axis, angle):
 # r=np.array([500,50,500,90,0,0])
 # r0=np.array([0,1.6,-2.08,-1.9,2.2,1.0])
 # print(runIK(r,r0, ikrobot))
+
+# print(tool2R(np.array([1.0,0,0]),np.array([0,0,1.0]),np.array([[1.0,0,0],[0,1.0,0],[0,0,1.0]])))
