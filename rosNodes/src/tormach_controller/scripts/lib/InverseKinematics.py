@@ -26,7 +26,8 @@ def abcToR(abc):
         abc - an array of length 3 that contains the alpha, beta, and gamma euler angles in radians
     Output:
         a 3x3 rotation matrix describing the orientation"""
-    return (grtb.rpy2R([abc[-1],abc[-2],abc[-3]]))
+    # return (grtb.rpy2R([abc[-1],abc[-2],abc[-3]]))
+    return np.matmul(grtb.rot(np.array([0,0,1]),abc[2]),np.matmul(grtb.rot(np.array([0,1.0,0]),abc[1]),grtb.rot(np.array([1.0,0,0]),abc[0])))
 
 def chooseIK(r0, sols, w):
     """chooses the best ik solution by minimizing the error in the solution and change from joint position r0
@@ -159,7 +160,7 @@ def getR(axis, angle):
     return R
 def axang2bg(axis,angle):
 
-    b=-1*asin(-axis[1]*sin(angle)+(1-cos(angle))*axis[0]*axis[2])
+    b=asin(-axis[1]*sin(angle)+(1-cos(angle))*axis[0]*axis[2])
     g=0;
     if b==np.pi/2 or b==-np.pi/2:
         g=0;
