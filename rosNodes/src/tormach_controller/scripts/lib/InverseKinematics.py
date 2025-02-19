@@ -51,7 +51,10 @@ def chooseIK(r0, sols, w):
         # newvalue=w[-1]*(col[1]-minerror)
         newvalue=0
         # print(np.shape(newsol)[0])
+
         for j in range(np.shape(newsol)[0]):
+            if (j==3 or j==5) and newsol[j]**2<.0004:
+                w[7+j]=100
             newvalue+=w[j]*(newsol[j]-r0[j])**2+w[7+j]*newsol[j]**2
         # print(newvalue)
         # newvalue=(newsol[0]-r0[0])**2+(newsol[5]-r0[5])**2
@@ -69,7 +72,7 @@ def runIK (r, r0, ikrobot, w=[1,1,1,1,1,1,0,.01,.01,.01,.1,.01,.1]):
         r - a numpy array of length 6 with the entries [x pose, y pose, z pose, a, b, c] where a b and c are the static frame roll, pitch, and yaw orientation in degrees
         r0 - a np array of length 6 containing the previous joint angles in radians
         ikrobot - an ik_geo Robot type describing the robot arm
-        w - the weighting factor of the deviations 1x7 array of j1-j6 then ik solution error
+        w - the weighting factor of the deviations 1x13 array of change in j1-j6 then ik solution error then absolute j1-j6
     output:
         a np array of length 6 containing the selected joint angles"""
 
