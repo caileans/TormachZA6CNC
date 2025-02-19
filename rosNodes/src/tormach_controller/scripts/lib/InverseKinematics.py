@@ -121,11 +121,11 @@ def j62R(j6):
     return R
 def tool2R(j6,tool,rj6):
     tool/=np.linalg.norm(tool)
-    print(tool)
+    # print(tool)
     z=np.matmul(rj6,np.array([[0],[0],[1]]))
-    print(z)
+    # print(z)
     z=np.array(z[:,0])
-    print(z)
+    # print(z)
     # z=np.array([0,0,1])
     theta=acos(np.dot(tool,z))
     # print(theta)
