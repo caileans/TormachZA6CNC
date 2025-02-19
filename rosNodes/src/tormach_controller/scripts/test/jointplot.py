@@ -13,7 +13,7 @@ import GCodeToTrajectory as gct
 import numpy as np
 
 robot=ik.tormachZA6();
-pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/5DOFTest.nc', a=30,hz=10,feedRate=30,rapidFeed=30,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20)
+pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/5DOFTest.nc', a=30,hz=80,feedRate=30,rapidFeed=30,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20)
 
 # set up arrays to save data here
 jprev = np.zeros(6)
@@ -27,7 +27,7 @@ for point in pointList:
 	c+=1
 	# returns all solutions
 	newsol=ik.getIK(np.array(point.pos[0:3]),ik.abcToR(np.array(point.rot[0:3])),robot)
-	pick.append(ik.chooseIK(pick[c-1],newsol,[1,1,1,1,1,1,0,.01,.01,.01,.01,.01,.01]))
+	pick.append(ik.chooseIK(pick[c-1],newsol,[1,1,1,1,1,1,0,.0,0,0,0,0,0]))
 	temp=[]
 	for j in newsol:
 		temp.append(j[0])
@@ -37,4 +37,6 @@ pick=np.array(pick[1:])
 sols=np.array(sols[1:])
 
 plt.plot(pick[:,3], '.-')
+plt.plot(pick[:,4], '.-')
+plt.plot(pick[:,5], '.-')
 plt.show()
