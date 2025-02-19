@@ -165,7 +165,7 @@ def axang2bg(axis,angle):
         g=0;
     else:
         g=atan2(-1*(axis[2]*sin(angle)+(1-cos(angle))*axis[0]*axis[1]), 1-(1-cos(angle))*(axis[2]*axis[2]+axis[1]*axis[1]))
-        return [b,g]
+    return [b,g]
 # ----- Testing -----
 
 # H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
