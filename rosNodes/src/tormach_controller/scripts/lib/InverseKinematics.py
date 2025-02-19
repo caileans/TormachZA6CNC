@@ -26,7 +26,7 @@ def abcToR(abc):
         abc - an array of length 3 that contains the alpha, beta, and gamma euler angles in radians
     Output:
         a 3x3 rotation matrix describing the orientation"""
-    return (grtb.rpy2R([abc[-3],abc[-2],abc[-1]]))
+    return (grtb.rpy2R([abc[-1],abc[-2],abc[-3]]))
 
 def chooseIK(r0, sols, w):
     """chooses the best ik solution by minimizing the error in the solution and change from joint position r0
