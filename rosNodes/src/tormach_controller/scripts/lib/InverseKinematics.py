@@ -148,7 +148,7 @@ def j62rpy(j6,toolVector):
     x=np.array([1,0,0])
     theta=acos(np.dot(j6,x))
     axis=np.cross(x,j6)
-    bc=axang2bg(axis,angle)
+    bc=axang2bg(axis,theta)
     rj6=j62R(j6)
     # c=R2rpy(rj6)
     return np.array([tool2R(j6,toolVector,rj6), bc[0],bc[1]])*180/pi
