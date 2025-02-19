@@ -1,10 +1,12 @@
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))+"/../"))
 
 import numpy as np
 import math
 import DataTypes
 import CircleFunctions
+import InverseKinematics
 
 
 
@@ -48,9 +50,12 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, rotVel):
 
     distance = np.linalg.norm(dp)
 
+    ijkCross = np.cross(ijk0, ijkf)
+    rotDist = math.acos(np.dot(ijkf/np.linalg.norm(ijkf), ijk0/np.linalg.norm(ijk0))) #*np.sign(ijkCross)
+
     if distance == 0:
-        if not np.linalg.norm(dijk) == 0:
-            distance = math.acos(np.dot(ijkf/np.linalg.norm(ijkf), ijk0/np.linalg.norm(ijk0)))
+        if not rotDist == 0:
+            distance = rotDist
             vi = vm = vf = rotVel
         else:
             print("neither ijk or p change. can't generate trajectory")
@@ -61,7 +66,9 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, rotVel):
     points = []
     for point in path:
         pos = p0+dp*point
-        ijk = ijk0+dijk*point
+        # ijk = ijk0+dijk*point
+        ijk = np.matmul(InverseKinematics.getR(ijkCross, rotDist*point), ijk0)
+
         points.append(DataTypes.TrajPoint(pos=pos, toolVec=ijk))
 
     return points
