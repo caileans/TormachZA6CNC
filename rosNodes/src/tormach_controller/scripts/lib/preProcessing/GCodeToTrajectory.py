@@ -10,7 +10,7 @@ import sys
 
 
 
-def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0, 0.0], origin=[562.0,0.0,866.0], toolIJKInit=[0.0,0.0,1.0]):
+def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0, 0.0], origin=[562.0,0.0,866.0], toolIJKInit=[0.0,0.0,1.0], pureRotVel = np.pi/2):
     '''call necessary functions to plan a trajectory from gcode'''
     parser = GcodeParserV2.GcodeParserV2(feedRate=feedRate, rapidFeed=rapidFeed, defaultLengthUnits=defaultLengthUnits, toolFrameOffset=toolFrameOffset)
     # print(os.getcwd())
@@ -21,7 +21,7 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
 
     wayPoints.append(DataTypes.WayPoint(pos=origin, toolVec=toolIJKInit, vel=(rapidFeed if defaultLengthUnits=="mm" else rapidFeed*25.4/60.0))) #add the origin to the end
 
-    trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz, pInit=origin, ijkInit=toolIJKInit)
+    trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz, pInit=origin, ijkInit=toolIJKInit, pureRotVel = pureRotVel)
 
     ### uncomment whichever one you want to use. Fixed will keep tool upright
     # trajectory = DOFConversion.AddFixed6DOF(trajectory)
@@ -96,8 +96,8 @@ def plot3DTrajectory(trajectory, hz=50):
 
     ax = plt.figure().add_subplot(projection='3d')
 
-    nmin = 0
-    nmax = len(x)
+    nmin = 1500
+    nmax = 2000 #len(x)
     ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i[nmin:nmax], j[nmin:nmax], k[nmin:nmax], length=10, normalize=True, color='b')
     ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i_j6[nmin:nmax], j_j6[nmin:nmax], k_j6[nmin:nmax], length=10, normalize=True, color='r')
     

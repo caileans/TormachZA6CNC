@@ -48,7 +48,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
             j6IJK = calcJ6IJK(toolIJK, j6ProjAngle)
 
-            # print(f"tool vec = {str(toolIJK)}    proj angle = {str(j6ProjAngle)}   ijk  = {str(j6IJK)}")
+            # print(f"tool vec = {str(toolIJK)}    proj angle = {str(j6ProjAngle)}   j6ijk  = {str(j6IJK)}   abc = {str(InverseKinematics.j62rpy(j6IJK, toolIJK))}")
 
         trajectory[i].rot=InverseKinematics.j62rpy(j6IJK, toolIJK)
 
