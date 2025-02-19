@@ -36,7 +36,6 @@ for point in pointList:
 pick=np.array(pick[1:])
 sols=np.array(sols[1:])
 
-plt.plot(pick[:,3], '.-')
-plt.plot(pick[:,4], '.-')
-plt.plot(pick[:,5], '.-')
+plt.plot(sols[:,:,4], '.')
+plt.plot(pick[:,4], '+-k')
 plt.show()
