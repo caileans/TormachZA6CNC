@@ -4,6 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))+"/../
 
 
 import numpy as np
+import math
 import DataTypes
 import InverseKinematics
 
@@ -48,9 +49,10 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
             j6IJK = calcJ6IJK(toolIJK, j6ProjAngle)
 
-            # print(f"tool vec = {str(toolIJK)}    proj angle = {str(j6ProjAngle)}   j6ijk  = {str(j6IJK)}   abc = {str(InverseKinematics.j62rpy(j6IJK, toolIJK))}")
+            print(f"tool vec = {str(toolIJK)}    proj angle = {str(j6ProjAngle)}   j6ijk  = {str(j6IJK)}   abcCailean = {str(calcABC(j6IJK, toolIJK))}   abcNik = {str(InverseKinematics.j62rpy(j6IJK, toolIJK))}")
 
-        trajectory[i].rot=InverseKinematics.j62rpy(j6IJK, toolIJK)
+        # trajectory[i].rot=InverseKinematics.j62rpy(j6IJK, toolIJK)
+        trajectory[i].rot=calcABC(j6IJK, toolIJK)
 
     return trajectory
 
@@ -65,3 +67,19 @@ def calcJ6IJK(toolIJK, angle):
 
     return j6IJK
 
+def calcABC(j6IJK, toolIJK):
+    C = math.atan2(j6IJK[1], j6IJK[0])
+
+    B = math.atan2(-j6IJK[2], np.sqrt(j6IJK[0]**2 + j6IJK[1]**2))
+
+    q0 = np.array([0.0, 0.0, 0.0])
+    q0[2] = math.cos(B)
+    q0ij = math.sin(B)
+    q0[0] = q0ij*math.cos(C)
+    q0[1] = q0ij*math.sin(C)
+    cross = np.cross(q0, toolIJK) #, q0)
+    A = math.acos(np.dot(q0/np.linalg.norm(q0), toolIJK/np.linalg.norm(toolIJK))) * (np.sign(cross.dot(j6IJK)))
+    # A = np.pi - np.copysign(math.asin(np.linalg.norm(cross)/(np.linealg.norm(q)*np.linalg.norm(q0))), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
+
+    cba =  np.rad2deg(np.array([A, B, C]))
+    return cba
