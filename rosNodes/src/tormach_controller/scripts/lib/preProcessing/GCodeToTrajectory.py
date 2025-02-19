@@ -111,10 +111,10 @@ def plot3DTrajectory(trajectory, hz=50):
 if __name__=="__main__":
     import matplotlib.pyplot as plt
     print("generating trajectory")
-    traj = genTrajectory(sys.argv[1], hz=1, feedRate=10, rapidFeed=10, toolFrameOffset=[0.0, 20.0, 0.0])
+    traj = genTrajectory(sys.argv[1], hz=10, feedRate=10, rapidFeed=10, toolFrameOffset=[0.0, 20.0, 0.0])
 
     # plotTrajectory(traj)
-    plot3DTrajectory(traj, hz=1)
+    plot3DTrajectory(traj, hz=10)
 
     # print("saving trajectory")
     # saveTrajectory(sys.argv[2], traj)
