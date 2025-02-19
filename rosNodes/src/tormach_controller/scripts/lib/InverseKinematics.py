@@ -3,7 +3,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from ik_geo import Robot # pip install ik-geo
 import numpy as np
 import general_robotics_toolbox as grtb
-from math import pi, cos, acos, sin, copysign
+from math import pi, cos, acos, sin, copysign, atan2
 
 
 
@@ -26,7 +26,7 @@ def abcToR(abc):
         abc - an array of length 3 that contains the alpha, beta, and gamma euler angles in radians
     Output:
         a 3x3 rotation matrix describing the orientation"""
-    return (grtb.rpy2R([abc[-1],abc[-2],abc[-3]]))
+    return (grtb.rpy2R([abc[-3],abc[-2],abc[-1]]))
 
 def chooseIK(r0, sols, w):
     """chooses the best ik solution by minimizing the error in the solution and change from joint position r0
@@ -138,20 +138,34 @@ def R2rpy(R):
     # print(np.linalg.norm(R[0:2,0]))
     # print(R[0:2,0])
     abc=grtb.R2rpy(R)
-
+    # b=asin(-R[0,2])
     # print(abc)
     # assert np.linalg.norm(R[0:2,0]) > np.finfo(float).eps * 10.0, "Singular rpy requested"
     return np.array([abc[-1],abc[-2],abc[-3]])
 
 def j62rpy(j6,toolVector):
+    j6/=np.linalg.norm(j6)
+    x=np.array([1,0,0])
+    theta=acos(np.dot(j6,x))
+    axis=np.cross(x,j6)
+    bc=axang2bg(axis,angle)
     rj6=j62R(j6)
-    c=R2rpy(rj6)
-    return np.array([c[0],c[1],tool2R(j6,toolVector,rj6)])*180/pi
+    # c=R2rpy(rj6)
+    return np.array([tool2R(j6,toolVector,rj6), bc[0],bc[1]])*180/pi
 
 def getR(axis, angle):
     theta=angle
     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
     return R
+def axang2bg(axis,angle):
+
+    b=asin(-axis[1]*sin(angle)+(1-cos(angle)*axis[0]*axis[2]))
+    g=0;
+    if b==np.pi/2 or b==-np.pi/2:
+        g=0;
+    else:
+        g=atan2(-1*(axis[2]*sin(angle)+(1-cos(angle))*axis[0]*axis[1]), 1-(1-cos(angle))*(axis[2]*axis[2]+axis[1]*axis[1]))
+        return [b,g]
 # ----- Testing -----
 
 # H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
