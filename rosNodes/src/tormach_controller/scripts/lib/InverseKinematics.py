@@ -121,11 +121,11 @@ def j62R(j6):
     return R
 def tool2R(j6,tool,rj6):
     tool/=np.linalg.norm(tool)
-    # print(tool)
-    z=rj6*np.array([[0],[0],[1]])
-    # print(z)
-    z=np.array(z[:,2])
-    # print(z)
+    print(tool)
+    z=np.matmul(rj6,np.array([[0],[0],[1]]))
+    print(z)
+    z=np.array(z[:,0])
+    print(z)
     # z=np.array([0,0,1])
     theta=acos(np.dot(tool,z))
     # print(theta)
@@ -138,6 +138,7 @@ def R2rpy(R):
     # print(np.linalg.norm(R[0:2,0]))
     # print(R[0:2,0])
     abc=grtb.R2rpy(R)
+
     # print(abc)
     # assert np.linalg.norm(R[0:2,0]) > np.finfo(float).eps * 10.0, "Singular rpy requested"
     return np.array([abc[-1],abc[-2],abc[-3]])
@@ -165,3 +166,4 @@ def getR(axis, angle):
 # print(runIK(r,r0, ikrobot))
 
 # print(tool2R(np.array([1.0,0,0]),np.array([0,0,1.0]),np.array([[1.0,0,0],[0,1.0,0],[0,0,1.0]])))
+# print(tool2R(np.array([0,0,1.0]),np.array([1.0,0,0]),np.array([[0,0,1.0],[0,1.0,0],[-1.0,0,0]])))
