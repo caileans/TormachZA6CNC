@@ -159,7 +159,7 @@ def getR(axis, angle):
     return R
 def axang2bg(axis,angle):
 
-    b=asin(-axis[1]*sin(angle)+(1-cos(angle)*axis[0]*axis[2]))
+    b=asin(-axis[1]*sin(angle)+(1-cos(angle))*axis[0]*axis[2])
     g=0;
     if b==np.pi/2 or b==-np.pi/2:
         g=0;
