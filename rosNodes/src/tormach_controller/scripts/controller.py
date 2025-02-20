@@ -35,6 +35,7 @@ if __name__=='__main__':
     robot=ik.tormachZA6()
 
     while True:
+        pub.home(publisher)
         userfile=input("file name:").strip()
         file=filepath
         offset=[0,0,0]
@@ -88,5 +89,5 @@ if __name__=='__main__':
 
             # rate=rospy.Rate(hz)
             rate.sleep()
-        pub.home(publisher)
+        
         # break
