@@ -19,7 +19,7 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
 
     wayPoints = parser.evaluateGcode()
 
-    wayPoints.append(DataTypes.WayPoint(pos=origin, toolVec=toolIJKInit, vel=(rapidFeed if defaultLengthUnits=="mm" else rapidFeed*25.4/60.0))) #add the origin to the end
+    # wayPoints.append(DataTypes.WayPoint(pos=origin, toolVec=toolIJKInit, vel=(rapidFeed if defaultLengthUnits=="mm" else rapidFeed*25.4/60.0))) #add the origin to the end
 
     trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz, pInit=origin, ijkInit=toolIJKInit, pureRotVel = pureRotVel)
 
@@ -38,23 +38,45 @@ def saveTrajectory(file, trajectory):
             f.write(str(trajPoint)+"\n")
 
 
-def plotTrajectory(trajectory):
-    x = []
-    y = []
-    time = []
+def plotTrajectory(trajectory, hz=50):
+    import matplotlib.pyplot as plt
+    num = len(trajectory)
+    x = np.zeros(num)
+    y = np.zeros(num)
+    z = np.zeros(num)
+    i = np.zeros(num)
+    j = np.zeros(num)
+    k = np.zeros(num)
+    a = np.zeros(num)
+    b = np.zeros(num)
+    c = np.zeros(num)
+    i_j6 = np.zeros(num)
+    j_j6 = np.zeros(num)
+    k_j6 = np.zeros(num)
+    time = np.zeros(num)
     lastTime = 0.0
-    for point in trajectory:
-        x.append(point.pos[0])
-        y.append(point.pos[1])
-        lastTime = lastTime + 1.0/50
-        time.append(lastTime)
-        # vel = np.linalg.norm
-    plt.plot(x, y, '.')
+    for n in range(num):
+        point = trajectory[n]
+        x[n] = point.pos[0]
+        y[n] = point.pos[1]
+        z[n] = point.pos[2]
+        i[n] = point.toolVec[0]
+        j[n] = point.toolVec[1]
+        k[n] = point.toolVec[2]
+        a[n] = point.rot[0]
+        b[n] = point.rot[1]
+        c[n] = point.rot[2]
+        lastTime = lastTime + 1.0/hz
+        time[n] = lastTime
 
 
     plt.figure(2)
-    plt.plot(time, x, '.')
-    plt.plot(time, y, '.')
+    plt.plot(i, k, '.')
+
+    plt.figure(3)
+    plt.plot(time, a, '+')
+    plt.plot(time, b, 'x')
+    plt.plot(time, c, '.')
 
     plt.show()
 
@@ -82,8 +104,8 @@ def plot3DTrajectory(trajectory, hz=50):
         lastTime = lastTime + 1.0/hz
         time[n] = lastTime
 
-        # yaw = np.deg2rad(point.rot[0])
-        # pitch = np.deg2rad(point.rot[1])
+        # yaw = point.rot[2]
+        # pitch = point.rot[1]
 
         yaw = np.deg2rad(point.rot[2])
         pitch = np.deg2rad(point.rot[1])
@@ -97,10 +119,10 @@ def plot3DTrajectory(trajectory, hz=50):
 
 
 
-    ax = plt.figure().add_subplot(projection='3d')
+    ax = plt.figure(4).add_subplot(projection='3d')
 
-    nmin = 150
-    nmax = 200 #len(x)
+    nmin = 100
+    nmax = len(x)#-500
     ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i[nmin:nmax], j[nmin:nmax], k[nmin:nmax], length=10, normalize=True, color='b')
     ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i_j6[nmin:nmax], j_j6[nmin:nmax], k_j6[nmin:nmax], length=10, normalize=True, color='r')
     
@@ -111,9 +133,9 @@ def plot3DTrajectory(trajectory, hz=50):
 if __name__=="__main__":
     import matplotlib.pyplot as plt
     print("generating trajectory")
-    traj = genTrajectory(sys.argv[1], hz=10, feedRate=10, rapidFeed=10, toolFrameOffset=[0.0, 20.0, 0.0])
+    traj = genTrajectory(sys.argv[1], a=30, hz=10, feedRate=30, rapidFeed=30, toolFrameOffset=[0.0, 20.0, 0.0], pureRotVel=np.pi/5)
 
-    # plotTrajectory(traj)
+    plotTrajectory(traj, hz=10)
     plot3DTrajectory(traj, hz=10)
 
     # print("saving trajectory")
