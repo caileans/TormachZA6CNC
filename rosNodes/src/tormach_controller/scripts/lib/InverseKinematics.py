@@ -56,7 +56,7 @@ def chooseIK(r0, sols, w):
             # if (j==3 or j==5) and newsol[4]**2<.0004:
                 # print(newsol)
                 # w[7+j]=100
-            newvalue+=w[j]*(newsol[j]-r0[j])**2+w[7+j]*newsol[j]**2
+            newvalue+=w[j]**((newsol[j]-r0[j])**2)+w[7+j]**(newsol[j]**2)
         # print(newvalue)
         # newvalue=(newsol[0]-r0[0])**2+(newsol[5]-r0[5])**2
         if newvalue<minval:
@@ -161,7 +161,7 @@ def j62rpy(j6,toolVector):
 def getR(axis, angle):
     theta=angle
     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
-    return R
+    return grtb.rot(axis,angle)
 def axang2bg(axis,angle):
 
     b=asin(-axis[1]*sin(angle)+(1-cos(angle))*axis[0]*axis[2])

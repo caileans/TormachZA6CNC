@@ -27,7 +27,7 @@ for point in pointList:
 	c+=1
 	# returns all solutions
 	newsol=ik.getIK(np.array(point.pos[0:3]),ik.abcToR(np.array(point.rot[0:3])),robot)
-	pick.append(ik.chooseIK(pick[c-1],newsol,[1,1,1,1,1,1,0,.0,0,0,0,0,0]))
+	pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,10,10,2,0,.0,0,0,0,0,0]))
 	temp=[]
 	for j in newsol:
 		temp.append(j[0])
@@ -36,6 +36,8 @@ for point in pointList:
 pick=np.array(pick[1:])
 sols=np.array(sols[1:])
 
-plt.plot(sols[:,:,4], '.')
-plt.plot(pick[:,4], '+-k')
+print()
+
+plt.plot(sols[:,:,3], '.')
+plt.plot(pick[:,3], '+-k')
 plt.show()
