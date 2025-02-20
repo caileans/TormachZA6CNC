@@ -27,10 +27,10 @@ c=0
 for point in pointList:
 	c+=1
 	# returns all solutions
-	newsol=ik.getIK(np.array(point.pos[0:3]),ik.abcToR(np.array(point.rot[0:3])),robot)
+	newsol=ik.getIK(np.array(point.pos[0:3]),ik.abcToR(np.array(np.deg2rad(point.rot[0:3]))),robot)
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,6,6,6,6,6,6]))
-	pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,4,4,4,4,4,4]))
-	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,2,2,2,2,2,2]))
+	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,4,4,4,4,4,4]))
+	pick.append(ik.chooseIK(pick[c-1],newsol,[4,4,4,4,4,4,0,4,4,4,2,4,2]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,0,0,0,0,0,0]))
 	temp=[]
 	for j in newsol:
@@ -38,11 +38,11 @@ for point in pointList:
 	sols.append(np.array(temp))
 
 pick=np.array(pick[1:])
-sols=np.array(sols[1:])
+# sols=np.array(sols[1:])
 
 plt.figure(3)
+# plt.plot(sols[:,:,5], '.k')
 plt.plot(pick[:,:], '+-')
-# plt.plot(sols[:,:,3], '.k')
 plt.legend(['1', '2', '3', '4', '5', '6'])
 
 # gct.plotTrajectory(pointList, hz)

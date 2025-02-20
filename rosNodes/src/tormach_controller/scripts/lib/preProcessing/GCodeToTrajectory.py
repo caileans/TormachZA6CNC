@@ -74,8 +74,8 @@ def plotTrajectory(trajectory, hz=50):
     plt.plot(i, k, '.')
 
     plt.figure(3)
-    plt.plot(time, a, '.')
-    plt.plot(time, b, '.')
+    plt.plot(time, a, '+')
+    plt.plot(time, b, 'x')
     plt.plot(time, c, '.')
 
     plt.show()
@@ -104,11 +104,11 @@ def plot3DTrajectory(trajectory, hz=50):
         lastTime = lastTime + 1.0/hz
         time[n] = lastTime
 
-        yaw = point.rot[2]
-        pitch = point.rot[1]
+        # yaw = point.rot[2]
+        # pitch = point.rot[1]
 
-        # yaw = np.deg2rad(point.rot[2])
-        # pitch = np.deg2rad(point.rot[1])
+        yaw = np.deg2rad(point.rot[2])
+        pitch = np.deg2rad(point.rot[1])
 
         
         # print(f"ti: {i[n]}    tj: {j[n]}    tk: {k[n]}   roll: {point.rot[2]}   pitch: {point.rot[1]}   yaw: {point.rot[0]}")
@@ -135,7 +135,7 @@ if __name__=="__main__":
     print("generating trajectory")
     traj = genTrajectory(sys.argv[1], a=30, hz=10, feedRate=30, rapidFeed=30, toolFrameOffset=[0.0, 20.0, 0.0], pureRotVel=np.pi/5)
 
-    # plotTrajectory(traj, hz=10)
+    plotTrajectory(traj, hz=10)
     plot3DTrajectory(traj, hz=10)
 
     # print("saving trajectory")

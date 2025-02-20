@@ -4,6 +4,7 @@ from ik_geo import Robot # pip install ik-geo
 import numpy as np
 import general_robotics_toolbox as grtb
 from math import pi, cos, acos, sin, copysign, atan2, asin
+import copy
 
 
 
@@ -17,7 +18,57 @@ def getIK(position, Rotation,robot):
     Output:
         the set of ik solutions calculated by ik_geo""" 
 
-    return robot.get_ik_sorted(Rotation,[position[0],position[1],position[2]])
+    sols = robot.get_ik_sorted(Rotation,[position[0],position[1],position[2]])
+
+    sols = applyJointLimits(sols, 6, 360)
+    sols = applyJointLimits(sols, 4, 270)
+
+
+    return  sols
+
+def applyJointLimits(sols, joint, limit):
+
+    limit = limit*np.pi/180
+
+    if limit == 180*np.pi/180:
+        return sols
+
+    numSols = len(sols)
+
+    #TODO: test this part
+    if limit < 180*np.pi/180: 
+        for i in range(numSols):
+            if abs(sols[i][0][joint-1]) > limit:
+                sols[i][0][joint-1].pop(i)
+        
+        return sols
+
+    # # double the number of sols to account for >180 limits
+    # newSols = copy.deepcopy(sols)
+    # newSols.extend(sols)
+    # # print(newSols)
+    # # newSols[numSols+7][0][5] -= 360*np.pi/180
+    # # print(newSols)
+    # for i in range(numSols):
+    #     if newSols[numSols+i][0][joint-1] > 0:
+    #         newSols[numSols+i][0][joint-1] -= limit
+    #     elif newSols[numSols+i][0][joint-1] < 0:
+    #         newSols[numSols+i][0][joint-1] += limit
+
+    # return newSols
+
+    for i in range(numSols):
+        if sols[i][0][joint-1] > 0:
+            newSol = sols[i][0][joint-1] - 360*np.pi/180
+        elif sols[i][0][joint-1] < 0:
+            newSol = sols[i][0][joint-1] + 360*np.pi/180
+        else:
+            continue
+
+        if abs(newSol) < limit:
+            sols.append(copy.deepcopy(sols[i]))
+            sols[-1][0][joint-1] = newSol
+    return sols
 
 def abcToR(abc):
     """uses the general robotics toolbox from rpi to calculate the rotation matrix from the static euler angles
