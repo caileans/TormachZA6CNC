@@ -35,8 +35,9 @@ if __name__=='__main__':
     robot=ik.tormachZA6()
 
     while True:
-        pub.home(publisher)
+
         userfile=input("file name:").strip()
+        pub.home(publisher)
         file=filepath
         offset=[0,0,0]
         # print(userfile)
