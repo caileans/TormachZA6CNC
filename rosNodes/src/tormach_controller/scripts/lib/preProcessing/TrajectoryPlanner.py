@@ -51,7 +51,11 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, rotVel):
     distance = np.linalg.norm(dp)
 
     ijkCross = np.cross(ijk0, ijkf)
+    if not all(ijkCross == 0):
+        ijkCross = ijkCross/np.linalg.norm(ijkCross)
     rotDist = math.acos(np.dot(ijkf/np.linalg.norm(ijkf), ijk0/np.linalg.norm(ijk0))) #*np.sign(ijkCross)
+
+    # print(f"rotdist: {str(rotDist)}   cross: {str(ijkCross)}")
 
     if distance == 0:
         if not rotDist == 0:
@@ -68,6 +72,12 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, rotVel):
         pos = p0+dp*point
         # ijk = ijk0+dijk*point
         ijk = np.matmul(InverseKinematics.getR(ijkCross, rotDist*point), ijk0)
+        R = InverseKinematics.getR(ijkCross, rotDist*point)
+        # ijk = np.array([R[0,0]*ijk0[0] + R[0,1]*ijk0[1] + R[0,2]*ijk0[2],
+        # R[1,0]*ijk0[0] + R[1,1]*ijk0[1] + R[1,2]*ijk0[2],
+        # R[2,0]*ijk0[0] + R[2,1]*ijk0[1] + R[2,2]*ijk0[2]])
+
+        # print(f"ijk: {str(ijk)}   pos: {str(pos)}   point: {str(point)}   rot: {str(math.acos(np.dot(ijk/np.linalg.norm(ijk), ijk0/np.linalg.norm(ijk0))))}   R: {str(R)}")
 
         points.append(DataTypes.TrajPoint(pos=pos, toolVec=ijk))
 
