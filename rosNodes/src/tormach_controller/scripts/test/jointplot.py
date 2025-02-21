@@ -42,7 +42,7 @@ pick=np.array(pick[1:])
 sols=np.array(sols[1:])
 
 plt.figure(3)
-plt.plot(sols[:,:,3], '.k')
+# plt.plot(sols[:,:,3], '.k')
 plt.plot(pick[:,:], '+-')
 plt.legend(['1', '2', '3', '4', '5', '6'])
 

@@ -23,13 +23,14 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
         toolPos = trajectory[i].pos
 
+
+############ quadrant based method:
         if toolIJK[2] == 0: #if the tool is horizontal
             j6IJK = np.array([0,0,-1.0])
 
             j6ProjAngle_prev = 0
 
         else:
-############ quadrant based method:
             if toolIJK[0] >= 0:
                 j6ProjAngle = 90*np.pi/180.0*toolIJK[1]
 
@@ -56,7 +57,6 @@ def Add6DofFrom5(trajectory, quadrant=2):
             # j6ProjAngle =  np.atan2(toolPos[1], toolPos[0])
 
 
-
 ############ nik method:
         # j6ProjAngle =  np.atan2(toolPos[1], toolPos[0])
 
@@ -66,7 +66,9 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
             
 
-        # print(f"tool vec = {str(toolIJK)}    pos = {str(toolPos)}    proj angle = {str(j6ProjAngle)}   j6ijk  = {str(j6IJK)}   abcCailean = {str(calcABC(j6IJK, toolIJK))}")
+
+
+        print(f"tool vec = {str(toolIJK)}    pos = {str(toolPos)}    proj angle = {str(j6ProjAngle)}   j6ijk  = {str(j6IJK)}   abcCailean = {str(calcABC(j6IJK, toolIJK))}")
 
         # trajectory[i].rot=InverseKinematics.j62rpy(j6IJK, toolIJK)
         trajectory[i].rot=calcABC(j6IJK, toolIJK)
@@ -96,7 +98,7 @@ def calcABC(j6IJK, toolIJK):
     q0[1] = q0ij*math.sin(C)
     cross = np.cross(q0, toolIJK) #, q0)
     # print(f"q0: {str(q0)}   tijk: {str(toolIJK)}   dot: {str(np.dot(q0/np.linalg.norm(q0), toolIJK/np.linalg.norm(toolIJK)))}")
-    A = math.acos(np.dot(q0/np.linalg.norm(q0), toolIJK/np.linalg.norm(toolIJK))*0.9999) * (np.sign(cross.dot(j6IJK)))
+    A = math.acos(np.dot(q0/np.linalg.norm(q0), toolIJK/np.linalg.norm(toolIJK))*0.999999) * (np.sign(cross.dot(j6IJK)))
     # -.000000000000002
     # A = np.pi - np.copysign(math.asin(np.linalg.norm(cross)/(np.linealg.norm(q)*np.linalg.norm(q0))), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
 

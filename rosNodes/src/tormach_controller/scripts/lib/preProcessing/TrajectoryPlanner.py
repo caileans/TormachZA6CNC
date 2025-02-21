@@ -53,7 +53,7 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, rotVel):
     ijkCross = np.cross(ijk0, ijkf)
     if not all(ijkCross == 0):
         ijkCross = ijkCross/np.linalg.norm(ijkCross)
-    rotDist = math.acos(np.dot(ijkf/np.linalg.norm(ijkf), ijk0/np.linalg.norm(ijk0))*0.9999) #*np.sign(ijkCross)
+    rotDist = math.acos(np.dot(ijkf/np.linalg.norm(ijkf), ijk0/np.linalg.norm(ijk0))*0.999999) #*np.sign(ijkCross)
 
     # print(f"rotdist: {str(rotDist)}   cross: {str(ijkCross)}")
 
