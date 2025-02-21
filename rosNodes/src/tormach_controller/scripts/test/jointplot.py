@@ -30,7 +30,7 @@ for point in pointList:
 	newsol=ik.getIK(np.array(point.pos[0:3]),np.transpose(ik.abcToR(np.array(np.deg2rad(point.rot[0:3])))),robot)
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,6,6,6,6,6,6]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,4,4,4,4,4,4]))
-	pick.append(ik.chooseIK(pick[c-1],newsol,[4,4,4,4,4,4,0,4,4,4,2,4,2]))
+	pick.append(ik.chooseIK(pick[c-1],newsol,[4,4,4,4,4,4,0,4,4,4,4,4,4]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,0,0,0,0,0,0]))
 	temp=[]
 	for j in newsol:
