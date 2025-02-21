@@ -119,7 +119,7 @@ def chooseIK(r0, sols, w):
     return np.array(sols[minindex][0])
 
 
-def runIK (r, r0, ikrobot, w=[4,4,4,4,4,4,0,4,4,4,4,4,4]):
+def runIK (r, r0, ikrobot, w=[2,2,2,2,2,2,0,2,2,2,2,2,2]):
     """ calculates and chooses the best inverse kinematics solution 
 
     inputs: 
