@@ -31,7 +31,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
                 j6ProjAngle = 90*np.pi/180.0*toolIJK[1]
 
             else:
-                j6ProjAngle = 180*np.pi/180.0*toolIJK[0] + 90*np.pi/180.0*toolIJK[1]
+                j6ProjAngle = -180*np.pi/180.0*toolIJK[0] + 90*np.pi/180.0*toolIJK[1]
 
                 if quadrant == 2:
                     pass
