@@ -21,12 +21,15 @@ def Add6DofFrom5(trajectory, quadrant=2):
         toolIJK = trajectory[i].toolVec
         toolIJK = toolIJK/np.linalg.norm(toolIJK)
 
+        toolPos = trajectory[i].pos
+
         if toolIJK[2] == 0: #if the tool is horizontal
             j6IJK = np.array([0,0,-1.0])
 
             j6ProjAngle_prev = 0
 
         else:
+############ quadrant based method:
             if toolIJK[0] >= 0:
                 j6ProjAngle = 90*np.pi/180.0*toolIJK[1]
 
@@ -49,7 +52,21 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
             j6IJK = calcJ6IJK(toolIJK, j6ProjAngle)
 
-        # print(f"tool vec = {str(toolIJK)}    proj angle = {str(j6ProjAngle)}   j6ijk  = {str(j6IJK)}   abcCailean = {str(calcABC(j6IJK, toolIJK))}")
+############ z axis alignment method:
+            # j6ProjAngle =  np.atan2(toolPos[1], toolPos[0])
+
+
+
+############ nik method:
+        # j6ProjAngle =  np.atan2(toolPos[1], toolPos[0])
+
+        # z=np.array([0,0,1])
+        # r=np.array([math.cos(j6ProjAngle),math.sin(j6ProjAngle),0])
+        # j6IJK=np.cross(toolIJK,np.cross(r,z))
+
+            
+
+        # print(f"tool vec = {str(toolIJK)}    pos = {str(toolPos)}    proj angle = {str(j6ProjAngle)}   j6ijk  = {str(j6IJK)}   abcCailean = {str(calcABC(j6IJK, toolIJK))}")
 
         # trajectory[i].rot=InverseKinematics.j62rpy(j6IJK, toolIJK)
         trajectory[i].rot=calcABC(j6IJK, toolIJK)

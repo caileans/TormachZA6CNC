@@ -121,7 +121,7 @@ def plot3DTrajectory(trajectory, hz=50):
 
     ax = plt.figure(4).add_subplot(projection='3d')
 
-    nmin = 100
+    nmin = 0
     nmax = len(x)#-500
     ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i[nmin:nmax], j[nmin:nmax], k[nmin:nmax], length=10, normalize=True, color='b')
     ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i_j6[nmin:nmax], j_j6[nmin:nmax], k_j6[nmin:nmax], length=10, normalize=True, color='r')
@@ -133,10 +133,10 @@ def plot3DTrajectory(trajectory, hz=50):
 if __name__=="__main__":
     import matplotlib.pyplot as plt
     print("generating trajectory")
-    traj = genTrajectory(sys.argv[1], a=30, hz=10, feedRate=30, rapidFeed=30, toolFrameOffset=[0.0, 20.0, 0.0], pureRotVel=np.pi/5)
+    traj = genTrajectory(sys.argv[1], a=30, hz=3, feedRate=30, rapidFeed=30, toolFrameOffset=[50.0, 0.0, 50.0], pureRotVel=np.pi/5)
 
-    plotTrajectory(traj, hz=10)
-    plot3DTrajectory(traj, hz=10)
+    plotTrajectory(traj, hz=3)
+    plot3DTrajectory(traj, hz=3)
 
     # print("saving trajectory")
     # saveTrajectory(sys.argv[2], traj)
