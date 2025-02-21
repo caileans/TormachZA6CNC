@@ -43,32 +43,34 @@ def applyJointLimits(sols, joint, limit):
         
         return sols
 
-    # # double the number of sols to account for >180 limits
-    # newSols = copy.deepcopy(sols)
-    # newSols.extend(sols)
-    # # print(newSols)
-    # # newSols[numSols+7][0][5] -= 360*np.pi/180
-    # # print(newSols)
-    # for i in range(numSols):
-    #     if newSols[numSols+i][0][joint-1] > 0:
-    #         newSols[numSols+i][0][joint-1] -= limit
-    #     elif newSols[numSols+i][0][joint-1] < 0:
-    #         newSols[numSols+i][0][joint-1] += limit
-
-    # return newSols
-
+    # double the number of sols to account for >180 limits
+    newSols = copy.deepcopy(sols)
+    newSols.extend(sols)
+    # print(newSols)
+    # newSols[numSols+7][0][5] -= 360*np.pi/180
+    # print(newSols)
     for i in range(numSols):
-        if sols[i][0][joint-1] > 0:
-            newSol = sols[i][0][joint-1] - 360*np.pi/180
-        elif sols[i][0][joint-1] < 0:
-            newSol = sols[i][0][joint-1] + 360*np.pi/180
-        else:
-            continue
+        if newSols[numSols+i][0][joint-1] > 0:
+            if abs(newSols[numSols+i][0][joint-1]-360*np.pi/180) < limit:
+                newSols[numSols+i][0][joint-1] -= 360*np.pi/180
+        elif newSols[numSols+i][0][joint-1] < 0:
+            if abs(newSols[numSols+i][0][joint-1]+360*np.pi/180) < limit:
+                newSols[numSols+i][0][joint-1] += 360*np.pi/180
 
-        if abs(newSol) < limit:
-            sols.append(copy.deepcopy(sols[i]))
-            sols[-1][0][joint-1] = newSol
-    return sols
+    return newSols
+
+    # for i in range(numSols):
+    #     if sols[i][0][joint-1] > 0:
+    #         newSol = sols[i][0][joint-1] - 360*np.pi/180
+    #     elif sols[i][0][joint-1] < 0:
+    #         newSol = sols[i][0][joint-1] + 360*np.pi/180
+    #     else:
+    #         continue
+
+    #     if abs(newSol) < limit:
+    #         sols.append(copy.deepcopy(sols[i]))
+    #         sols[-1][0][joint-1] = newSol
+    # return sols
 
 def abcToR(abc):
     """uses the general robotics toolbox from rpi to calculate the rotation matrix from the static euler angles

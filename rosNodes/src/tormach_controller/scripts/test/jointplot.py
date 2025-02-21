@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import GCodeToTrajectory as gct
 import numpy as np
 
-hz = 80
+hz = 40
 robot=ik.tormachZA6();
 pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/5DOFTest.nc', a=30,hz=hz,feedRate=30,rapidFeed=30,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/5)
 
@@ -30,7 +30,8 @@ for point in pointList:
 	newsol=ik.getIK(np.array(point.pos[0:3]),np.transpose(ik.abcToR(np.array(np.deg2rad(point.rot[0:3])))),robot)
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,6,6,6,6,6,6]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,4,4,4,4,4,4]))
-	pick.append(ik.chooseIK(pick[c-1],newsol,[4,4,4,4,4,4,0,4,4,4,4,4,4]))
+	pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,2,2,2,2,2,2]))
+	# pick.append(ik.chooseIK(pick[c-1],newsol,[0,0,0,0,0,0,0,0,0,0,100000000000,0,0]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,0,0,0,0,0,0]))
 	temp=[]
 	for j in newsol:
@@ -38,10 +39,10 @@ for point in pointList:
 	sols.append(np.array(temp))
 
 pick=np.array(pick[1:])
-# sols=np.array(sols[1:])
+sols=np.array(sols[1:])
 
 plt.figure(3)
-# plt.plot(sols[:,:,5], '.k')
+plt.plot(sols[:,:,3], '.k')
 plt.plot(pick[:,:], '+-')
 plt.legend(['1', '2', '3', '4', '5', '6'])
 
