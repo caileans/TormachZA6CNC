@@ -24,11 +24,13 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
 
     trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz, pInit=origin, ijkInit=toolIJKInit, pureRotVel = pureRotVel)
 
+    trajectory = toolOffset.toolOffset(trajectory, [0, tOffset[1]])
+
     ### uncomment whichever one you want to use. Fixed will keep tool upright
     # trajectory = DOFConversion.AddFixed6DOF(trajectory)
     trajectory = DOFConversion.Add6DofFrom5(trajectory, quadrant=2)
 
-    trajectory = toolOffset.toolOffset(trajectory, tOffset)
+    trajectory = toolOffset.toolOffset(trajectory, [tOffset[0], 0])
 
     return trajectory
 
@@ -137,7 +139,7 @@ def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0):
 if __name__=="__main__":
     import matplotlib.pyplot as plt
     print("generating trajectory")
-    traj = genTrajectory(sys.argv[1], a=30, hz=7, feedRate=30, rapidFeed=30, toolFrameOffset=[400.0, 0.0, 400.0], pureRotVel=np.pi/5)
+    traj = genTrajectory(sys.argv[1], a=30, hz=7, feedRate=30, rapidFeed=30, toolFrameOffset=[400.0, 0.0, 400.0], pureRotVel=np.pi/5, tOffset=[10, 20])
 
     plotTrajectory(traj, hz=7)
     plot3DTrajectory(traj, hz=7)
