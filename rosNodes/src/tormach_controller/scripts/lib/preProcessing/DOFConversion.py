@@ -24,31 +24,63 @@ def Add6DofFrom5(trajectory, quadrant=2):
         toolPos = trajectory[i].pos
 
 
-############ quadrant based method:
-        if toolIJK[2] == 0: #if the tool is horizontal
-            j6IJK = np.array([0,0,-1.0])
+# ############ quadrant based method:
+#         if toolIJK[2] == 0: #if the tool is horizontal
+#             j6IJK = np.array([0,0,-1.0])
+
+#             j6ProjAngle_prev = 0
+
+#         else:
+#             if toolIJK[0] >= 0:
+#                 j6ProjAngle = 90*np.pi/180.0*toolIJK[1]
+
+#             else:
+#                 j6ProjAngle = -180*np.pi/180.0*toolIJK[0] + 90*np.pi/180.0*toolIJK[1]
+
+#                 if quadrant == 2:
+#                     pass
+#                 elif quadrant == 1:
+#                     j6ProjAngle = -j6ProjAngle
+#                 elif quadrant == 0:
+#                     if j6ProjAngle == 0: #use quadrant to decide
+#                         if toolIJK[1] < 0:
+#                             j6ProjAngle = -j6ProjAngle
+#                     else: # use previous sign to decide
+#                         if j6ProjAngle_prev < 0:
+#                             j6ProjAngle = -j6ProjAngle
+            
+#             j6ProjAngle_prev = j6ProjAngle
+
+#             j6IJK = calcJ6IJK(toolIJK, j6ProjAngle)
+
+
+########### quadrant based method #2:
+        if toolIJK[2] == 0: # and toolIJK[1] == 0: #if the tool is horizontal
+            j6IJK = np.array([abs(toolIJK[1])*np.sqrt(1-abs(toolIJK[0])**2),-toolIJK[0]*np.sign(toolIJK[1])*np.sqrt(1-abs(toolIJK[0])**2),-abs(toolIJK[0])])
 
             j6ProjAngle_prev = 0
 
         else:
             if toolIJK[0] >= 0:
-                j6ProjAngle = 90*np.pi/180.0*toolIJK[1]
+                j6ProjAngle = np.atan2(toolPos[1], toolPos[0])*(1-abs(toolIJK[1]))
 
             else:
-                j6ProjAngle = -180*np.pi/180.0*toolIJK[0] + 90*np.pi/180.0*toolIJK[1]
+                j6AngleIJKComp = -180*np.pi/180.0*toolIJK[0]# + 90*np.pi/180.0*toolIJK[1]
 
                 if quadrant == 2:
                     pass
                 elif quadrant == 1:
-                    j6ProjAngle = -j6ProjAngle
+                    j6AngleIJKComp = -j6AngleIJKComp
                 elif quadrant == 0:
                     if j6ProjAngle == 0: #use quadrant to decide
                         if toolIJK[1] < 0:
-                            j6ProjAngle = -j6ProjAngle
+                            j6AngleIJKComp = -j6AngleIJKComp
                     else: # use previous sign to decide
                         if j6ProjAngle_prev < 0:
-                            j6ProjAngle = -j6ProjAngle
+                            j6AngleIJKComp = -j6AngleIJKComp
             
+                j6ProjAngle = (1-abs(toolIJK[0]))*np.atan2(toolPos[1], toolPos[0])*(1-abs(toolIJK[1])) + j6AngleIJKComp
+
             j6ProjAngle_prev = j6ProjAngle
 
             j6IJK = calcJ6IJK(toolIJK, j6ProjAngle)
@@ -68,7 +100,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
 
 
-        print(f"tool vec = {str(toolIJK)}    pos = {str(toolPos)}    proj angle = {str(j6ProjAngle)}   j6ijk  = {str(j6IJK)}   abcCailean = {str(calcABC(j6IJK, toolIJK))}")
+        # print(f"tool vec = {str(toolIJK)}    pos = {str(toolPos)}    proj angle = {str(j6ProjAngle)}   j6ijk  = {str(j6IJK)}   abcCailean = {str(calcABC(j6IJK, toolIJK))}")
 
         # trajectory[i].rot=InverseKinematics.j62rpy(j6IJK, toolIJK)
         trajectory[i].rot=calcABC(j6IJK, toolIJK)
@@ -88,6 +120,8 @@ def calcJ6IJK(toolIJK, angle):
 
 def calcABC(j6IJK, toolIJK):
     C = math.atan2(j6IJK[1], j6IJK[0])
+    if j6IJK[1] == 0 and j6IJK[0] == 0:
+        C = math.atan2(toolIJK[1], toolIJK[0])
 
     B = math.atan2(-j6IJK[2], np.sqrt(j6IJK[0]**2 + j6IJK[1]**2))
 
