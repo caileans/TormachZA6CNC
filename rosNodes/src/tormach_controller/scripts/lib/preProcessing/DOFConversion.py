@@ -61,8 +61,11 @@ def Add6DofFrom5(trajectory, quadrant=2):
             j6ProjAngle_prev = 0
 
         else:
+            j6AnglePosComp = np.atan2(toolPos[1], toolPos[0])
+            
+
             if toolIJK[0] >= 0:
-                j6ProjAngle = np.atan2(toolPos[1], toolPos[0])*(1-abs(toolIJK[1]))
+                j6ProjAngle = j6AnglePosComp*(1-abs(toolIJK[1]))
 
             else:
                 j6AngleIJKComp = -180*np.pi/180.0*toolIJK[0]# + 90*np.pi/180.0*toolIJK[1]
@@ -79,7 +82,10 @@ def Add6DofFrom5(trajectory, quadrant=2):
                         if j6ProjAngle_prev < 0:
                             j6AngleIJKComp = -j6AngleIJKComp
             
-                j6ProjAngle = (1-abs(toolIJK[0]))*np.atan2(toolPos[1], toolPos[0])*(1-abs(toolIJK[1])) + j6AngleIJKComp
+                j6ProjAngle = (1-abs(toolIJK[0]))*j6AnglePosComp*(1-abs(toolIJK[1])) + j6AngleIJKComp
+
+            if toolIJK[2] < 0:
+                j6ProjAngle -= np.pi*(1-abs(toolIJK[1]))*(1 if toolIJK[1] == 0 else np.sign(toolIJK[1]))
 
             j6ProjAngle_prev = j6ProjAngle
 

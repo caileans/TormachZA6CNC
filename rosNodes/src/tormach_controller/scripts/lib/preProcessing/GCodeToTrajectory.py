@@ -30,7 +30,7 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
     # trajectory = DOFConversion.AddFixed6DOF(trajectory)
     trajectory = DOFConversion.Add6DofFrom5(trajectory, quadrant=2)
 
-    trajectory = toolOffset.toolOffset(trajectory, [tOffset[0], 0])
+    # trajectory = toolOffset.toolOffset(trajectory, [tOffset[0], 0])
 
     return trajectory
 
