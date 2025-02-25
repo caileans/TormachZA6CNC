@@ -4,13 +4,14 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import GcodeParserV2
 import TrajectoryPlanner
 import DOFConversion
+import toolOffset
 import DataTypes
 import numpy as np
 import sys
 
 
 
-def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0, 0.0], origin=[562.0,0.0,866.0], toolIJKInit=[0.0,0.0,1.0], pureRotVel = np.pi/2):
+def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0, 0.0], origin=[562.0,0.0,866.0], toolIJKInit=[0.0,0.0,1.0], pureRotVel = np.pi/2, tOffset=[0,0]):
     '''call necessary functions to plan a trajectory from gcode'''
     parser = GcodeParserV2.GcodeParserV2(feedRate=feedRate, rapidFeed=rapidFeed, defaultLengthUnits=defaultLengthUnits, toolFrameOffset=toolFrameOffset)
     # print(os.getcwd())
@@ -23,9 +24,13 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
 
     trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz, pInit=origin, ijkInit=toolIJKInit, pureRotVel = pureRotVel)
 
+    trajectory = toolOffset.toolOffset(trajectory, [0, tOffset[1]])
+
     ### uncomment whichever one you want to use. Fixed will keep tool upright
     # trajectory = DOFConversion.AddFixed6DOF(trajectory)
     trajectory = DOFConversion.Add6DofFrom5(trajectory, quadrant=2)
+
+    # trajectory = toolOffset.toolOffset(trajectory, [tOffset[0], 0])
 
     return trajectory
 
@@ -70,8 +75,8 @@ def plotTrajectory(trajectory, hz=50):
         time[n] = lastTime
 
 
-    plt.figure(2)
-    plt.plot(i, k, '.')
+    # plt.figure(2)
+    # plt.plot(i, k, '.')
 
     plt.figure(3)
     plt.plot(time, a, '+')
@@ -80,7 +85,8 @@ def plotTrajectory(trajectory, hz=50):
 
     plt.show()
 
-def plot3DTrajectory(trajectory, hz=50):
+def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0):
+    import matplotlib.pyplot as plt
     num = len(trajectory)
     x = np.zeros(num)
     y = np.zeros(num)
@@ -121,8 +127,8 @@ def plot3DTrajectory(trajectory, hz=50):
 
     ax = plt.figure(4).add_subplot(projection='3d')
 
-    nmin = 0
-    nmax = len(x)#-500
+    # nmin = 350
+    nmax = len(x)-nmaxOffset
     ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i[nmin:nmax], j[nmin:nmax], k[nmin:nmax], length=10, normalize=True, color='b')
     ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i_j6[nmin:nmax], j_j6[nmin:nmax], k_j6[nmin:nmax], length=10, normalize=True, color='r')
     
@@ -133,10 +139,10 @@ def plot3DTrajectory(trajectory, hz=50):
 if __name__=="__main__":
     import matplotlib.pyplot as plt
     print("generating trajectory")
-    traj = genTrajectory(sys.argv[1], a=30, hz=3, feedRate=30, rapidFeed=30, toolFrameOffset=[50.0, 0.0, 50.0], pureRotVel=np.pi/5)
+    traj = genTrajectory(sys.argv[1], a=30, hz=7, feedRate=30, rapidFeed=30, toolFrameOffset=[400.0, 0.0, 400.0], pureRotVel=np.pi/5, tOffset=[10, 20])
 
-    plotTrajectory(traj, hz=3)
-    plot3DTrajectory(traj, hz=3)
+    plotTrajectory(traj, hz=7)
+    plot3DTrajectory(traj, hz=7)
 
     # print("saving trajectory")
     # saveTrajectory(sys.argv[2], traj)

@@ -23,38 +23,76 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
         toolPos = trajectory[i].pos
 
-        if toolIJK[2] == 0: #if the tool is horizontal
-            j6IJK = np.array([0,0,-1.0])
+
+# ############ quadrant based method:
+#         if toolIJK[2] == 0: #if the tool is horizontal
+#             j6IJK = np.array([0,0,-1.0])
+
+#             j6ProjAngle_prev = 0
+
+#         else:
+#             if toolIJK[0] >= 0:
+#                 j6ProjAngle = 90*np.pi/180.0*toolIJK[1]
+
+#             else:
+#                 j6ProjAngle = -180*np.pi/180.0*toolIJK[0] + 90*np.pi/180.0*toolIJK[1]
+
+#                 if quadrant == 2:
+#                     pass
+#                 elif quadrant == 1:
+#                     j6ProjAngle = -j6ProjAngle
+#                 elif quadrant == 0:
+#                     if j6ProjAngle == 0: #use quadrant to decide
+#                         if toolIJK[1] < 0:
+#                             j6ProjAngle = -j6ProjAngle
+#                     else: # use previous sign to decide
+#                         if j6ProjAngle_prev < 0:
+#                             j6ProjAngle = -j6ProjAngle
+            
+#             j6ProjAngle_prev = j6ProjAngle
+
+#             j6IJK = calcJ6IJK(toolIJK, j6ProjAngle)
+
+
+########### quadrant based method #2:
+        if toolIJK[2] == 0: # and toolIJK[1] == 0: #if the tool is horizontal
+            j6IJK = np.array([abs(toolIJK[1])*np.sqrt(1-abs(toolIJK[0])**2),-toolIJK[0]*np.sign(toolIJK[1])*np.sqrt(1-abs(toolIJK[0])**2),-abs(toolIJK[0])])
 
             j6ProjAngle_prev = 0
 
         else:
-############ quadrant based method:
+            j6AnglePosComp = np.atan2(toolPos[1], toolPos[0])
+            
+
             if toolIJK[0] >= 0:
-                j6ProjAngle = 90*np.pi/180.0*toolIJK[1]
+                j6ProjAngle = j6AnglePosComp*(1-abs(toolIJK[1]))
 
             else:
-                j6ProjAngle = -180*np.pi/180.0*toolIJK[0] + 90*np.pi/180.0*toolIJK[1]
+                j6AngleIJKComp = -180*np.pi/180.0*toolIJK[0]# + 90*np.pi/180.0*toolIJK[1]
 
                 if quadrant == 2:
                     pass
                 elif quadrant == 1:
-                    j6ProjAngle = -j6ProjAngle
+                    j6AngleIJKComp = -j6AngleIJKComp
                 elif quadrant == 0:
                     if j6ProjAngle == 0: #use quadrant to decide
                         if toolIJK[1] < 0:
-                            j6ProjAngle = -j6ProjAngle
+                            j6AngleIJKComp = -j6AngleIJKComp
                     else: # use previous sign to decide
                         if j6ProjAngle_prev < 0:
-                            j6ProjAngle = -j6ProjAngle
+                            j6AngleIJKComp = -j6AngleIJKComp
             
+                j6ProjAngle = (1-abs(toolIJK[0]))*j6AnglePosComp*(1-abs(toolIJK[1])) + j6AngleIJKComp
+
+            if toolIJK[2] < 0:
+                j6ProjAngle -= np.pi*(1-abs(toolIJK[1]))*(1 if toolIJK[1] == 0 else np.sign(toolIJK[1]))
+
             j6ProjAngle_prev = j6ProjAngle
 
             j6IJK = calcJ6IJK(toolIJK, j6ProjAngle)
 
 ############ z axis alignment method:
             # j6ProjAngle =  np.atan2(toolPos[1], toolPos[0])
-
 
 
 ############ nik method:
@@ -65,6 +103,8 @@ def Add6DofFrom5(trajectory, quadrant=2):
         # j6IJK=np.cross(toolIJK,np.cross(r,z))
 
             
+
+
 
         # print(f"tool vec = {str(toolIJK)}    pos = {str(toolPos)}    proj angle = {str(j6ProjAngle)}   j6ijk  = {str(j6IJK)}   abcCailean = {str(calcABC(j6IJK, toolIJK))}")
 
@@ -86,6 +126,8 @@ def calcJ6IJK(toolIJK, angle):
 
 def calcABC(j6IJK, toolIJK):
     C = math.atan2(j6IJK[1], j6IJK[0])
+    if j6IJK[1] == 0 and j6IJK[0] == 0:
+        C = math.atan2(toolIJK[1], toolIJK[0])
 
     B = math.atan2(-j6IJK[2], np.sqrt(j6IJK[0]**2 + j6IJK[1]**2))
 
@@ -96,7 +138,7 @@ def calcABC(j6IJK, toolIJK):
     q0[1] = q0ij*math.sin(C)
     cross = np.cross(q0, toolIJK) #, q0)
     # print(f"q0: {str(q0)}   tijk: {str(toolIJK)}   dot: {str(np.dot(q0/np.linalg.norm(q0), toolIJK/np.linalg.norm(toolIJK)))}")
-    A = math.acos(np.dot(q0/np.linalg.norm(q0), toolIJK/np.linalg.norm(toolIJK))*0.9999) * (np.sign(cross.dot(j6IJK)))
+    A = math.acos(np.dot(q0/np.linalg.norm(q0), toolIJK/np.linalg.norm(toolIJK))*0.999999) * (np.sign(cross.dot(j6IJK)))
     # -.000000000000002
     # A = np.pi - np.copysign(math.asin(np.linalg.norm(cross)/(np.linealg.norm(q)*np.linalg.norm(q0))), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
 

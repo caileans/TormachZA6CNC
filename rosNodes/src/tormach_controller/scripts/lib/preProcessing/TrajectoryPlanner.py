@@ -53,7 +53,7 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, rotVel):
     ijkCross = np.cross(ijk0, ijkf)
     if not all(ijkCross == 0):
         ijkCross = ijkCross/np.linalg.norm(ijkCross)
-    rotDist = math.acos(np.dot(ijkf/np.linalg.norm(ijkf), ijk0/np.linalg.norm(ijk0))*0.9999) #*np.sign(ijkCross)
+    rotDist = math.acos(np.dot(ijkf/np.linalg.norm(ijkf), ijk0/np.linalg.norm(ijk0))*0.999999) #*np.sign(ijkCross)
 
     # print(f"rotdist: {str(rotDist)}   cross: {str(ijkCross)}")
 
@@ -143,10 +143,11 @@ def genPath(hz, a=1, vi=0, vm=0.3, vf=0, p0=0, pf=1):
     t3 = ta + tb + tc
 
     if tb < 0:
-        print(f"Trajectory Planner Error: Not enough time to move from {p0} to {pf}")
+        print(f"Trajectory Planner Error: Not enough time to move from {str(p0)} to {str(pf)}")
 
-    time=np.linspace(0,t3,num=int(hz*t3))
-    pos=np.zeros(int(hz*t3))
+    # time=np.linspace(0,t3,num=int(hz*t3))
+    time=np.arange(0, t3, 1/hz)
+    pos=np.zeros_like(time)
 
     for i in range(0, len(time)):
         pos[i] = pOft(a, vi, vm, vf, p0, pf, t1, t2, t3, time[i])
