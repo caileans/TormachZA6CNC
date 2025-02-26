@@ -24,13 +24,13 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
 
     trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz, pInit=origin, ijkInit=toolIJKInit, pureRotVel = pureRotVel)
 
-    trajectory = toolOffset.toolOffset(trajectory, [0, tOffset[1]])
+    trajectory = toolOffset.toolOffset(trajectory, [0, tOffset[1]], nFadeIn=20)
 
     ### uncomment whichever one you want to use. Fixed will keep tool upright
     # trajectory = DOFConversion.AddFixed6DOF(trajectory)
     trajectory = DOFConversion.Add6DofFrom5(trajectory, quadrant=2)
 
-    trajectory = toolOffset.toolOffset(trajectory, [tOffset[0], 0])
+    trajectory = toolOffset.toolOffset(trajectory, [tOffset[0], 0], nFadeIn=20)
 
     return trajectory
 
