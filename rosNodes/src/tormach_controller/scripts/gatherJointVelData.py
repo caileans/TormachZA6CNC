@@ -19,7 +19,7 @@ import preProcessing.DataTypes
 import preProcessing.GCodeToTrajectory as gct
 from queue import Queue
 from math import pi
-
+import copy
 
 # NOTE THIS NODE IS IN RADIANS!!!!!!!!!!!!!
 #publishing a new position will overwrite the current move
@@ -44,13 +44,12 @@ if __name__=='__main__':
     for i in range(6):
         for v in speeds:
             offset=v/hz
-            jprev=jup
+            jprev=copy.deepcopy(jup)
             jpub=jprev
             flag=0;
             while not rospy.is_shutdown():
-                jcur=jprev
+                jcur=coppy.deepcoppy(jprev)
                 if flag==0:
-                    jcur=jprev
                     jcur[i]+=offset
                     print(jcur)
                     print(pi/2+jup[i])
@@ -58,13 +57,11 @@ if __name__=='__main__':
                         flag=1
                         print(flag)
                 elif flag==1:
-                    jcur=jprev
                     jcur[i]-=offset
                     if jcur[i]<=-pi/2+jup[i]:
                         flag=2
                         print(flag)
                 elif flag==2:
-                    jcur=jprev
                     jcur[i]+=offset
                     if jcur[i]>=jup[i]:
                         pub.pubMove(publisher,jup,1,hz)
