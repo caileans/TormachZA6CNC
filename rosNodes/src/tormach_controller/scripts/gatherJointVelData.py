@@ -50,20 +50,25 @@ if __name__=='__main__':
                     jcur[i]+=offset
                     if jcur[i]>=pi/2+jup[i]:
                         flag=1
+                        print(flag)
                 elif flag==1:
                     jcur=jprev
                     jcur[i]-=offset
-                    if jcur[i]>=-pi/2+jup[i]:
+                    if jcur[i]<=-pi/2+jup[i]:
                         flag=2
+                        print(flag)
                 elif flag==2:
                     jcur=jprev
                     jcur[i]+=offset
                     if jcur[i]>=jup[i]:
                         pub.pubMove(publisher,jup,1,hz)
+                        print(flag)
+                        flag=3
                         break
-                jpub=pub.applyOvershoot(jprev,jcur,overshoot)
-                pub.pubMove(publisher,jpub,overshoot,hz)
-                jprev=jcur;
+                if flag!=3:
+                    jpub=pub.applyOvershoot(jprev,jcur,overshoot)
+                    pub.pubMove(publisher,jpub,overshoot,hz)
+                    jprev=jcur;
                 rate.sleep()
             sleep(1)
         
