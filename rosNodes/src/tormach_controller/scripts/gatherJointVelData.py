@@ -31,7 +31,7 @@ if __name__=='__main__':
     publisher=pub.startPublisher()
     hz=5
     jup=np.array([0,0,-pi/2,0,0,0]);
-    speeds=[.3,.6,.9,1.2,1.5]
+    speeds=[.1,.3,.5,.6,.7,.8]
     overshoot=1.2
     jprev = np.zeros(6)
     jcur =np.zeros(6)
