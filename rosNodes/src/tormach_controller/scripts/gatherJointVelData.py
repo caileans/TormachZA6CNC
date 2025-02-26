@@ -33,6 +33,9 @@ if __name__=='__main__':
     jup=np.array([0,0,-pi/2,0,0,0]);
     speeds=[.3,.6,.9,1.2,1.5]
     overshoot=1.2
+    jprev = np.zeros(6)
+    jcur =np.zeros(6)
+    jpub=np.zeros(6)
                 # hz=50
     pub.straightUp(publisher)
     sleep(5)
