@@ -30,7 +30,7 @@ if __name__=='__main__':
     rospy.init_node("controller")
     publisher=pub.startPublisher()
     hz=5
-    jup=np.array([0,0,-pi/2,0,0,0]);
+    jup=np.array([0,0,-pi/4,0,0,0]);
     speeds=[.1,.3,.5,.6,.7]
     overshoot=1.2
     jprev = np.zeros(6)
