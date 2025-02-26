@@ -32,8 +32,9 @@ if __name__=='__main__':
     hz=50
     jup=np.array([0,0,-pi/2,0,0,0]);
     speeds=[.3,.6,.9,1.2,1.5]
+    overshoot=1.2
                 # hz=50
-
+    pub.straightUp(publisher)
     rate=rospy.Rate(hz)
     for i in range(6):
         for v in speeds:
@@ -46,17 +47,17 @@ if __name__=='__main__':
                     jcur=jprev
                     jcur[i]+=offset
                     if jcur[i]>=pi/2+jup[i]:
-                        flag==1
+                        flag=1
                 elif flag==1:
                     jcur=jprev
                     jcur[i]-=offset
                     if jcur[i]>=-pi/2+jup[i]:
-                        flag==2
+                        flag=2
                 elif flag==2:
                     jcur=jprev
                     jcur[i]+=offset
                     if jcur[i]>=jup[i]:
-                        pub.pubMove(publisher,jup,overshoot,hz)
+                        pub.pubMove(publisher,jup,1,hz)
                         break
                 jpub=pub.applyOvershoot(jprev,jcur,overshoot)
                 pub.pubMove(publisher,jpub,overshoot,hz)
