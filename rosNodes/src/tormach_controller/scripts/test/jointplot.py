@@ -14,7 +14,7 @@ import numpy as np
 
 hz = 40
 robot=ik.tormachZA6();
-pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/5DOFTest.nc', a=30,hz=hz,feedRate=30,rapidFeed=30,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/5, tOffset=[10, 20])
+pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/5DOFTest.nc', a=30,hz=hz,feedRate=30,rapidFeed=30,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/5, tOffset=[0, 20])
 
 # set up arrays to save data here
 jprev = np.zeros(6)
