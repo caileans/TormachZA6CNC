@@ -48,7 +48,7 @@ if __name__=='__main__':
             jpub=jprev
             flag=0;
             while not rospy.is_shutdown():
-                jcur=coppy.deepcopy(jprev)
+                jcur=copy.deepcopy(jprev)
                 if flag==0:
                     jcur[i]+=offset
                     print(jcur)
