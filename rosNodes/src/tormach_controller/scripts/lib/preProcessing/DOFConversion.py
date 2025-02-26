@@ -61,7 +61,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
             j6ProjAngle_prev = 0
 
         else:
-            j6AnglePosComp = np.atan2(toolPos[1], toolPos[0])
+            j6AnglePosComp = math.atan2(toolPos[1], toolPos[0])
             
 
             if toolIJK[0] >= 0:
