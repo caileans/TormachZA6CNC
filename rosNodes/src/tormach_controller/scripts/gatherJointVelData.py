@@ -48,6 +48,8 @@ if __name__=='__main__':
                 if flag==0:
                     jcur=jprev
                     jcur[i]+=offset
+                    print(jcur)
+                    print(pi/2+jup[i])
                     if jcur[i]>=pi/2+jup[i]:
                         flag=1
                         print(flag)
