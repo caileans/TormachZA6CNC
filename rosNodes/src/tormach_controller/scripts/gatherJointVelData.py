@@ -30,8 +30,8 @@ if __name__=='__main__':
     rospy.init_node("controller")
     publisher=pub.startPublisher()
     hz=5
-    jup=np.array([0,0,-pi/4,0,0,0]);
-    speeds=[.1,.3,.5,.6,.7]
+    jup=np.array([0,0,-pi/2,0,0,0]);
+    speeds=[.1,.3,.4,.5,.6]
     overshoot=1.2
     jprev = np.zeros(6)
     jcur =np.zeros(6)
@@ -51,14 +51,14 @@ if __name__=='__main__':
                 jcur=copy.deepcopy(jprev)
                 if flag==0:
                     jcur[i]+=offset
-                    print(jcur)
-                    print(pi/2+jup[i])
-                    if jcur[i]>=pi/2+jup[i]:
+                    # print(jcur)
+                    # print(pi/2+jup[i])
+                    if jcur[i]>=pi/10+jup[i]:
                         flag=1
                         print(flag)
                 elif flag==1:
                     jcur[i]-=offset
-                    if jcur[i]<=-pi/2+jup[i]:
+                    if jcur[i]<=-pi/10+jup[i]:
                         flag=2
                         print(flag)
                 elif flag==2:
