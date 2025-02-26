@@ -45,6 +45,7 @@ if __name__=='__main__':
             jpub=jprev
             flag=0;
             while not rospy.is_shutdown():
+                jcur=jprev
                 if flag==0:
                     jcur=jprev
                     jcur[i]+=offset
