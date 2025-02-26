@@ -47,12 +47,12 @@ if __name__=='__main__':
                     jcur=jprev
                     jcur[i]+=offset
                     if jcur[i]>=pi/2+jup[i]:
-                        flag==1
+                        flag=1
                 elif flag==1:
                     jcur=jprev
                     jcur[i]-=offset
                     if jcur[i]>=-pi/2+jup[i]:
-                        flag==2
+                        flag=2
                 elif flag==2:
                     jcur=jprev
                     jcur[i]+=offset
