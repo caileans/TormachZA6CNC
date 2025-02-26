@@ -29,7 +29,7 @@ if __name__=='__main__':
     #start the test node
     rospy.init_node("controller")
     publisher=pub.startPublisher()
-    hz=50
+    hz=5
     jup=np.array([0,0,-pi/2,0,0,0]);
     speeds=[.3,.6,.9,1.2,1.5]
     overshoot=1.2
