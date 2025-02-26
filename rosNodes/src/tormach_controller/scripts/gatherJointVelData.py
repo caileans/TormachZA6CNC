@@ -34,7 +34,7 @@ if __name__=='__main__':
     speeds=[.3,.6,.9,1.2,1.5]
     overshoot=1.2
                 # hz=50
-
+    pub.straightUp(publisher)
     rate=rospy.Rate(hz)
     for i in range(6):
         for v in speeds:
