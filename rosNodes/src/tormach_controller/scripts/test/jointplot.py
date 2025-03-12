@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 import GCodeToTrajectory as gct
 import numpy as np
 
+'''Script for "previewing" (in a plot) the joint and cartesian space trajectory generated from a gcode file'''
+
 hz = 40
 robot=ik.tormachZA6();
 pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/5DOFTest.nc', a=30,hz=hz,feedRate=30,rapidFeed=30,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/5, tOffset=[0, 20])

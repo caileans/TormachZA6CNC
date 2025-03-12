@@ -4,6 +4,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 import numpy as np
 
+'''define data classes to pass tool path information between components'''
+
+
 # @dataclass
 # class IJKVector:
 #     i: float = 0
@@ -45,6 +48,7 @@ import numpy as np
 
 @dataclass
 class ToolPose:
+    '''stores the x, y, z position of a tool as well as the toolvector i, j, k components. ijk represent a vector (not necessarily a unit vector) from the tool tip pointing to the tool shank'''
     x: float = 0
     y: float = 0
     z: float = 0
@@ -59,6 +63,7 @@ class ToolPose:
 
 @dataclass
 class WayPoint:
+    '''stores a Gcode waypoint. Used to store Gcode movements'''
     # pos: Position = field(default_factory=Position)
     # toolVec: IJKVector = field(default_factory=IJKVector)
     # circ: IJKVector = field(default_factory=IJKVector)
@@ -70,6 +75,7 @@ class WayPoint:
 
 @dataclass
 class TrajPoint:
+    '''stores a trajectory point. this assumes constant timing information, so no velocity information is stored. also assumes discretized linear motion, so circular motion can not be represented.'''
     # pos: Position = field(default_factory=Position)
     # toolVec: IJKVector = field(default_factory=IJKVector)
     # rot: EulerAngles = field(default_factory=EulerAngles)

@@ -8,8 +8,21 @@ import DataTypes
 from math import pi
 import InverseKinematics as ik
 
-def applyOffset(point, toolOffset):
+'''
+functions to apply offset to an array of TrajPoint data types between the tool tip and the "default" end effector 0 position
+'''
 
+def applyOffset(point, toolOffset):
+	'''
+	applies offset to single TrajPoint data type between the tool tip and the "default" end effector 0 position
+
+	Inputs:
+		point: a TrajPoint data type
+		toolOffset: an 2 element array containing the offset along the j6 vector and the tool vector
+
+	Outputs:
+		point: a TrajPoint data type, but adjusted with the toolOffset
+	'''
 	abc=point.rot*pi/180
 	j6=np.matmul(ik.abcToR(abc),np.array([[1],[0],[0]]))[:,0]
 	# print(j6)
@@ -19,6 +32,18 @@ def applyOffset(point, toolOffset):
 	return point
 
 def toolOffset(points, toolOffset, nFadeIn = 0, nFadeOut = 0):
+	'''
+	applies offset to an array of TrajPoint data types between the tool tip and the "default" end effector 0 position
+
+	Inputs:
+		points: an array of TrajPoint data types
+		toolOffset: an 2 element array containing the offset along the j6 vector and the tool vector
+		nFadeIn: allows the offset to "fade in" over the first n points of the trajectory
+		nFadeOut: allows the offset to "fade out" over the last n points of the trajectory
+
+	Outputs:
+		points: the same array as input, but adjusted with the toolOffset
+	'''
 	nPoints = len(points)
 	toolOffset = np.array(toolOffset)
 	for i in range(len(points)):

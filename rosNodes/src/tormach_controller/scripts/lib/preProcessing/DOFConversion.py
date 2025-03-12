@@ -10,12 +10,31 @@ import InverseKinematics
 
 
 def AddFixed6DOF(trajectory):
+    '''
+    adds 6dof rotation information to an array of TrajPoint data types
+
+    Inputs:
+        trajectory: an array of TrajPoint data types
+
+    Outputs:
+        trajectory: the same array as the input, but with the .rot field filled out with a fixed upright orientation
+    '''
     for i in range(len(trajectory)):
         trajectory[i].rot=np.array([0.0, 0.0,0.0])
 
     return trajectory
 
 def Add6DofFrom5(trajectory, quadrant=2):
+    '''
+    adds 6dof rotation information to an array of TrajPoint data types
+
+    Inputs:
+        trajectory: an array of TrajPoint data types
+        quadrant: experimental, used in computing the 6dof orientation. choses which qudrant the tool is working in. 1, 2, or 0 for automatic
+
+    Outputs:
+        trajectory: the same array as the input, but with the .rot field filled out with a computed 6dof orientation
+    '''
     j6ProjAngle_prev = 0
     for i in range(len(trajectory)):
         toolIJK = trajectory[i].toolVec
@@ -115,6 +134,16 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
 
 def calcJ6IJK(toolIJK, angle):
+    '''
+    calculates the vector along the j6 rotation axis from the tool vector and the projected j6 vector angle
+
+    Inputs:
+        toolIJK: the tool orientation vector (from the tool tip to the shank)
+        angle: the angle (ccw from +x) of the j6 vector projected onto the XY plane
+
+    Outputs:
+        j6IJK: the vector along the j6 rotation axis (pointing towards the end effector)
+    '''
     j6IJK = np.array([0, 0, 0.0])
     j6IJK[0] = np.cos(angle)
     j6IJK[1] = np.sin(angle)
@@ -125,6 +154,16 @@ def calcJ6IJK(toolIJK, angle):
     return j6IJK
 
 def calcABC(j6IJK, toolIJK):
+    '''
+    calculates ABC Euler angles from the tool vector and the j6 vector
+
+    Inputs:
+        j6IJK: the vector along the j6 rotation axis
+        toolIJK: the tool vector (from the tool tip to the shank)
+
+    Outputs:
+        abc: the Euler angles describing the rotation of the end effector
+    '''
     C = math.atan2(j6IJK[1], j6IJK[0])
     if j6IJK[1] == 0 and j6IJK[0] == 0:
         C = math.atan2(toolIJK[1], toolIJK[0])

@@ -12,7 +12,25 @@ import sys
 
 
 def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0, 0.0], origin=[562.0,0.0,866.0], toolIJKInit=[0.0,0.0,1.0], pureRotVel = np.pi/2, tOffset=[0,0]):
-    '''call necessary functions to plan a trajectory from gcode'''
+    '''
+    call necessary functions to plan a trajectory from gcode
+    
+    Inputs:
+        file: the gcode file/file path
+        a: the maximum acceleration to use in trajectory planning
+        hz: the frequency to plan the trajectory points at
+        feedRate: the default feedrate to use for Gcode parsing
+        rapidFeed: the default rapid feedrate to use for Gcode parsing
+        defaultLengthUnits: the default length units ("in" or "mm") to use for Gcode parsing
+        toolFrameOffset: the offset from the global coordinent system to the Gcode coordinant system
+        origin: the end effector starting and ending location
+        toolIJKInit: the initial tool orientation
+        pureRotVel: the rotational velocity to use for movements with only a tool orientation change
+        tOffset: the tooloffset from the end effector center
+
+    Outputs:
+        trajectory: an array of TrajPoint data types; the trajectory that follows the gcode, with moves from and back to origin added in
+    '''
     parser = GcodeParserV2.GcodeParserV2(feedRate=feedRate, rapidFeed=rapidFeed, defaultLengthUnits=defaultLengthUnits, toolFrameOffset=toolFrameOffset)
     # print(os.getcwd())
     if parser.parseFile(file):
@@ -37,13 +55,22 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
 
 
 def saveTrajectory(file, trajectory):
-    '''write the trajectory to a file'''
+    '''
+    write the trajectory to a file
+    
+    Inputs:
+        file: the file to save the trajectory to
+        trajectory: an array of TrajPoint data points
+    '''
     with open(file, "w") as f:
         for trajPoint in trajectory:
             f.write(str(trajPoint)+"\n")
 
 
 def plotTrajectory(trajectory, hz=50):
+    '''
+    plot information about the trajectory in 2D. for testing/verification. modify what is plotted as needed
+    '''
     import matplotlib.pyplot as plt
     num = len(trajectory)
     x = np.zeros(num)
@@ -86,6 +113,15 @@ def plotTrajectory(trajectory, hz=50):
     plt.show()
 
 def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0):
+    '''
+    plots the trajectory in 3D, including tool vectors and j6 vectors. this plotting can be hard on a graphics card if nmin and nmaxOffset are not set appropriately
+
+    Inputs:
+        trajectory: an array of TrajPoint data types; the trajectory
+        hz: the frequency the trajectory was generated at (to plot against time)
+        nmin: the trajectory index to start plotting at
+        nmaxOffset: the number data points on the end of the trajectory to not plot
+    '''
     import matplotlib.pyplot as plt
     num = len(trajectory)
     x = np.zeros(num)
@@ -137,6 +173,9 @@ def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0):
 
 
 if __name__=="__main__":
+    '''
+    for testing
+    '''
     import matplotlib.pyplot as plt
     print("generating trajectory")
     traj = genTrajectory(sys.argv[1], a=30, hz=7, feedRate=30, rapidFeed=30, toolFrameOffset=[400.0, 0.0, 400.0], pureRotVel=np.pi/5, tOffset=[10, 20])

@@ -11,6 +11,20 @@ import InverseKinematics
 
 
 def planTrajectory(wayPoints, a=1, hz=50, pInit=[562.0,0.0,866.0], ijkInit=[0.0,0.0,1.0], pureRotVel = np.pi/2):
+    '''
+    plans a trajectory to move between an array of waypoints
+
+    Inputs:
+        wayPoints: an array of WayPoint data type. the points to move between
+        a: the maximum acceleration to use
+        hz: the frequency to generate the trajectory at
+        pInit: the starting position in global coordinates:
+        inkInit: the starting tool orientation
+        pureRotVel: the rotational velocity to use for movements that do not have a positional change
+
+    Outputs:
+        traj: an array of TrajPoint data types, describing the motion between the waypoints at the hz frequency
+    '''
     traj = []
 
     for i in range(len(wayPoints)):
@@ -45,6 +59,24 @@ def planTrajectory(wayPoints, a=1, hz=50, pInit=[562.0,0.0,866.0], ijkInit=[0.0,
     return traj
 
 def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, rotVel):
+    '''
+    generates a trajectory to move along a linear path
+
+    Inputs:
+        hz: the frequency of the data points on the path
+        a: the maximum acceleration to use
+        vi: the initial (starting) velocity
+        vm: the middle/ constant/ desired velocity
+        vf: the final/ finishing velocity
+        p0: the initial position
+        pf: the final position
+        ijk0: the inital tool orientation vector
+        ijkf: the final tool orientation vector
+        rotVel: the rotational velocity to use if there is only a change in orientation (no positional change)
+
+    Outputs:
+        points: an array of TrajPoint data type, describing the desired motion
+    '''
     dp = pf - p0
     dijk = ijkf - ijk0
 
@@ -85,6 +117,22 @@ def genLinPath(hz, a, vi, vm, vf, p0, pf, ijk0, ijkf, rotVel):
     
 
 def genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoint):
+    '''
+    generates a trajectory to move along a circular path
+
+    Inputs:
+        hz: the frequency of the data points on the path
+        a: the maximum acceleration to use
+        vi: the initial (starting) velocity
+        vm: the middle/ constant/ desired velocity
+        vf: the final/ finishing velocity
+        p0: the initial position
+        pf: the final position
+        wayPoint: the waypoint to move to, which must include the cicle center ijk
+
+    Outputs:
+        points: an array of TrajPoint data type, describing the desired motion
+    '''
     rad = np.linalg.norm(wayPoint.circijk)
     vi_angular = vi/rad
     vm_angular = vm/rad
@@ -131,10 +179,21 @@ def genCircPath(hz, a, vi, vm, vf, p0, pf, wayPoint):
 #         return 0
 
 def genPath(hz, a=1, vi=0, vm=0.3, vf=0, p0=0, pf=1):
-    """generates a 1d path using trapizoidal acceleration at a specified frequency hz
+    '''
+    generates a 1d path using trapizoidal acceleration at a specified frequency hz
 
+    Inputs:
+        hz: the frequency of the data points on the path
+        a: the maximum acceleration to use
+        vi: the initial (starting) velocity
+        vm: the middle/ constant/ desired velocity
+        vf: the final/ finishing velocity
+        p0: the initial position
+        pf: the final position
 
-     """
+    Outputs:
+        pos: an array of position values from p0 to pf at the specified frequency
+    '''
     ta = abs(vm - vi)/a #time to go from vi to vm
     tc = abs(vf - vm)/a #time to go from vm to vf
     tb = (pf - p0 - 0.5*(vi+vm)*ta - 0.5*(vm+vf)*tc)/vm #time to stay at vm
@@ -155,6 +214,25 @@ def genPath(hz, a=1, vi=0, vm=0.3, vf=0, p0=0, pf=1):
     return pos
 
 def pOft(a, vi, vm, vf, p0, pf, t1, t2, t3, t):
+    '''
+    generates a position curve as a function of time. curve uses a trapezoidal velocity profile. returns a single position at the time specified
+
+    Inputs:
+        a: the maximum acceleration to use
+        vi: the initial (starting) velocity
+        vm: the middle/ constant/ desired velocity
+        vf: the final/ finishing velocity
+        p0: the initial position
+        pf: the final position
+        ***times assume p0 occurs at t = 0***
+        t1: the time that the profile reaches the vm velocity after ramping up/down from vi
+        t2: the time that the profile starts ramping up/down from vm to vf
+        t3: the time at which pf and vf are reached
+        t: the time to evaluate the profile at
+
+    Outputs:
+        returns the position at the specified time
+    '''
     c1 = np.sign(vm-vi)*a
     c2 = np.sign(vf-vm)*a
     if t <= t1:
@@ -169,6 +247,9 @@ def pOft(a, vi, vm, vf, p0, pf, t1, t2, t3, t):
 
 
 if __name__=="__main__":
+    '''
+    for testing
+    '''
     # genpath(200, 4, 1, 2, 1, 1, 5)
     # genpath(200, 4, 0, 2, 3, 1, 5)
     # genpath(200, 4, 5, 2, 1, 1, 5)

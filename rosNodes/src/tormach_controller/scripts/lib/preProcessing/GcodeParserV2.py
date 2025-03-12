@@ -10,11 +10,27 @@ import DataTypes
 
 
 class GcodeParserV2:
+    '''
+    A class which can be used to pass a single block of Gcode or a Gcode file. General use has three steps:
+    1) define an instance of the class, pass in default parameters, feedrates, etc
+    2) call a parse____ function. ***parseFile() is the only one of these function to have been fully tested***
+    3) call the evaluateGcode function, this will return an array of WayPoint dataTypes
+    '''
     def __init__(self, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0,0.0]):
+        '''initialization function. see setParameters for inputs'''
         self.setParameters(feedRate, rapidFeed, defaultLengthUnits, toolFrameOffset)
 
     
     def setParameters(self, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0,0.0]):
+        '''
+        used by the __init__ function to initilize default parameters. can also be used to reinitilize these parameters
+
+        Inputs:
+            feedRate: the default linear/circular motion feed rate, in defaultLengthUnits units
+            rapidFeed: the default rapid feed rate, in defaultLengthUnits units
+            defaultLengthUnits: units to expect Gcode in, as well as the feed rate inputs. can be "mm" or "in"
+            toolFrameOffset: X, Y, Z offsets of the Gcode frame w.r.t. the machine coordinate system
+        '''
         self.motionMode = 1
         self.lengthUnits = defaultLengthUnits
         self.toolPose = DataTypes.ToolPose()
@@ -31,6 +47,15 @@ class GcodeParserV2:
 
 
     def parseFile(self, file):
+        '''
+        parses a Gcode file. Parsing is just reading the file into an internal array. does not output waypoints (see evaulate____ functions)
+
+        Inputs:
+            file: the file name/path to read the Gcode from
+
+        Outputs:
+            returns 0 if sucessful, 1 if the file failed to open
+        '''
         #import the gcode
         try:
             with open(file, 'r') as f:
@@ -44,6 +69,12 @@ class GcodeParserV2:
 
 
     def evaluateGcode(self):
+        '''
+        evaluates whatever is currently stored as the Gcode in the class instance. returns an array of WayPoints
+
+        Outputs:
+            wayPoints: an array of WayPoint data types, one for each movement Gcode command
+        '''
         wayPoints = []
         for block in self.parsedGcode:
             if self.evaluateGcodeBlock(block):
@@ -81,6 +112,15 @@ class GcodeParserV2:
 
 
     def parseAllLines(self, gcode):
+        '''
+        parses a string (can be multiple blocks) of Gcode into an array of Gcode commands. For internal use only
+
+        Inputs:
+            gcode: a string of Gcode
+
+        Outputs:
+            parsedLines: an array (multiple blocks) of Gcode commands ready to be run through the evaluateGcodeBlock function
+        '''
         self.parsedLines = []
         for line in gcode.splitlines():
             self.parsedLine, self.errors = self.parseLine(line)
@@ -94,6 +134,16 @@ class GcodeParserV2:
 
     @staticmethod
     def parseLine(line):
+        '''
+        translates a line/ block of text gcode into an array of commands
+
+        Inputs:
+            line: a string (single line) of Gcode
+
+        Outputs:
+            commands: an array of the commands found in the string. array is of the format: [[letter, number], [letter, number],...etc]
+            unrecognizedCommands: an array of text not regognized as Gcode or a comment
+        '''
         #strip all whitespace,
         # line = (''.join(line.split())).replace(";", "").upper()
         line = (''.join(line.split(';')[0].split())).upper()
@@ -111,6 +161,15 @@ class GcodeParserV2:
         return commands, unrecognizedCommands
 
     def evaluateGcodeBlock(self, block):
+        '''
+        evaluates a parsed Gcode block array. this includes setting parameters and updating new movement positions
+
+        Inputs:
+            block: the array of a parsed Gcode block
+        
+        Outputs:
+            newPose: true if the Gcode block contained a movement command, false otherwise
+        '''
 #        print(block)
         # self.toolPose = self.newToolPose
         self.toolPose.x=self.newToolPose.x
