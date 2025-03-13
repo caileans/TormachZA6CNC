@@ -194,7 +194,7 @@ if __name__=="__main__":
     traj = genTrajectory(sys.argv[1], a=30, hz=7, feedRate=30, rapidFeed=30, toolFrameOffset=[400.0, 0.0, 400.0], pureRotVel=np.pi/5, tOffset=[10, 20])
 
     plotTrajectory(traj, hz=7)
-    plot3DTrajectory(traj, hz=7)
+    plot3DTrajectory(traj, hz=7, nmin=0, nmaxOffset=0)
 
     # print("saving trajectory")
     # saveTrajectory(sys.argv[2], traj)

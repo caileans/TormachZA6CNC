@@ -101,7 +101,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
                         if j6ProjAngle_prev < 0:
                             j6AngleIJKComp = -j6AngleIJKComp
             
-                j6ProjAngle = (1-abs(toolIJK[0]))*j6AnglePosComp*(1-abs(toolIJK[1])) + j6AngleIJKComp
+                j6ProjAngle = (1-abs(toolIJK[0]))*j6AnglePosComp*(1-abs(toolIJK[1])) + j6AngleIJKComp*(1 if toolIJK[2]>=0 else -1)
 
             if toolIJK[2] < 0:
                 j6ProjAngle -= np.pi*(1-abs(toolIJK[1]))*(1 if toolIJK[1] == 0 else np.sign(toolIJK[1]))

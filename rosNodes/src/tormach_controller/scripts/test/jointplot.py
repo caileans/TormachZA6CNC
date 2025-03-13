@@ -53,6 +53,6 @@ plt.xlabel("trajectory point")
 plt.ylabel("joint angle (rad)")
 plt.title("ik-geo solutions for 5DOFTest.nc")
 
-gct.plot3DTrajectory(pointList, hz)
+gct.plot3DTrajectory(pointList, hz, nmin=50, nmaxOffset=50)
 
 plt.show()
