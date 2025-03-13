@@ -21,7 +21,7 @@ def getIK(position, Rotation,robot):
     sols = robot.get_ik_sorted(Rotation,[position[0],position[1],position[2]])
 
     sols = applyJointLimits(sols, 6, 360)
-    sols = applyJointLimits(sols, 4, 270)
+    # sols = applyJointLimits(sols, 4, 270) tormach doesn't throw error, but just moves to 180 and won't move past
 
 
     return  sols
@@ -43,34 +43,36 @@ def applyJointLimits(sols, joint, limit):
         
         return sols
 
-    # double the number of sols to account for >180 limits
-    newSols = copy.deepcopy(sols)
-    newSols.extend(sols)
-    # print(newSols)
-    # newSols[numSols+7][0][5] -= 360*np.pi/180
-    # print(newSols)
-    for i in range(numSols):
-        if newSols[numSols+i][0][joint-1] > 0:
-            if abs(newSols[numSols+i][0][joint-1]-360*np.pi/180) < limit:
-                newSols[numSols+i][0][joint-1] -= 360*np.pi/180
-        elif newSols[numSols+i][0][joint-1] < 0:
-            if abs(newSols[numSols+i][0][joint-1]+360*np.pi/180) < limit:
-                newSols[numSols+i][0][joint-1] += 360*np.pi/180
-
-    return newSols
-
+    #######this version creats duplicate entries, so is less efficient to sort later.
+    # # double the number of sols to account for >180 limits
+    # newSols = copy.deepcopy(sols)
+    # newSols.extend(sols)
+    # # print(newSols)
+    # # newSols[numSols+7][0][5] -= 360*np.pi/180
+    # # print(newSols)
     # for i in range(numSols):
-    #     if sols[i][0][joint-1] > 0:
-    #         newSol = sols[i][0][joint-1] - 360*np.pi/180
-    #     elif sols[i][0][joint-1] < 0:
-    #         newSol = sols[i][0][joint-1] + 360*np.pi/180
-    #     else:
-    #         continue
+    #     if newSols[numSols+i][0][joint-1] > 0:
+    #         if abs(newSols[numSols+i][0][joint-1]-360*np.pi/180) < limit:
+    #             newSols[numSols+i][0][joint-1] -= 360*np.pi/180
+    #     elif newSols[numSols+i][0][joint-1] < 0:
+    #         if abs(newSols[numSols+i][0][joint-1]+360*np.pi/180) < limit:
+    #             newSols[numSols+i][0][joint-1] += 360*np.pi/180
 
-    #     if abs(newSol) < limit:
-    #         sols.append(copy.deepcopy(sols[i]))
-    #         sols[-1][0][joint-1] = newSol
-    # return sols
+    # return newSols
+
+    ########this version is more efficient, but can be hard to plot due to different numbers of solutions at each point
+    for i in range(numSols):
+        if sols[i][0][joint-1] > 0:
+            newSol = sols[i][0][joint-1] - 360*np.pi/180
+        elif sols[i][0][joint-1] < 0:
+            newSol = sols[i][0][joint-1] + 360*np.pi/180
+        else:
+            continue
+
+        if abs(newSol) < limit:
+            sols.append(copy.deepcopy(sols[i]))
+            sols[-1][0][joint-1] = newSol
+    return sols
 
 def abcToR(abc):
     """uses the general robotics toolbox from rpi to calculate the rotation matrix from the static euler angles

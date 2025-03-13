@@ -178,6 +178,7 @@ def calcABC(j6IJK, toolIJK):
     cross = np.cross(q0, toolIJK) #, q0)
     # print(f"q0: {str(q0)}   tijk: {str(toolIJK)}   dot: {str(np.dot(q0/np.linalg.norm(q0), toolIJK/np.linalg.norm(toolIJK)))}")
     A = math.acos(np.dot(q0/np.linalg.norm(q0), toolIJK/np.linalg.norm(toolIJK))*0.999999) * (np.sign(cross.dot(j6IJK)))
+    
     # -.000000000000002
     # A = np.pi - np.copysign(math.asin(np.linalg.norm(cross)/(np.linealg.norm(q)*np.linalg.norm(q0))), -cross.dot(np.array([toolPose.i, toolPose.j, toolPose.k])))
 

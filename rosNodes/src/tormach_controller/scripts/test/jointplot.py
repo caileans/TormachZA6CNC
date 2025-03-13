@@ -11,10 +11,11 @@ import InverseKinematics as ik
 import matplotlib.pyplot as plt
 import GCodeToTrajectory as gct
 import numpy as np
+import general_robotics_toolbox as grtb
 
 '''Script for "previewing" (in a plot) the joint and cartesian space trajectory generated from a gcode file'''
 
-hz = 40
+hz = 7
 robot=ik.tormachZA6();
 pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/5DOFTest.nc', a=30,hz=hz,feedRate=30,rapidFeed=30,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/5, tOffset=[0, 20])
 
@@ -28,21 +29,21 @@ pick=[jprev];
 c=0
 for point in pointList:
 	c+=1
-	# returns all solutions
-	newsol=ik.getIK(np.array(point.pos[0:3]),np.transpose(ik.abcToR(np.array(np.deg2rad(point.rot[0:3])))),robot)
+	# returns all solutions np.transpose(ik.abcToR(np.array(np.deg2rad(point.rot[0:3]))))
+	newsol=ik.getIK(point.pos,np.transpose(grtb.rpy2R(np.deg2rad(point.rot))),robot)
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,6,6,6,6,6,6]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,4,4,4,4,4,4]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,2,2,2,2,2,2]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[0,0,0,0,0,0,0,0,0,0,100000000000,0,0]))
-	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,0,0,0,0,0,0]))
-	pick.append(ik.runIK(np.array([point.pos[0],point.pos[1],point.pos[2],point.rot[0],point.rot[1],point.rot[2]]),pick[c-1],robot))
+	pick.append(ik.chooseIK(pick[c-1],newsol,[20,20,20,20,20,20,0,2,2,2,2,2,0]))
+	# pick.append(ik.runIK(np.array([point.pos[0],point.pos[1],point.pos[2],point.rot[0],point.rot[1],point.rot[2]]),pick[c-1],robot))
 	temp=[]
 	for j in newsol:
 		temp.append(j[0])
 	sols.append(np.array(temp))
 
 pick=np.array(pick[1:])
-sols=np.array(sols[1:])
+# sols=np.array(sols[1:])
 
 plt.figure(3)
 # plt.plot(sols[:,:,3], '.k', label='_nolegend_')
