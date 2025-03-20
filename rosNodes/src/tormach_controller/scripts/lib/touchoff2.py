@@ -34,18 +34,24 @@ def keyboardMove(publisher, q, hz):
 
     input("Use x,y,z keys to change position. Use with shift for negative increment. Hit esc to stop movement and return final position")
 
+    print(rot_euler)
+
     rot_euler = np.array(rot_euler).reshape(1,3)
     EE_pos = EE_pos.reshape(1,3)
 
     print(rot_euler)
     print(EE_pos)
 
-    keyboard.add_hotkey('x', moveRobotx(EE_pos, rot_euler, q, hz, inc, publisher))
-    keyboard.add_hotkey('y', moveRoboty(EE_pos, rot_euler, q, hz, inc, publisher))
-    keyboard.add_hotkey('z', moveRobotz(EE_pos, rot_euler, q, hz, inc, publisher))
-    keyboard.add_hotkey('shift + x', moveRobotnegx(EE_pos, rot_euler, q, hz, inc, publisher))
-    keyboard.add_hotkey('shift + y', moveRobotnegy(EE_pos, rot_euler, q, hz, inc, publisher))
-    keyboard.add_hotkey('shift + z', moveRobotnegz(EE_pos, rot_euler, q, hz, inc, publisher))
+
+
+    moveRobotx(EE_pos, rot_euler, q, hz, inc, publisher)
+
+    #keyboard.add_hotkey('x', moveRobotx(EE_pos, rot_euler, q, hz, inc, publisher))
+    #keyboard.add_hotkey('y', moveRoboty(EE_pos, rot_euler, q, hz, inc, publisher))
+    #keyboard.add_hotkey('z', moveRobotz(EE_pos, rot_euler, q, hz, inc, publisher))
+    #keyboard.add_hotkey('shift + x', moveRobotnegx(EE_pos, rot_euler, q, hz, inc, publisher))
+    #keyboard.add_hotkey('shift + y', moveRobotnegy(EE_pos, rot_euler, q, hz, inc, publisher))
+    #keyboard.add_hotkey('shift + z', moveRobotnegz(EE_pos, rot_euler, q, hz, inc, publisher))
 
     keyboard.wait("esc")
     print("The current EE position is ", EE_pos)
