@@ -71,7 +71,7 @@ def jointStateCallback(msg,grav,fric):
     # rospy.loginfo(msg.effort);
     #print(np.array(msg.position)[0:6])
     tau=fric(msg.velocity[0:6],grav(msg.position[0:6],msg.effort[0:6]))
-    jac=grtb.robotjacobian(ik.tormachZA6FK(),np.array(msg.position)[0:6])
+    jac=grtb.robotjacobian(ik.tormachZA6fk(),np.array(msg.position)[0:6])
 
     # print(jac)
 
