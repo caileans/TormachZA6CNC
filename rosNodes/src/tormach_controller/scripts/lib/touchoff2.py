@@ -28,11 +28,11 @@ def keyboardMove(publisher, q, hz):
     rot_euler = R2rpy(EE_rot)
 
     #Set Increment
-    inc = input("Set motion increment (mm): ")      #Max increment?
+    inc = float(input("Set motion increment (mm): "))      #Max increment?
 
     while not inc.isnumeric():
         print("Input must be a number!")
-        inc = input("Set motion increment (mm): ")
+        inc = float(input("Set motion increment (mm): "))
 
     input("Use x,y,z keys to change position. Use with shift for negative increment. Hit esc to stop movement and return final position")
 
