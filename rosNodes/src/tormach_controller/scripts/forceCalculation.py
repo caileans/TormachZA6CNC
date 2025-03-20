@@ -17,6 +17,7 @@ import lib.InverseKinematics as ik
 import lib.publisher31 as pub
 import preProcessing.DataTypes
 import gravityIsolation as grav
+import general_robotics_toolbox as grtb
 from math import sin, cos, pi,exp
 import csv
 
@@ -70,7 +71,7 @@ def jointStateCallback(msg,grav,fric):
     # rospy.loginfo(msg.effort);
     #print(np.array(msg.position)[0:6])
     tau=fric(msg.velocity[0:6],grav(msg.position[0:6],msg.effort[0:6]))
-    jac=robotjacobian(ik.tormachZA6FK(),np.array(msg.position)[0:6])
+    jac=grtb.robotjacobian(ik.tormachZA6FK(),np.array(msg.position)[0:6])
 
     # print(jac)
 
