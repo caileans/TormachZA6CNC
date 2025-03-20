@@ -31,7 +31,7 @@ if __name__=='__main__':
     
     #start the test node
     rospy.init_node("controller")
-    os.system("rosrun tormach_controller forceCalculation.py")
+    os.system("gnome-terminal -- rosrun tormach_controller forceCalculation.py")
     # x=DataTypes.TrajPoint()
     filepath ='/home/pathpilot/Downloads/TormachZA6CNC/Gcode/'
     publisher=pub.startPublisher()
