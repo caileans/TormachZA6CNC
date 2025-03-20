@@ -88,7 +88,7 @@ def jointStateCallback(msg,grav,fric):
 
 if __name__=='__main__':
     # run calibration code
-    adjuster=grav.calibrate(__file__.split("force")[0]+"lib/data.csv")
+    adjuster=grav.calibrate("data.csv")
     a,b=getFrictionModel()
     friction=lambda v,tau:frictionModel(v,tau,a,b=b)
     #start the buffer_node node
