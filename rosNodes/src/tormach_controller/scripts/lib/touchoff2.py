@@ -59,7 +59,7 @@ def keyboardMove(publisher, q, hz):
     
     return EE_pos, q
 
-def moveRobotx(position, q, rot_euler, hz, inc, publisher):
+def moveRobotx(position, rot_euler, q, hz, inc, publisher):
     #Updates and moves the robot's Cartesian position in the x direction
     position[0] += inc  #Update new position's axis
     print("rot_euler", rot_euler)
