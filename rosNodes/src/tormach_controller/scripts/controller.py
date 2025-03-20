@@ -18,6 +18,7 @@ import lib.publisher31 as pub
 import preProcessing.DataTypes
 import preProcessing.GCodeToTrajectory as gct
 from queue import Queue
+import touchoff2 as jog
 
 
 
@@ -38,6 +39,9 @@ if __name__=='__main__':
 
         userfile=input("file name:").strip()
         pub.home(publisher)
+        jprev = np.zeros(6)
+        jprev[2]=np.pi/18;
+        jprev[4]=-np.pi/18
         file=filepath
         offset=[0,0,0]
         # print(userfile)
@@ -50,12 +54,11 @@ if __name__=='__main__':
         elif userfile =='2':
             file=file+"TormachR.nc"
             offset=[432.1,89,427]
+        elif userfile=='jog':
+            eePositon, jprev=jog.keyboardMove(publisher,jprev,hz)
         else:
             file=file+userfile
             offset=[float(input("offset x").strip()),float(input("offset y").strip()),float(input("offset z").strip())]
-        jprev = np.zeros(6)
-        jprev[2]=np.pi/18;
-        jprev[4]=-np.pi/18
         jcur =np.zeros(6)
         jpub=np.zeros(6)
         # hz=50
