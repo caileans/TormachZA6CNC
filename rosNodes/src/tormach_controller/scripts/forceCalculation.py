@@ -5,9 +5,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__).split("controller.py")[0]+"/lib/__init__.py")))
 # print(os.path.dirname(os.path.dirname('/scripts/lib')))
 # print(os.path.abspath(__file__.split("controller.py")[0]+"/lib"))
-sys.path.append(os.path.abspath(__file__.split("controller.py")[0]))
-sys.path.append(os.path.abspath(__file__.split("controller.py")[0]+"/lib"))
-sys.path.append(os.path.abspath(__file__.split("controller.py")[0]+"/lib/preProcessing"))
+sys.path.append(os.path.abspath(__file__.split("force")[0]))
+sys.path.append(os.path.abspath(__file__.split("force")[0]+"/lib"))
+sys.path.append(os.path.abspath(__file__.split("force")[0]+"/lib/preProcessing"))
 
 import rospy 
 from tormach_controller.msg import pose, forceTorque, MovePoseAction, MovePoseGoal,MovePoseResult,MovePoseFeedback
