@@ -8,10 +8,10 @@ from math import pi
 from general_robotics_toolbox import fwdkin, R2rpy
 import keyboard
 
-from InverseKinematics import runIK, tormachZA4fk, tormachZA6
+from InverseKinematics import runIK, tormachZA6fk, tormachZA6
 import publisher31 as pub
 
-robot_fwd = tormachZA4fk()
+robot_fwd = tormachZA6fk()
 robot_IK = tormachZA6()
 
 def keyboardMove(publisher, q, hz):
