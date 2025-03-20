@@ -68,7 +68,7 @@ def moveRobotx(position, rot_euler, q, hz, inc, publisher):
     print(r)
     new_EE_joints = runIK(r, q, robot_IK)  #Return new joints in joint space
     q = new_EE_joints
-    pub.Move(publisher,q,1,hz)  #Publish new position to robot      
+    pub.pubMove(publisher,q,1,hz)  #Publish new position to robot      
     sleep(1/hz)
     print(position)
     return position, q
