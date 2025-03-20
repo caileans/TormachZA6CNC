@@ -18,7 +18,7 @@ import lib.publisher31 as pub
 import preProcessing.DataTypes
 import gravityIsolation as grav
 
-def getFrictionModel()
+def getFrictionModel():
 	with open(__file__.split("Tormach")[0]+"TormachZA6CNC\\data\\jointvel\\"+'velFrictionGains.csv', 'r', newline='') as csvfile:
 		reader = csv.reader(csvfile)
 		a=np.zeros(36)
@@ -87,7 +87,8 @@ def jointStateCallback(msg,grav,fric):
 if __name__=='__main__':
     # run calibration code
     adjuster=grav.calibrate("data.csv")
-    friction=lambda v,tau:frictionModel(v,tau,getFrictionModel())
+    a,b=getFrictionModel()
+    friction=lambda v,tau:frictionModel(v,tau,a,b=b)
     #start the buffer_node node
     rospy.init_node("forceCalculation")
     #subscribe to the "/tormach/movePose" topic which has a pose msg type
