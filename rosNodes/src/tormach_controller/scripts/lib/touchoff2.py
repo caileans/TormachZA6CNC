@@ -36,8 +36,8 @@ def keyboardMove(publisher, q, hz):
 
     print(rot_euler)
 
-    rot_euler = np.array(rot_euler).reshape(1,3)
-    EE_pos = EE_pos.reshape(1,3)
+    rot_euler = np.array(rot_euler)
+    EE_pos = EE_pos
 
     print(rot_euler)
     print(EE_pos)
