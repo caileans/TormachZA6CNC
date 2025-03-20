@@ -56,6 +56,8 @@ def keyboardMove(publisher, q, hz):
 def moveRobotx(position, q, rot_euler, hz, inc, publisher):
     #Updates and moves the robot's Cartesian position in the x direction
     position[0] += inc  #Update new position's axis
+    print("rot_euler", rot_euler)
+    print("position", position)
     r = np.append(position, rot_euler)
     print(r)
     new_EE_joints = runIK(r, q, robot_IK)  #Return new joints in joint space
