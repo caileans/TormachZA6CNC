@@ -19,7 +19,7 @@ import preProcessing.DataTypes
 import gravityIsolation as grav
 
 def getFrictionModel():
-	with open(__file__.split("Tormach")[0]+"TormachZA6CNC\\data\\jointvel\\"+'velFrictionGains.csv', 'r', newline='') as csvfile:
+	with open(__file__.split("Tormach")[0]+"TormachZA6CNC/data/jointvel/"+'velFrictionGains.csv', 'r', newline='') as csvfile:
 		reader = csv.reader(csvfile)
 		a=np.zeros(36)
 		for row in reader:
@@ -29,7 +29,7 @@ def getFrictionModel():
 			for val in row:
 				a[c]=float( val)
 				c+=1
-	with open(__file__.split("Tormach")[0]+"TormachZA6CNC\\data\\jointvel\\"+'velFrictionConst.csv', 'r', newline='') as csvfile:
+	with open(__file__.split("Tormach")[0]+"TormachZA6CNC/data/jointvel/"+'velFrictionConst.csv', 'r', newline='') as csvfile:
 		reader = csv.reader(csvfile)
 		b=np.zeros(6)
 		for row in reader:
