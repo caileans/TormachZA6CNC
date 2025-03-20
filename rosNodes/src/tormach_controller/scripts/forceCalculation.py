@@ -99,5 +99,6 @@ if __name__=='__main__':
     forcePub=rospy.Publisher('eeforce', forceTorque, queue_size=1,latch=true)
     #keep node running until shutdown request
     while not  rospy.is_shutdown():
-        if not moveBuffer.empty():
+    	1==1
+        # if not moveBuffer.empty():
             # result=movepose_client();
