@@ -62,7 +62,7 @@ if __name__=='__main__':
         elif userfile=='forcePoint':
             sub=rospy.Subscriber("eeForce", forceTorque, callback=pose_callback)
             direct=np.array([float(input("dir x").strip()),float(input("dir y").strip()),float(input("dir z").strip())])
-            pose=np.array(grtb.fwdkin(ik.tormachZA6fw(),jprev).p)
+            pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
             direct/=np.linalg.norm(direct)
             while c<=10^10:
                 force=rospy.wait_for_message('/eeForce',forceTorque,1/45.0)[0:3]
