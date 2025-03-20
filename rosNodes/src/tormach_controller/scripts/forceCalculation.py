@@ -88,13 +88,13 @@ def jointStateCallback(msg,grav,fric):
 
 if __name__=='__main__':
     # run calibration code
-    adjuster=grav.calibrate("data.csv")
+    adjuster=grav.calibrate("/lib/data.csv")
     a,b=getFrictionModel()
     friction=lambda v,tau:frictionModel(v,tau,a,b=b)
     #start the buffer_node node
     rospy.init_node("forceCalculation")
     #subscribe to the "/tormach/movePose" topic which has a pose msg type
-    sub=rospy.Subscriber("/tormach/movePose", pose, callback=pose_callback)
+    # sub=rospy.Subscriber("/tormach/movePose", pose, callback=pose_callback)
     #with open('data.csv','w',newline='') as csvfile:
     #	writer=csv.writer(csvfile)
     currentPoseSub=rospy.Subscriber("/joint_states", JointState,queue_size=1, callback=lambda msg:jointStateCallback(msg,adjuster,friction))
