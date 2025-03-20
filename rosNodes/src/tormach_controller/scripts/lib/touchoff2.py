@@ -56,7 +56,7 @@ def keyboardMove(publisher, q, hz):
 def moveRobotx(position, q, rot_euler, hz, inc, publisher):
     #Updates and moves the robot's Cartesian position in the x direction
     position[0] += inc  #Update new position's axis
-    r = np.column_stack((position, rot_euler))
+    r = np.append(position, rot_euler)
     new_EE_joints = runIK(r, q, robot_IK)  #Return new joints in joint space
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)  #Publish new position to robot      
@@ -67,7 +67,7 @@ def moveRobotx(position, q, rot_euler, hz, inc, publisher):
 def moveRoboty(position, q, rot_euler, hz, inc, publisher):
     #Updates and moves the robot's Cartesian position in the y direction
     position[1] += inc
-    r = np.column_stack((position, rot_euler))
+    r = np.append(position, rot_euler)
     new_EE_joints = runIK(r, q, robot_IK)
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)     
@@ -78,7 +78,7 @@ def moveRoboty(position, q, rot_euler, hz, inc, publisher):
 def moveRobotz(position, q, rot_euler, hz, inc, publisher):
     #Updates and moves the robot'ss Cartesian position in the z direction
     position[2] += inc
-    r = np.column_stack((position, rot_euler))
+    r = np.append(position, rot_euler)
     new_EE_joints = runIK(r, q, robot_IK) 
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)   
@@ -89,7 +89,7 @@ def moveRobotz(position, q, rot_euler, hz, inc, publisher):
 def moveRobotnegx(position, q, rot_euler, hz, inc, publisher):
     #Updates and moves the robot's Cartesian position in the x direction
     position[0] += -inc  #Update new position's axis
-    r = np.column_stack((position, rot_euler))
+    r = np.append(position, rot_euler)
     new_EE_joints = runIK(r, q, robot_IK)  #Return new joints in joint space
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)  #Publish new position to robot      
@@ -100,7 +100,7 @@ def moveRobotnegx(position, q, rot_euler, hz, inc, publisher):
 def moveRobotnegy(position, q, rot_euler, hz, inc, publisher):
     #Updates and moves the robot's Cartesian position in the y direction
     position[1] += -inc
-    r = np.column_stack((position, rot_euler))
+    r = np.append(position, rot_euler)
     new_EE_joints = runIK(r, q, robot_IK)
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)     
@@ -111,7 +111,7 @@ def moveRobotnegy(position, q, rot_euler, hz, inc, publisher):
 def moveRobotnegz(position, q, rot_euler, hz, inc, publisher):
     #Updates and moves the robot'ss Cartesian position in the z direction
     position[2] += -inc
-    r = np.column_stack((position, rot_euler))
+    r = np.append(position, rot_euler)
     new_EE_joints = runIK(r, q, robot_IK) 
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)   
