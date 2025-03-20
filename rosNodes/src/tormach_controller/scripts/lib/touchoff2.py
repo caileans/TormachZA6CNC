@@ -29,10 +29,8 @@ def keyboardMove(publisher, q, hz):
 
     #Set Increment
     inc = float(input("Set motion increment (mm): "))      #Max increment?
+    print("increment is ", inc)
 
-    while not inc.isnumeric():
-        print("Input must be a number!")
-        inc = float(input("Set motion increment (mm): "))
 
     input("Use x,y,z keys to change position. Use with shift for negative increment. Hit esc to stop movement and return final position")
 
