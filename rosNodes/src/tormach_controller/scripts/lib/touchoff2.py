@@ -37,6 +37,7 @@ def keyboardMove(publisher, q, hz):
     input("Use x,y,z keys to change position. Use with shift for negative increment. Hit esc to stop movement and return final position")
 
     print(rot_euler)
+    print(EE_pos)
 
     rot_euler = np.array([rot_euler]).reshape(1,3)
     EE_pos = EE_pos.reshape(1,3)
