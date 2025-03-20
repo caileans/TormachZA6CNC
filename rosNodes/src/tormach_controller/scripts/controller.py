@@ -19,9 +19,11 @@ import preProcessing.DataTypes
 import preProcessing.GCodeToTrajectory as gct
 from queue import Queue
 import touchoff2 as jog
+from tormach_controller.msg import  forceTorque
 
 
-
+def pose_callback(msg):
+    return np.array([msg.forcex,    msg.forcey,    msg.forcez,    msg.momenti,    msg.momentj,    msg.momentk])
 # NOTE THIS NODE IS IN RADIANS!!!!!!!!!!!!!
 #publishing a new position will overwrite the current move
 #Note: this doesnt work for cartesian space
@@ -29,6 +31,7 @@ if __name__=='__main__':
     
     #start the test node
     rospy.init_node("controller")
+    os.system("rosrun tormach_controller forceCalculation.py")
     # x=DataTypes.TrajPoint()
     filepath ='/home/pathpilot/Downloads/TormachZA6CNC/Gcode/'
     publisher=pub.startPublisher()
@@ -56,6 +59,25 @@ if __name__=='__main__':
             offset=[432.1,89,427]
         elif userfile=='jog':
             eePositon, jprev=jog.keyboardMove(publisher,jprev,hz)
+        elif userfile=='forcePoint':
+            sub=rospy.Subscriber("eeForce", forceTorque, callback=pose_callback)
+            direct=np.array([float(input("dir x").strip()),float(input("dir y").strip()),float(input("dir z").strip())])
+            pose=np.array(grtb.fwdkin(ik.tormachZA6fw(),jprev).p)
+            direct/=np.linalg.norm(direct)
+            while c<=10^10:
+                force=rospy.wait_for_message('/eeForce',forceTorque,1/45.0)[0:3]
+                c+=1
+                if np.dot(force,direct)>5000:
+                    pose+=.05*direct
+                    flag=True
+                elif not flag:
+                    pose-=.5*direct
+                else:
+                    pose-=.05*direct
+                jprev=ik.runIK(np.array([pose[0],pose[1],pose[2],0,0,0]),jprev,robot)
+                pub.pubmove(publisher,jprev,1,hz)
+                sleep(1.0/hz)
+
         else:
             file=file+userfile
             offset=[float(input("offset x").strip()),float(input("offset y").strip()),float(input("offset z").strip())]
