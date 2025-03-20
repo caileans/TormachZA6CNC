@@ -49,6 +49,8 @@ def keyboardMove(publisher, q, hz):
     EE_pos,q = keyboard.add_hotkey('shift + z', moveRobotnegz(EE_pos, rot_euler, q, hz, inc, publisher))
 
     keyboard.wait("esc")
+    print("The current EE position is ", EE_pos)
+    print("The zerod")
     
     return EE_pos, q
 
@@ -60,6 +62,7 @@ def moveRobotx(position, q, rot_euler, hz, inc, publisher):
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)  #Publish new position to robot      
     sleep(1/hz)
+    print(position)
     return position, q
 
 def moveRoboty(position, q, rot_euler, hz, inc, publisher):
@@ -70,6 +73,7 @@ def moveRoboty(position, q, rot_euler, hz, inc, publisher):
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)     
     sleep(1/hz)
+    print(position)
     return position, q
 
 def moveRobotz(position, q, rot_euler, hz, inc, publisher):
@@ -80,6 +84,7 @@ def moveRobotz(position, q, rot_euler, hz, inc, publisher):
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)   
     sleep(1/hz)
+    print(position)
     return position, q
 
 def moveRobotnegx(position, q, rot_euler, hz, inc, publisher):
@@ -90,6 +95,7 @@ def moveRobotnegx(position, q, rot_euler, hz, inc, publisher):
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)  #Publish new position to robot      
     sleep(1/hz)
+    print(position)
     return position, q
 
 def moveRobotnegy(position, q, rot_euler, hz, inc, publisher):
@@ -100,6 +106,7 @@ def moveRobotnegy(position, q, rot_euler, hz, inc, publisher):
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)     
     sleep(1/hz)
+    print(position)
     return position, q
 
 def moveRobotnegz(position, q, rot_euler, hz, inc, publisher):
@@ -110,6 +117,7 @@ def moveRobotnegz(position, q, rot_euler, hz, inc, publisher):
     q = new_EE_joints
     pub.Move(publisher,q,1,hz)   
     sleep(1/hz)
+    print(position)
     return position, q
     
 
