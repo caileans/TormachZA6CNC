@@ -20,7 +20,9 @@ def keyboardMove(publisher, q, hz):
     # EE_pos is the current end effector Cartesian position
     # hz is the frequency (50 Hz)
 
-    EE_rot, EE_pos = fwdkin(robot_fwd,q)  #Get joint angles from  position / Cartesian position of robot flange
+    pose = fwdkin(robot_fwd,q)  #Get joint angles from  position / Cartesian position of robot flange
+    EE_rot = pose.R
+    EE_pos = pose.p
 
     #Change this to euler angles
     rot_euler = R2rpy(EE_rot)
