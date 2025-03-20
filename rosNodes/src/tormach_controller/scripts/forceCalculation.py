@@ -17,6 +17,8 @@ import lib.InverseKinematics as ik
 import lib.publisher31 as pub
 import preProcessing.DataTypes
 import gravityIsolation as grav
+from math import sin, cos, pi,exp
+import csv
 
 def getFrictionModel():
 	with open(__file__.split("Tormach")[0]+"TormachZA6CNC/data/jointvel/"+'velFrictionGains.csv', 'r', newline='') as csvfile:
