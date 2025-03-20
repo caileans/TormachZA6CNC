@@ -1,0 +1,90 @@
+import os, sys
+sys.path.append(os.path.abspath(__file__.split("script")[0]+"/scripts/lib"))
+sys.path.append(os.path.abspath(__file__.split("script")[0]+"/scripts/lib/preProcessing"))
+
+from time import sleep
+import numpy as np
+from math import pi
+from general_robotics_toolbox import fwdkin, R2rpy
+import keyboard
+
+from InverseKinematics import runIK, tormachZA4fk, tormachZA6
+import publisher31 as pub
+
+robot_fwd = tormachZA4fk()
+robot_IK = tormachZA6()
+
+def keyboardMove(publisher, q, hz):
+    # Function that jogs the robot in x y z and sets the zero position
+    # q is the start configuration
+    # EE_pos is the current end effector Cartesian position
+    # hz is the frequency (50 Hz)
+
+    pose = fwdkin(robot_fwd,q)  #Get joint angles from  position / Cartesian position of robot flange
+    EE_pos = pose[0:3, -1]
+    EE_rot = pose[0:3, 0:3]
+
+    #Change this to euler angles
+    rot_euler = R2rpy(EE_rot)
+    max_inc = 10
+
+    #Set Increment
+    inc = input("Set motion increment (mm): ")      #Max increment?
+
+    while not inc.isnumeric():
+        print("Input must be a number!")
+        inc = input("Set motion increment (mm): ")
+    while inc < 0 or inc > max_inc:
+        print("Increment must be positive and less than ", str(max_inc))
+        inc = input("Set motion increment (mm): ")
+
+    input("Use x,y,z keys to change position. Hit esc to stop movement and return final position")
+
+    rot_euler = rot_euler.reshape(1,3)
+    EE_pos = EE_pos.reshape(1,3)
+
+    EE_pos,q = keyboard.add_hotkey('x', moveRobotx(EE_pos, rot_euler, q, hz, inc, publisher))
+    EE_pos,q = keyboard.add_hotkey('y', moveRoboty(EE_pos, rot_euler, q, hz, inc, publisher))
+    EE_pos,q = keyboard.add_hotkey('z', moveRobotz(EE_pos, rot_euler, q, hz, inc, publisher))
+
+    keyboard.wait("esc")
+    
+    return EE_pos, q
+
+def moveRobotx(position, q, rot_euler, hz, inc, publisher):
+    #Updates and moves the robot's Cartesian position in the x direction
+    position[0] += inc  #Update new position's axis
+    r = np.column_stack(position, rot_euler)
+    new_EE_joints = runIK(r, q, robot_IK)  #Return new joints in joint space
+    q = new_EE_joints
+    pub.Move(publisher,q,1,hz)  #Publish new position to robot      
+    sleep(1/hz)
+    return position, q
+
+def moveRoboty(position, q, rot_euler, hz, inc, publisher):
+    #Updates and moves the robot's Cartesian position in the y direction
+    position[1] += inc
+    r = np.column_stack(position, rot_euler)
+    new_EE_joints = runIK(r, q, robot_IK)
+    q = new_EE_joints
+    pub.Move(publisher,q,1,hz)     
+    sleep(1/hz)
+    return position, q
+
+def moveRobotz(position, q, rot_euler, hz, inc, publisher):
+    #Updates and moves the robot'ss Cartesian position in the z direction
+    position[2] += inc
+    r = np.column_stack(position, rot_euler)
+    new_EE_joints = runIK(r, q, robot_IK) 
+    q = new_EE_joints
+    pub.Move(publisher,q,1,hz)   
+    sleep(1/hz)
+    return position, q
+    
+
+
+
+
+
+
+  
