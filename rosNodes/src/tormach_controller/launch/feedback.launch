@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+	<node pkg="tormach_controller" type="forceCalculation.py" name="forceCalculation" output="screen"/>
+	<node pkg="tormach_controller" type="controller.py" name="controller" output="screen" args="--ros-args -p arg1:=True"/>
+<\launch>

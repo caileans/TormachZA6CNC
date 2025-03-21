@@ -22,6 +22,7 @@ import touchoff2 as jog
 from tormach_controller.msg import  forceTorque
 import general_robotics_toolbox as grtb
 
+
 def pose_callback(msg):
     return np.array([msg.forcex,    msg.forcey,    msg.forcez,    msg.momenti,    msg.momentj,    msg.momentk])
 # NOTE THIS NODE IS IN RADIANS!!!!!!!!!!!!!
@@ -31,7 +32,12 @@ if __name__=='__main__':
     
     #start the test node
     rospy.init_node("controller")
-    os.system("rosrun tormach_controller forceCalculation.py &")
+    os.system("xterm -e rosrun tormach_controller forceCalculation.py")
+    feedback=False
+    myargv = rospy.myargv(argv=sys.argv)
+    if len(myargv) == 2:
+        feedback=myargv[1]
+    print(myargv)
     # x=DataTypes.TrajPoint()
     filepath ='/home/pathpilot/Downloads/TormachZA6CNC/Gcode/'
     publisher=pub.startPublisher()
@@ -39,7 +45,6 @@ if __name__=='__main__':
     robot=ik.tormachZA6()
 
     while True:
-
         userfile=input("file name:").strip()
         pub.home(publisher)
         jprev = np.zeros(6)
