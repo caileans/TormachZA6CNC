@@ -64,7 +64,8 @@ if __name__=='__main__':
             direct=np.array([float(input("dir x").strip()),float(input("dir y").strip()),float(input("dir z").strip())])
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
             direct/=np.linalg.norm(direct)
-            while c<=10^10:
+            c=0
+            while c<=10**10:
                 force=rospy.wait_for_message('/eeForce',forceTorque,1/45.0)[0:3]
                 c+=1
                 if np.dot(force,direct)>5000:
