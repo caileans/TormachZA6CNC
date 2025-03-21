@@ -66,7 +66,7 @@ if __name__=='__main__':
             direct/=np.linalg.norm(direct)
             c=0
             while c<=10**10:
-                force=rospy.wait_for_message('/eeForce',forceTorque,.1)[0:3]
+                force=rospy.wait_for_message('/eeforce',forceTorque,.1)[0:3]
                 c+=1
                 if np.dot(force,direct)>5000:
                     pose+=.05*direct
