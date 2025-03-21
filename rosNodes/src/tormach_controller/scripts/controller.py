@@ -78,7 +78,7 @@ if __name__=='__main__':
                 else:
                     pose-=.05*direct
                 jprev=ik.runIK(np.array([pose[0],pose[1],pose[2],0,0,0]),jprev,robot)
-                pub.pubmove(publisher,jprev,1,hz)
+                pub.pubMove(publisher,jprev,1,hz)
                 sleep(1.0/hz)
 
         else:
