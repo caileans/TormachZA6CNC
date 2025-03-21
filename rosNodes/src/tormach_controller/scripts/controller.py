@@ -60,7 +60,7 @@ if __name__=='__main__':
         elif userfile=='jog':
             eePositon, jprev=jog.keyboardMove(publisher,jprev,hz)
         elif userfile=='forcePoint':
-            sub=rospy.Subscriber("eeForce", forceTorque, callback=pose_callback)
+            sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
             direct=np.array([float(input("dir x").strip()),float(input("dir y").strip()),float(input("dir z").strip())])
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
             direct/=np.linalg.norm(direct)
