@@ -65,6 +65,7 @@ if __name__=='__main__':
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
             direct/=np.linalg.norm(direct)
             c=0
+            flag=False
             while c<=10**10:
                 msg=rospy.wait_for_message('eeforce',forceTorque,.1)
                 force=np.array([msg.forcex,msg.forcey,msg.forcez])
