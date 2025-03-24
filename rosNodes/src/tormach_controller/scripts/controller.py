@@ -72,11 +72,11 @@ if __name__=='__main__':
             with open(file, 'r') as csvfile:
                 reader = csv.reader(csvfile)
                 for row in reader:
-                temp=np.array([[float(row[0].split('(')[1]),float(row[1]),float(row[2]),float(row[3]),float(row[4]),float(row[5].split(')')[0])]])
-                # print(temp)
-                q=np.append(q,temp, axis=0)
-                temp=[[float(row[6].split('(')[1]),float(row[7]),float(row[8]),float(row[9]),float(row[10]),float(row[11].split(')')[0])]]
-                tau=np.append(tau,temp, axis=0)
+                    temp=np.array([[float(row[0].split('(')[1]),float(row[1]),float(row[2]),float(row[3]),float(row[4]),float(row[5].split(')')[0])]])
+                    # print(temp)
+                    q=np.append(q,temp, axis=0)
+                    temp=[[float(row[6].split('(')[1]),float(row[7]),float(row[8]),float(row[9]),float(row[10]),float(row[11].split(')')[0])]]
+                    tau=np.append(tau,temp, axis=0)
             f=open(file,'w')
             for point in q:
                 pub.pubBigMove(publisher,point,time);
