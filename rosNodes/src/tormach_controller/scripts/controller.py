@@ -68,7 +68,7 @@ if __name__=='__main__':
             import csv
             q=np.zeros((1,6))
             tau=np.zeros((1,6))
-            time=10.5
+            time=20.5
             file=os.path.abspath(__file__.split("controller.py")[0]+"/lib/gravityIsolationData.csv")
             with open(file, 'r') as csvfile:
                 reader = csv.reader(csvfile)
