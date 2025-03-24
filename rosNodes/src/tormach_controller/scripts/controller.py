@@ -64,6 +64,29 @@ if __name__=='__main__':
             offset=[432.1,89,427]
         elif userfile=='jog':
             eePositon, jprev=jog.keyboardMove(publisher,jprev,hz)
+        elif userfile=='calibrateGravity':
+            q=np.zeros((1,6))
+            tau=np.zeros((1,6))
+            time=3.5
+            file="gravityIsolationData.csv"
+            with open(file, 'r') as csvfile:
+                reader = csv.reader(csvfile)
+                for row in reader:
+                temp=np.array([[float(row[0].split('(')[1]),float(row[1]),float(row[2]),float(row[3]),float(row[4]),float(row[5].split(')')[0])]])
+                # print(temp)
+                q=np.append(q,temp, axis=0)
+                temp=[[float(row[6].split('(')[1]),float(row[7]),float(row[8]),float(row[9]),float(row[10]),float(row[11].split(')')[0])]]
+                tau=np.append(tau,temp, axis=0)
+            f=open(file,'w')
+            for point in q:
+                pub.pubBigMove(publisher,point,time);
+                sleep(time+.25);
+                msg=rospy.wait_for_message("/joint_states", JointState, timeout=1)
+                pose=msg.position[0:6]
+                effort=msg.effort[0:6]
+                f.write(str(pose)+','+str(effort)+'\n')
+                sleep(.01)
+
         elif userfile=='forcePoint':
             sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
             direct=np.array([float(input("dir x").strip()),float(input("dir y").strip()),float(input("dir z").strip())])
