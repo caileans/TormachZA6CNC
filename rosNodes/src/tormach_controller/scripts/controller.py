@@ -68,7 +68,7 @@ if __name__=='__main__':
             q=np.zeros((1,6))
             tau=np.zeros((1,6))
             time=3.5
-            file="gravityIsolationData.csv"
+            file="lib/gravityIsolationData.csv"
             with open(file, 'r') as csvfile:
                 reader = csv.reader(csvfile)
                 for row in reader:
