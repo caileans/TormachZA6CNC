@@ -32,7 +32,7 @@ if __name__=='__main__':
     
     #start the test node
     rospy.init_node("controller")
-    os.system("xterm -e rosrun tormach_controller forceCalculation.py")
+    # os.system("xterm -e rosrun tormach_controller forceCalculation.py")
     feedback=False
     myargv = rospy.myargv(argv=sys.argv)
     if len(myargv) == 2:
@@ -68,7 +68,7 @@ if __name__=='__main__':
             q=np.zeros((1,6))
             tau=np.zeros((1,6))
             time=3.5
-            file="lib/gravityIsolationData.csv"
+            file=os.path.abspath(__file__.split("controller.py")[0]+"/lib/gravityIsolationData.csv")
             with open(file, 'r') as csvfile:
                 reader = csv.reader(csvfile)
                 for row in reader:
