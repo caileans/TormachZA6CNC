@@ -65,6 +65,7 @@ if __name__=='__main__':
         elif userfile=='jog':
             eePositon, jprev=jog.keyboardMove(publisher,jprev,hz)
         elif userfile=='calibrateGravity':
+            import csv
             q=np.zeros((1,6))
             tau=np.zeros((1,6))
             time=3.5
