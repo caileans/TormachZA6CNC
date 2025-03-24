@@ -78,15 +78,24 @@ if __name__=='__main__':
                     q=np.append(q,temp, axis=0)
                     temp=[[float(row[6].split('(')[1]),float(row[7]),float(row[8]),float(row[9]),float(row[10]),float(row[11].split(')')[0])]]
                     tau=np.append(tau,temp, axis=0)
-            f=open(file,'w')
+            print("moving")
+            data=[]
             for point in q:
                 pub.pubBigMove(publisher,point,time);
                 sleep(time+.25);
                 msg=rospy.wait_for_message("/joint_states", JointState, timeout=1)
                 pose=msg.position[0:6]
                 effort=msg.effort[0:6]
-                f.write(str(pose)+','+str(effort)+'\n')
+                data.append(str(pose)+','+str(effort))
                 sleep(.01)
+            print("printing")
+            f=open(file,'w')
+            c=0
+            for d in data:
+                f.write(d+'\n')
+                print(str(c)+':'+d)
+                c+=1
+
 
         elif userfile=='forcePoint':
             sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
@@ -109,6 +118,15 @@ if __name__=='__main__':
                 jprev=ik.runIK(np.array([pose[0],pose[1],pose[2],0,0,0]),jprev,robot)
                 pub.pubMove(publisher,jprev,1,hz)
                 sleep(1.0/hz)
+        elif userfile=='getForce':
+            n=int(input("Number of samples: "))
+            while True:
+                input("press enter when  ready")
+                force=np.zeros(3)
+                for i in range(n):  
+                    msg=rospy.wait_for_message('eeforce',forceTorque,.1)
+                    force+=np.array([msg.forcex,msg.forcey,msg.forcez])
+                print((force/n))
 
         else:
             file=file+userfile
