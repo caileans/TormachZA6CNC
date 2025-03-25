@@ -119,6 +119,7 @@ if __name__=='__main__':
                 pub.pubMove(publisher,jprev,1,hz)
                 sleep(1.0/hz)
         elif userfile=='getForce':
+            sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
             n=int(input("Number of samples: "))
             while True:
                 input("press enter when  ready")
