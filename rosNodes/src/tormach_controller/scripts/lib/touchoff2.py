@@ -29,7 +29,7 @@ def keyboardMove(publisher, q, hz):
     rot_euler = R2rpy(EE_rot)
     #Set Increment
     max_inc = .05
-    inc = input("Set motion increment (mm): ")
+    inc = float(input("Set motion increment (mm): "))
 
     while inc > max_inc:
         inc = input("Increment must be less than 0.5! Give new incrmement: ")
