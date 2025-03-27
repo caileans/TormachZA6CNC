@@ -142,7 +142,7 @@ if __name__=='__main__':
             k=.1**5.5
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
             while True:
-                msg=rospy.wait_for_message('eeforce',forceTorque,.1)
+                msg=rospy.wait_for_message('eeforce',forceTorque,.2)
                 force[c,:]=np.array([msg.forcex,msg.forcey,msg.forcez])
                 for i in range(3):
                     avg=np.mean(force[:,i])
