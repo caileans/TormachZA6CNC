@@ -46,7 +46,7 @@ def keyboardMove(publisher, q, hz):
     print("Initial euler angles are: ", rot_euler)
     print("Initial EE_pos is: ", EE_pos)
 
-    rate = rospy.rate(hz)
+    rate = rospy.Rate(hz)
 
     while True:
 
