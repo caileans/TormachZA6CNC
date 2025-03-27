@@ -27,6 +27,28 @@ def pubMove(publisher, j, alpha, hz):
 	pubmsg.header.stamp=rospy.Time.now()
 	publisher.publish(pubmsg)
 
+def pubBigMove(publisher, j, t):
+	"""publishes a move to the position_trajectory_controller/command topic
+
+	Inputs:
+		publisher - a rospy object describing the position_trajectory_controller/command publisher
+		j - the desired joint pose (6 element np array)
+		t- the time to perform the move
+	Output:
+		NONE"""
+	# print(j)
+	pnt=JointTrajectoryPoint()
+	pnt.positions=[j[0],j[1],j[2],j[3],j[4],j[5],0.1,0.1]
+	pnt.effort=[]
+	pnt.velocities=[]
+	pnt.accelerations=[]
+	pnt.time_from_start.secs=int(t)
+	pnt.time_from_start.nsecs=int((t-int(t))*10**9)
+	pubmsg=JointTrajectory()
+	pubmsg.joint_names=['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','tcp_lin','tcp_rot']
+	pubmsg.points=[pnt]
+	pubmsg.header.stamp=rospy.Time.now()
+	publisher.publish(pubmsg)
 
 def applyOvershoot(j0, j, alpha):
 	"""computes joint space overshoot
