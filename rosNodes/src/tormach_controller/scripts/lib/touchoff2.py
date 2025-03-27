@@ -39,7 +39,7 @@ def keyboardMove(publisher, q, hz):
 
     print("increment is ", inc)
 
-    print("Use x,y,z keys to change position. Use a,s,d for negative resepctive increment. Hit esc to stop movement and return final position")
+    print("Use x,y,z keys to change position. Use a,s,d for negative resepctive increment. Use i to change the increment. Hit esc to stop movement and return final position")
 
     rot_euler = np.array(rot_euler)
 
@@ -68,6 +68,11 @@ def keyboardMove(publisher, q, hz):
         elif keyboard.is_pressed("d"):
             change_dir = 2
             increment = -inc
+        elif keyboard.is_pressed("i"):
+            inc = float(input("Set motion increment (mm): "))
+            while inc > max_inc:
+                inc = float(input("Increment must be less than 0.5! Give new incrmement: "))   
+            continue
         elif keyboard.is_pressed("esc"):
             break
         else:
