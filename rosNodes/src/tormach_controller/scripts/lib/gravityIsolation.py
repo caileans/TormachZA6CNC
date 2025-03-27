@@ -172,7 +172,7 @@ def calibrate(csvFile):
     q=np.zeros((1,6))
     tau=np.zeros((1,6))
 
-    with open(os.path.abspath(__file__.split("script")[0]+"scripts/lib"+csvFile), 'r') as csvfile:
+    with open(os.path.abspath(__file__.split("script")[0]+"scripts/lib/"+csvFile), 'r') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             temp=np.array([[float(row[0].split('(')[1]),float(row[1]),float(row[2]),float(row[3]),float(row[4]),float(row[5].split(')')[0])]])
