@@ -7,6 +7,7 @@ import numpy as np
 from math import pi
 from general_robotics_toolbox import fwdkin, R2rpy
 import keyboard
+import rospy
 
 from InverseKinematics import runIK, tormachZA6fk, tormachZA6
 import publisher31 as pub
@@ -26,112 +27,67 @@ def keyboardMove(publisher, q, hz):
 
     #Change this to euler angles
     rot_euler = R2rpy(EE_rot)
-
     #Set Increment
-    inc = float(input("Set motion increment (mm): "))      #Max increment?
+    max_inc = .05
+    inc = input("Set motion increment (mm): ")
+
+    while inc > max_inc:
+        inc = input("Increment must be less than 0.5! Give new incrmement: ")
+    while type(inc) != float or type(inc) != int:
+        inc = input("Increment must be a number! Give new increment: ")
+    inc = float(inc)
+
     print("increment is ", inc)
 
-
-    input("Use x,y,z keys to change position. Use with shift for negative increment. Hit esc to stop movement and return final position")
-
-    print(rot_euler)
+    input("Use x,y,z keys to change position. Use a,s,d for negative resepctive increment. Hit esc to stop movement and return final position")
 
     rot_euler = np.array(rot_euler)
-    EE_pos = EE_pos
 
-    print(rot_euler)
-    print(EE_pos)
+    print("Initial euler angles are: ", rot_euler)
+    print("Initial EE_pos is: ", EE_pos)
 
+    rate = rospy.rate(hz)
 
+    while True:
 
-    moveRobotx(EE_pos, rot_euler, q, hz, inc, publisher)
+        if keyboard.is_pressed("x"):
+            change_dir = 0
+            increment = inc
+        elif keyboard.is_pressed("y"):
+            change_dir = 1
+            increment = inc
+        elif keyboard.is_pressed("z"):
+            change_dir = 2
+            increment = inc
+        elif keyboard.is_pressed("a"):
+            change_dir = 0
+            increment = -inc
+        elif keyboard.is_pressed("s"):
+            change_dir = 1
+            increment = -inc
+        elif keyboard.is_pressed("d"):
+            change_dir = 2
+            increment = -inc
+        elif keyboard.is_pressed("esc"):
+            break
+        else:
+            continue
 
-    #keyboard.add_hotkey('x', moveRobotx(EE_pos, rot_euler, q, hz, inc, publisher))
-    #keyboard.add_hotkey('y', moveRoboty(EE_pos, rot_euler, q, hz, inc, publisher))
-    #keyboard.add_hotkey('z', moveRobotz(EE_pos, rot_euler, q, hz, inc, publisher))
-    #keyboard.add_hotkey('shift + x', moveRobotnegx(EE_pos, rot_euler, q, hz, inc, publisher))
-    #keyboard.add_hotkey('shift + y', moveRobotnegy(EE_pos, rot_euler, q, hz, inc, publisher))
-    #keyboard.add_hotkey('shift + z', moveRobotnegz(EE_pos, rot_euler, q, hz, inc, publisher))
+        #Updates and moves the robot's Cartesian position
+        EE_pos[change_dir] += increment  #Update new position's axis
+        print("Current Euler Angles: ", rot_euler)
+        print("Current Position: ", EE_pos)
+        r = np.append(EE_pos, rot_euler)
+        print("r array is : ", r)
+        new_EE_joints = runIK(r, q, robot_IK)  #Return new joints in joint space
+        q = new_EE_joints
+        pub.pubMove(publisher,q,1,hz)  #Publish new position to robot      
+        rate.sleep()
+        print(EE_pos)
 
-    keyboard.wait("esc")
-    print("The current EE position is ", EE_pos)
-    print("The zerod")
-    
+    print("Final position is : ", EE_pos)
+
     return EE_pos, q
-
-def moveRobotx(position, rot_euler, q, hz, inc, publisher):
-    #Updates and moves the robot's Cartesian position in the x direction
-    position[0] += inc  #Update new position's axis
-    print("rot_euler", rot_euler)
-    print("position", position)
-    r = np.append(position, rot_euler)
-    print(r)
-    new_EE_joints = runIK(r, q, robot_IK)  #Return new joints in joint space
-    q = new_EE_joints
-    pub.pubMove(publisher,q,1,hz)  #Publish new position to robot      
-    sleep(1/hz)
-    print(position)
-    return position, q
-
-def moveRoboty(position, q, rot_euler, hz, inc, publisher):
-    #Updates and moves the robot's Cartesian position in the y direction
-    position[1] += inc
-    r = np.append(position, rot_euler)
-    new_EE_joints = runIK(r, q, robot_IK)
-    q = new_EE_joints
-    pub.Move(publisher,q,1,hz)     
-    sleep(1/hz)
-    print(position)
-    return position, q
-
-def moveRobotz(position, q, rot_euler, hz, inc, publisher):
-    #Updates and moves the robot'ss Cartesian position in the z direction
-    position[2] += inc
-    r = np.append(position, rot_euler)
-    new_EE_joints = runIK(r, q, robot_IK) 
-    q = new_EE_joints
-    pub.Move(publisher,q,1,hz)   
-    sleep(1/hz)
-    print(position)
-    return position, q
-
-def moveRobotnegx(position, q, rot_euler, hz, inc, publisher):
-    #Updates and moves the robot's Cartesian position in the x direction
-    position[0] += -inc  #Update new position's axis
-    r = np.append(position, rot_euler)
-    new_EE_joints = runIK(r, q, robot_IK)  #Return new joints in joint space
-    q = new_EE_joints
-    pub.Move(publisher,q,1,hz)  #Publish new position to robot      
-    sleep(1/hz)
-    print(position)
-    return position, q
-
-def moveRobotnegy(position, q, rot_euler, hz, inc, publisher):
-    #Updates and moves the robot's Cartesian position in the y direction
-    position[1] += -inc
-    r = np.append(position, rot_euler)
-    new_EE_joints = runIK(r, q, robot_IK)
-    q = new_EE_joints
-    pub.Move(publisher,q,1,hz)     
-    sleep(1/hz)
-    print(position)
-    return position, q
-
-def moveRobotnegz(position, q, rot_euler, hz, inc, publisher):
-    #Updates and moves the robot'ss Cartesian position in the z direction
-    position[2] += -inc
-    r = np.append(position, rot_euler)
-    new_EE_joints = runIK(r, q, robot_IK) 
-    q = new_EE_joints
-    pub.Move(publisher,q,1,hz)   
-    sleep(1/hz)
-    print(position)
-    return position, q
-    
-
-
-
-
 
 
   
