@@ -164,7 +164,7 @@ def saveB(b):
 		writer.writerow(b)
 
 def getA():
-	with open(__file__.split("Tormach")[0]+"TormachZA6CNC\\data\\jointvel\\"+'velFrictionGains.csv', 'r', newline='') as csvfile:
+	with open(__file__.split("Tormach")[0]+"TormachZA6CNC/data/jointvel/"+'velFrictionGains.csv', 'r', newline='') as csvfile:
 		reader = csv.reader(csvfile)
 		a=np.zeros(36)
 		for row in reader:
@@ -177,7 +177,7 @@ def getA():
 	return a
 
 def getB():
-	with open(__file__.split("Tormach")[0]+"TormachZA6CNC\\data\\jointvel\\"+'velFrictionConst.csv', 'r', newline='') as csvfile:
+	with open(__file__.split("Tormach")[0]+"TormachZA6CNC/data/jointvel/"+'velFrictionConst.csv', 'r', newline='') as csvfile:
 		reader = csv.reader(csvfile)
 		a=np.zeros(6)
 		for row in reader:
