@@ -39,7 +39,7 @@ def keyboardMove(publisher, q, hz):
 
     print("increment is ", inc)
 
-    input("Use x,y,z keys to change position. Use a,s,d for negative resepctive increment. Hit esc to stop movement and return final position")
+    print("Use x,y,z keys to change position. Use a,s,d for negative resepctive increment. Hit esc to stop movement and return final position")
 
     rot_euler = np.array(rot_euler)
 
