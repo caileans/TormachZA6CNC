@@ -21,6 +21,7 @@ import general_robotics_toolbox as grtb
 from math import sin, cos, pi,exp
 import csv
 import frictionIsolation as fric
+import taumap as mp
 
 
 def jointStateCallback(msg,gravity,friction):
@@ -28,19 +29,27 @@ def jointStateCallback(msg,gravity,friction):
     # rospy.loginfo(msg.effort);
     #print(np.array(msg.position)[0:6])
     tau=friction(msg.velocity[0:6],gravity(msg.position[0:6],msg.effort[0:6]))
-    jac=grtb.robotjacobian(ik.tormachZA6fk(),np.array(msg.position)[0:6])
+    # jac=grtb.robotjacobian(ik.tormachZA6fk(),np.array(msg.position)[0:6])
+
 
     # print(jac)
 
     #force=np.array([0,0,0,0,0,0])
-    force=np.matmul(jac,tau)
+    # force=np.matmul(jac,tau)
+    force=mp.getEEState(msg.position[0:6],tau)
     pubmsg=forceTorque()
-    pubmsg.forcex=force[3];
-    pubmsg.forcey=force[4];
-    pubmsg.forcez=force[5];
-    pubmsg.momenti=force[1];
-    pubmsg.momentj=force[2];
-    pubmsg.momentk=force[3];
+    # pubmsg.forcex=force[3];
+    # pubmsg.forcey=force[4];
+    # pubmsg.forcez=force[5];
+    # pubmsg.momenti=force[1];
+    # pubmsg.momentj=force[2];
+    # pubmsg.momentk=force[3];
+    pubmsg.forcex=force[0];
+    pubmsg.forcey=force[1];
+    pubmsg.forcez=force[2];
+    pubmsg.momenti=force[3];
+    pubmsg.momentj=force[4];
+    pubmsg.momentk=force[5];
     forcePub.publish(pubmsg)
     # rospy.loginfo(force)
 
