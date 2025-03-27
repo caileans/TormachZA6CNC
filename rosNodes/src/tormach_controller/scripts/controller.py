@@ -128,6 +128,31 @@ if __name__=='__main__':
                     msg=rospy.wait_for_message('eeforce',forceTorque,.1)
                     force+=np.array([msg.forcex,msg.forcey,msg.forcez])
                 print((force/n))
+        elif userfile=='complianceDemo':
+            hz=50
+            rate=rospy.Rate(hz)
+            threshold=[5000,6000,5000];
+            sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
+            n=5
+            force=np.zeros((n,3));
+            c=0
+            avg=0
+            movemax=.5
+            movemin=.05
+            k=.1**5.5
+            pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
+            while True:
+                msg=rospy.wait_for_message('eeforce',forceTorque,.1)
+                force[c,:]=np.array([msg.forcex,msg.forcey,msg.forcez])
+                for i in range(3)
+                    avg=np.mean(force[:,i])
+                    if abs(avg)>threshold[i]:
+                        pose[i]-=(avg/abs(avg))*max(minmove,min(maxmove,k*abs(avg)))
+
+                jprev=ik.runIK(np.array([pose[0],pose[1],pose[2],0,0,0]),jprev,robot)
+                pub.pubMove(publisher,jprev,1.05,hz)
+                c=(c+1)%n
+                rate.sleep()
 
         else:
             file=file+userfile
