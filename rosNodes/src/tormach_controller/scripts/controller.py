@@ -144,7 +144,7 @@ if __name__=='__main__':
             while True:
                 msg=rospy.wait_for_message('eeforce',forceTorque,.1)
                 force[c,:]=np.array([msg.forcex,msg.forcey,msg.forcez])
-                for i in range(3)
+                for i in range(3):
                     avg=np.mean(force[:,i])
                     if abs(avg)>threshold[i]:
                         pose[i]-=(avg/abs(avg))*max(minmove,min(maxmove,k*abs(avg)))
