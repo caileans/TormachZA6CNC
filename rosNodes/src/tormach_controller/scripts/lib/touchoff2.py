@@ -34,7 +34,7 @@ def keyboardMove(publisher, q, hz):
 
     while inc > max_inc:
         inc = float(input("Increment must be less than 0.5! Give new incrmement: "))
-    while type(inc) != float or type(inc) != int:
+    while type(inc) != float:
         inc = float(input("Increment must be a number! Give new increment: "))
 
     print("increment is ", inc)
