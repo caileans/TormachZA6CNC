@@ -231,7 +231,7 @@ class GcodeParserV2:
                 pass
             ###TODO: G17, 18, 19, ?(G40, G49)?, G90, G91
             else:
-                print("Gcode Parser Error: " + str(block[i]) + " not found in block " + i)
+                print("Gcode Parser Error: " + str(block[i]) + " not found recognized")
         
         return newPose
 
