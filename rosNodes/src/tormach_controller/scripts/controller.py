@@ -131,7 +131,7 @@ if __name__=='__main__':
         elif userfile=='complianceDemo':
             hz=50
             rate=rospy.Rate(hz)
-            threshold=[5000,7600,5000];
+            threshold=[7000,8600,7000];
             sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
             n=5
             force=np.zeros((n,3));
