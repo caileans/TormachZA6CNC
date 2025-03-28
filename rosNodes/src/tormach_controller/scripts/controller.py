@@ -137,7 +137,7 @@ if __name__=='__main__':
             force=np.zeros((n,3));
             c=0
             avg=0
-            movemax=10
+            movemax=7
             movemin=0
             k=.1**3.5
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
