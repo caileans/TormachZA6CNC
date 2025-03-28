@@ -3,7 +3,15 @@ from math import sin, cos, pi
 import csv
 from scipy.optimize import least_squares
 import math
-
+import os, sys
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__).split("controller.py")[0]+"/lib")))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__).split("controller.py")[0]+"/lib/__init__.py")))
+# print(os.path.dirname(os.path.dirname('/scripts/lib')))
+# print(os.path.abspath(__file__.split("controller.py")[0]+"/lib"))
+# sys.path.append(os.path.abspath(__file__.split("script")[0]+"scripts/lib"))
+# sys.path.append(os.path.abspath(__file__.split("script")[0]+"/lib"))
+# sys.path.append(os.path.abspath(__file__.split("script")[0]+"/lib/preProcessing"))
 
 
 
@@ -164,7 +172,7 @@ def calibrate(csvFile):
     q=np.zeros((1,6))
     tau=np.zeros((1,6))
 
-    with open(csvFile, 'r') as csvfile:
+    with open(os.path.abspath(__file__.split("script")[0]+"scripts/lib/"+csvFile), 'r') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             temp=np.array([[float(row[0].split('(')[1]),float(row[1]),float(row[2]),float(row[3]),float(row[4]),float(row[5].split(')')[0])]])

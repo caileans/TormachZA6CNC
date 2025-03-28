@@ -20,78 +20,44 @@ import gravityIsolation as grav
 import general_robotics_toolbox as grtb
 from math import sin, cos, pi,exp
 import csv
+import frictionIsolation as fric
+import taumap as mp
 
-def getFrictionModel():
-	with open(__file__.split("Tormach")[0]+"TormachZA6CNC/data/jointvel/"+'velFrictionGains.csv', 'r', newline='') as csvfile:
-		reader = csv.reader(csvfile)
-		a=np.zeros(36)
-		for row in reader:
-			c=0
-			# print(c)
-			# print(row)
-			for val in row:
-				a[c]=float( val)
-				c+=1
-	with open(__file__.split("Tormach")[0]+"TormachZA6CNC/data/jointvel/"+'velFrictionConst.csv', 'r', newline='') as csvfile:
-		reader = csv.reader(csvfile)
-		b=np.zeros(6)
-		for row in reader:
-			c=0
-			# print(c)
-			# print(row)
-			for val in row:
-				b[c]=float( val)
-				c+=1
-	return a,b
 
-def frictionModel(v,tau,a,b=[0,0,0,0,0,0]):
-	A=np.zeros((6,6));
-	for i in range(6):
-		for j in range(6):
-			A[i][j]=a[6*i+j]
-	v=np.array(v)[0:6]
-	# print(v)
-	tau=np.array(tau)[0:6]
-	# print(tau)
-	tau=tau-np.matmul(A,v)
-	# print(tau)
-	# print(np.shape(v))
-	for val in range(6):
-		# print(b[val]*np.sign(v[val]))
-		k=1
-		barrier=.005
-		if np.sign(v[val])*v[val]<barrier:
-			k=np.sign(v[val])*v[val]/barrier
-		tau[val]+=k*b[val]*np.sign(v[val])
-	# print(tau)
-	return tau
-
-def jointStateCallback(msg,grav,fric):
+def jointStateCallback(msg,gravity,friction):
     # print("h")
     # rospy.loginfo(msg.effort);
     #print(np.array(msg.position)[0:6])
-    tau=fric(msg.velocity[0:6],grav(msg.position[0:6],msg.effort[0:6]))
+    tau=friction(msg.velocity[0:6],gravity(msg.position[0:6],msg.effort[0:6]))
     jac=grtb.robotjacobian(ik.tormachZA6fk(),np.array(msg.position)[0:6])
+
 
     # print(jac)
 
     #force=np.array([0,0,0,0,0,0])
     force=np.matmul(jac,tau)
+    # force=mp.getEEState(msg.position[0:6],tau)
     pubmsg=forceTorque()
     pubmsg.forcex=force[3];
     pubmsg.forcey=force[4];
     pubmsg.forcez=force[5];
-    pubmsg.momenti=force[1];
-    pubmsg.momentj=force[2];
-    pubmsg.momentk=force[3];
+    pubmsg.momenti=force[0];
+    pubmsg.momentj=force[1];
+    pubmsg.momentk=force[2];
+    # pubmsg.forcex=force[0];
+    # pubmsg.forcey=force[1];
+    # pubmsg.forcez=force[2];
+    # pubmsg.momenti=force[3];
+    # pubmsg.momentj=force[4];
+    # pubmsg.momentk=force[5];
     forcePub.publish(pubmsg)
     # rospy.loginfo(force)
 
 if __name__=='__main__':
     # run calibration code
-    adjuster=grav.calibrate("data.csv")
-    a,b=getFrictionModel()
-    friction=lambda v,tau:frictionModel(v,tau,a,b=b)
+    adjuster=grav.calibrate("gravityIsolationData.csv")
+    a,b=fric.getFrictionModel()
+    friction=lambda v,tau:fric.frictionModel(v,tau,a,b=b)
     #start the buffer_node node
     rospy.init_node("forceCalculation")
     #subscribe to the "/tormach/movePose" topic which has a pose msg type
