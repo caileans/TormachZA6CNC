@@ -74,17 +74,29 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
 
 ########### quadrant based method #2:
+
+        toolProjAngle = math.atan2(toolIJK[1], toolIJK[0])
         if toolIJK[2] == 0: # and toolIJK[1] == 0: #if the tool is horizontal
+            print("tool horizontal")
             j6IJK = np.array([abs(toolIJK[1])*np.sqrt(1-abs(toolIJK[0])**2),-toolIJK[0]*np.sign(toolIJK[1])*np.sqrt(1-abs(toolIJK[0])**2),-abs(toolIJK[0])])
 
             j6ProjAngle_prev = 0
 
         else:
+            # j6AnglePosComp = math.atan2(toolPos[1], toolPos[0])
             j6AnglePosComp = math.atan2(toolPos[1], toolPos[0])
             
 
             if toolIJK[0] >= 0:
-                j6ProjAngle = j6AnglePosComp*(1-abs(toolIJK[1]))
+                # j6ProjAngle = 90*np.pi/180.0*toolIJK[1]
+                j6ProjAngle = j6AnglePosComp*(1-abs(toolIJK[1])) #(-1 if toolIJK[1] > 0 else 1)
+                # j6ProjAngle = j6AnglePosComp*(1-abs(np.cos(toolProjAngle)))
+                # j6ProjAngle = j6AnglePosComp*(np.sin(toolProjAngle))
+                # j6ProjAngle = 0.0
+
+                if toolIJK[2] < 0:
+                    j6ProjAngle -= np.pi*abs(toolIJK[0])*(1 if toolIJK[1]>0 else -1)
+
 
             else:
                 j6AngleIJKComp = -180*np.pi/180.0*toolIJK[0]# + 90*np.pi/180.0*toolIJK[1]
@@ -94,6 +106,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
                 elif quadrant == 1:
                     j6AngleIJKComp = -j6AngleIJKComp
                 elif quadrant == 0:
+                    print("here1!")
                     if j6ProjAngle == 0: #use quadrant to decide
                         if toolIJK[1] < 0:
                             j6AngleIJKComp = -j6AngleIJKComp
@@ -101,10 +114,17 @@ def Add6DofFrom5(trajectory, quadrant=2):
                         if j6ProjAngle_prev < 0:
                             j6AngleIJKComp = -j6AngleIJKComp
             
-                j6ProjAngle = (1-abs(toolIJK[0]))*j6AnglePosComp*(1-abs(toolIJK[1])) + j6AngleIJKComp*(1 if toolIJK[2]>=0 else -1)
+                j6ProjAngle = (1-abs(toolIJK[0]))*j6AnglePosComp*(1-abs(toolIJK[1])) + j6AngleIJKComp*(1 if toolIJK[1]>=0 else -1)
+                # j6ProjAngle = j6AngleIJKComp*(1 if toolIJK[2]>=0 else -1)*(1 if toolIJK[1]>=0 else -1)
+                # j6ProjAngle = j6AngleIJKComp*(1 if toolIJK[1]>=0 else -1) #THIS ONE WORKS
 
-            if toolIJK[2] < 0:
-                j6ProjAngle -= np.pi*(1-abs(toolIJK[1]))*(1 if toolIJK[1] == 0 else np.sign(toolIJK[1]))
+                if toolIJK[2] < 0:
+                    # j6ProjAngle += np.pi *(1-abs(toolIJK[1]))#*(1 if toolIJK[2] == 0 else -np.sign(toolIJK[2]))
+                    j6ProjAngle -= np.pi*abs(toolIJK[0])*(1 if toolIJK[1]>0 else -1)
+                    # j6ProjAngle += np.pi *abs(toolIJK[0])
+
+            # if j6ProjAngle < 0:
+            #     j6ProjAngle += 2*np.pi
 
             j6ProjAngle_prev = j6ProjAngle
 

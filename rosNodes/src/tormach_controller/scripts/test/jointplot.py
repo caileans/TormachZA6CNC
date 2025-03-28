@@ -15,9 +15,15 @@ import general_robotics_toolbox as grtb
 
 '''Script for "previewing" (in a plot) the joint and cartesian space trajectory generated from a gcode file'''
 
-hz = 7
+
+file = 'F360Test1.nc'
+# file = '5DOFTest.nc'
+# file = 'WAAM_wall_2025.nc'
+hz = 1
 robot=ik.tormachZA6();
-pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/5DOFTest.nc', a=30,hz=hz,feedRate=30,rapidFeed=30,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/5, tOffset=[0, 20])
+# pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,100,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
+pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
+# pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
 
 # set up arrays to save data here
 jprev = np.zeros(6)
@@ -51,8 +57,8 @@ plt.plot(pick[:,:], '+-')
 plt.legend(['1', '2', '3', '4', '5', '6'])
 plt.xlabel("trajectory point")
 plt.ylabel("joint angle (rad)")
-plt.title("ik-geo solutions for 5DOFTest.nc")
+plt.title("ik-geo solutions for "+file)
 
-gct.plot3DTrajectory(pointList, hz, nmin=50, nmaxOffset=50)
+gct.plot3DTrajectory(pointList, hz, nmin=70, nmaxOffset=40, step=1, titleFile = file)
 
 plt.show()

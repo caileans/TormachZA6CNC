@@ -113,7 +113,7 @@ def plotTrajectory(trajectory, hz=50):
 
     plt.show()
 
-def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0):
+def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0, step=1, titleFile="Gcode"):
     '''
     plots the trajectory in 3D, including tool vectors and j6 vectors. this plotting can be hard on a graphics card if nmin and nmaxOffset are not set appropriately
 
@@ -137,7 +137,7 @@ def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0):
     ijk_fromabc = np.zeros([num, 3])
     time = np.zeros(num)
     lastTime = 0.0
-    for n in range(num):
+    for n in range(0, num, step):
         point = trajectory[n]
         x[n] = point.pos[0]
         y[n] = point.pos[1]
@@ -166,8 +166,8 @@ def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0):
         # j_t[n] = 
         # k_t[n] = 
 
-        ijk_fromabc[n, :] = np.matmul(grtb.rpy2R(np.deg2rad(point.rot)), np.array([0,0,1.0]))
-        # angle = np.acos(np.dot(ijk_fromabc[n], [i[n], j[n], k[n]])/np.linalg.norm([i[n], j[n], k[n]]))
+        ijk_fromabc[n, :] = np.matmul(grtb.rpy2R(np.deg2rad(point.rot)), np.array([1.0,0,0]))
+        angle = np.arccos(np.dot(ijk_fromabc[n], [i[n], j[n], k[n]])/np.linalg.norm([i[n], j[n], k[n]]))
         # if angle > 0.0001:
         #     print(f"ijk_fromabc: {ijk_fromabc[n, :]}    ijk: {i[n], j[n], k[n]} angle: {angle}")
 
@@ -177,11 +177,17 @@ def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0):
 
     # nmin = 350
     nmax = len(x)-nmaxOffset
-    ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i[nmin:nmax], j[nmin:nmax], k[nmin:nmax], length=10, normalize=True, color='b')
-    ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i_j6[nmin:nmax], j_j6[nmin:nmax], k_j6[nmin:nmax], length=10, normalize=True, color='r')
-    ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], ijk_fromabc[nmin:nmax, 0], ijk_fromabc[nmin:nmax, 1], ijk_fromabc[nmin:nmax, 2], length=8, normalize=True, color='g')
+    ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i[nmin:nmax], j[nmin:nmax], k[nmin:nmax], length=10, normalize=True, color='b', label="tool vector")
+    ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i_j6[nmin:nmax], j_j6[nmin:nmax], k_j6[nmin:nmax], length=10, normalize=True, color='r', label="h6 vector")
+    # ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], ijk_fromabc[nmin:nmax, 0], ijk_fromabc[nmin:nmax, 1], ijk_fromabc[nmin:nmax, 2], length=8, normalize=True, color='g')
     
-    ax.set_aspect('equal', adjustable='box')
+    ax.set_aspect('equal')#, adjustable='box')
+
+    ax.set_xlabel("X (mm)")
+    ax.set_ylabel("Y (mm)")
+    ax.set_zlabel("Z (mm)")
+    ax.set_title("Tool vector and h6 vector trajectory for "+titleFile)
+    ax.legend()
     plt.show()
 
 
