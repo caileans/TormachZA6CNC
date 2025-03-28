@@ -157,12 +157,13 @@ if __name__=='__main__':
         else:
             file=file+userfile
             offset=[float(input("offset x").strip()),float(input("offset y").strip()),float(input("offset z").strip())]
+            velocity=[float(input("linear vel").strip()),float(input("rapid vel").strip()),float(input("rot vel").strip())]
         jcur =np.zeros(6)
         jpub=np.zeros(6)
         # hz=50
         moveBuffer=Queue(maxsize=0)
 
-        pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=30,rapidFeed=15,toolFrameOffset=offset,pureRotVel=np.pi/20, tOffset=[0,50])
+        pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=velocity[0],rapidFeed=velocity[1],toolFrameOffset=offset,pureRotVel=np.pi/velocity[2], tOffset=[0,50])
         for point in pointList:
             moveBuffer.put(point)
 
