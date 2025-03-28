@@ -138,7 +138,7 @@ if __name__=='__main__':
             c=0
             avg=0
             movemax=10
-            movemin=1
+            movemin=0
             k=.1**5.5
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
             while True:
@@ -147,7 +147,7 @@ if __name__=='__main__':
                 for i in range(3):
                     avg=np.mean(force[:,i])
                     if abs(avg)>threshold[i]:
-                        pose[i]-=(avg/abs(avg))*max(movemin,min(movemax,k*abs(avg)))
+                        pose[i]-=(avg/abs(avg))*max(movemin,min(movemax,k*abs(avg)-abs(threshold)))
 
                 jprev=ik.runIK(np.array([pose[0],pose[1],pose[2],0,0,0]),jprev,robot)
                 pub.pubMove(publisher,jprev,1.05,hz)
