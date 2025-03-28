@@ -16,13 +16,13 @@ import general_robotics_toolbox as grtb
 '''Script for "previewing" (in a plot) the joint and cartesian space trajectory generated from a gcode file'''
 
 
-file = 'F360Test1.nc'
+# file = 'F360Test1.nc'
 # file = '5DOFTest.nc'
-# file = 'WAAM_wall_2025.nc'
+file = 'WAAM_wall_2025.nc'
 hz = 1
 robot=ik.tormachZA6();
 # pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,100,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
-pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
+pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=30,rapidFeed=10,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
 # pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
 
 # set up arrays to save data here
@@ -41,14 +41,14 @@ for point in pointList:
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,4,4,4,4,4,4]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,2,2,2,2,2,2]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[0,0,0,0,0,0,0,0,0,0,100000000000,0,0]))
-	pick.append(ik.chooseIK(pick[c-1],newsol,[20,20,20,20,20,20,0,2,2,2,2,2,0]))
+	pick.append(ik.chooseIK(pick[c-1],newsol,[20,20,20,20,20,20,0,0,2,2,20,2,20]))
 	# pick.append(ik.runIK(np.array([point.pos[0],point.pos[1],point.pos[2],point.rot[0],point.rot[1],point.rot[2]]),pick[c-1],robot))
 	temp=[]
 	for j in newsol:
 		temp.append(j[0])
 	sols.append(np.array(temp))
 
-pick=np.array(pick[1:])
+pick=np.array(pick[0:])
 # sols=np.array(sols[1:])
 
 plt.figure(3)
@@ -59,6 +59,6 @@ plt.xlabel("trajectory point")
 plt.ylabel("joint angle (rad)")
 plt.title("ik-geo solutions for "+file)
 
-gct.plot3DTrajectory(pointList, hz, nmin=70, nmaxOffset=40, step=1, titleFile = file)
+gct.plot3DTrajectory(pointList, hz, nmin=10, nmaxOffset=10, step=1, titleFile = file)
 
 plt.show()
