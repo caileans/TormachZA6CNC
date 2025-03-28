@@ -147,7 +147,7 @@ if __name__=='__main__':
                 for i in range(3):
                     avg=np.mean(force[:,i])
                     if abs(avg)>threshold[i]:
-                        pose[i]-=(avg/abs(avg))*max(movemin,min(movemax,k*abs(avg)-abs(threshold)))
+                        pose[i]-=(avg/abs(avg))*max(movemin,min(movemax,k*abs(avg)-abs(threshold[i])))
 
                 jprev=ik.runIK(np.array([pose[0],pose[1],pose[2],0,0,0]),jprev,robot)
                 pub.pubMove(publisher,jprev,1.05,hz)
