@@ -52,6 +52,15 @@ def getParams(file,default):
                         temp2=temp
                     elif len(row)==2:
                         temp2=float(row[1])
+                    if row[0]=='rotate':
+                        temp3=[]
+                        for i in range(3):
+                            temp4=[]
+                            for j in range(3):
+                                temp4.append(temp2[3i+j])
+                            temp3.append(temp4)
+                        temp2=temp3
+
                     print(temp2)
                     params[row[0]]=temp2
                 except:
