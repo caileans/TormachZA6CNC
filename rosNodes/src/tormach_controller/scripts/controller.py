@@ -22,6 +22,8 @@ import touchoff2 as jog
 from tormach_controller.msg import  forceTorque
 import general_robotics_toolbox as grtb
 from sensor_msgs.msg import JointState
+import csv
+
 
 def pose_callback(msg):
     return np.array([msg.forcex,    msg.forcey,    msg.forcez,    msg.momenti,    msg.momentj,    msg.momentk])
@@ -68,7 +70,7 @@ if __name__=='__main__':
     while True:
         userfile=input("file name:").strip()
         pub.home(publisher)
-        default=dict(hz=50,offset=[0,0,0], velocity=[30,30,20],jprev=np.array([0,0,np.pi/18,0,-np.pi/18,0]),overshoot=1.2,rotate=np.eye(3),a=30,tOffset=[0,50])
+        default=dict(hz=50,offset=[550,0,550], velocity=[30,30,20],jprev=np.array([0,0,np.pi/18,0,-np.pi/18,0]),overshoot=1.2,rotate=np.eye(3),a=30,tOffset=[0,50])
         jprev = np.zeros(6)
         jprev[2]=np.pi/18;
         jprev[4]=-np.pi/18
