@@ -77,7 +77,7 @@ def Add6DofFrom5(trajectory, quadrant=2):
 
         toolProjAngle = math.atan2(toolIJK[1], toolIJK[0])
         if toolIJK[2] == 0: # and toolIJK[1] == 0: #if the tool is horizontal
-            print("tool horizontal")
+            # print("tool horizontal")
             j6IJK = np.array([abs(toolIJK[1])*np.sqrt(1-abs(toolIJK[0])**2),-toolIJK[0]*np.sign(toolIJK[1])*np.sqrt(1-abs(toolIJK[0])**2),-abs(toolIJK[0])])
 
             j6ProjAngle_prev = 0

@@ -16,19 +16,24 @@ import general_robotics_toolbox as grtb
 '''Script for "previewing" (in a plot) the joint and cartesian space trajectory generated from a gcode file'''
 
 
-# file = 'F360Test1.nc'
+file = 'F360Test1.nc'
 # file = '5DOFTest.nc'
-file = 'WAAM_wall_2025.nc'
-hz = 1
+# file = 'WAAM_wall_2025.nc'
+hz = 50
+posInit = [562.0,0.0,866.0]
+toolIJKInit = [-1,0.0,0.0]
+# tfRot = [[1,0,0],[0,1,0],[0,0,1]]
+tfRot = [[0,1,0],[-1,0,0],[0,0,1]]
 robot=ik.tormachZA6();
 # pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,100,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
-pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=30,rapidFeed=10,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
+pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=20,rapidFeed=20,toolFrameOffset=np.array([500,0,500]),toolFrameRot=tfRot, pureRotVel=np.pi/40, tOffset=[0, 20], origin=posInit, toolIJKInit=toolIJKInit)
 # pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
 
 # set up arrays to save data here
 jprev = np.zeros(6)
-jprev[2]=np.pi/18;
-jprev[4]=-np.pi/18
+# jprev[2]=np.pi/18;
+jprev[4]=np.pi/2#18
+jprev[5]=np.pi
 
 sols=[np.zeros(6)]
 pick=[jprev];
@@ -41,7 +46,7 @@ for point in pointList:
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,4,4,4,4,4,4]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[2,2,2,2,2,2,0,2,2,2,2,2,2]))
 	# pick.append(ik.chooseIK(pick[c-1],newsol,[0,0,0,0,0,0,0,0,0,0,100000000000,0,0]))
-	pick.append(ik.chooseIK(pick[c-1],newsol,[20,20,20,20,20,20,0,0,2,2,20,2,20]))
+	pick.append(ik.chooseIK(pick[c-1],newsol,[20,20,20,20,20,20,0,0,2,2,2,2,2]))
 	# pick.append(ik.runIK(np.array([point.pos[0],point.pos[1],point.pos[2],point.rot[0],point.rot[1],point.rot[2]]),pick[c-1],robot))
 	temp=[]
 	for j in newsol:
@@ -59,6 +64,6 @@ plt.xlabel("trajectory point")
 plt.ylabel("joint angle (rad)")
 plt.title("ik-geo solutions for "+file)
 
-gct.plot3DTrajectory(pointList, hz, nmin=10, nmaxOffset=10, step=1, titleFile = file)
+gct.plot3DTrajectory(pointList, hz, nmin=20, nmaxOffset=20, step=1, titleFile = file)
 
 plt.show()

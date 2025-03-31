@@ -202,7 +202,7 @@ def genPath(hz, a=1, vi=0, vm=0.3, vf=0, p0=0, pf=1):
     t3 = ta + tb + tc
 
     if tb < 0:
-        print(f"Trajectory Planner Error: Not enough time to move from {str(p0)} to {str(pf)}")
+        print(f"Trajectory Planner Error: Not enough time to move from {str(p0)} to {str(pf)} with vi={str(vi)}, vm={str(vm)}, vf={str(vf)}")
 
     # time=np.linspace(0,t3,num=int(hz*t3))
     time=np.arange(0, t3, 1/hz)

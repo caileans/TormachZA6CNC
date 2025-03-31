@@ -16,12 +16,12 @@ class GcodeParserV2:
     2) call a parse____ function. ***parseFile() is the only one of these function to have been fully tested***
     3) call the evaluateGcode function, this will return an array of WayPoint dataTypes
     '''
-    def __init__(self, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0,0.0]):
+    def __init__(self, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0,0.0], toolFrameRot=[[1,0,0],[0,1,0],[0,0,1]]):
         '''initialization function. see setParameters for inputs'''
-        self.setParameters(feedRate, rapidFeed, defaultLengthUnits, toolFrameOffset)
+        self.setParameters(feedRate, rapidFeed, defaultLengthUnits, toolFrameOffset, toolFrameRot)
 
     
-    def setParameters(self, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0,0.0]):
+    def setParameters(self, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0,0.0], toolFrameRot=[[1,0,0],[0,1,0],[0,0,1]]):
         '''
         used by the __init__ function to initilize default parameters. can also be used to reinitilize these parameters
 
@@ -44,6 +44,7 @@ class GcodeParserV2:
             self.toolFrameOffset = np.array(toolFrameOffset)
             self.rapidFeed = rapidFeed 
             self.feedRate = feedRate
+        self.toolFrameRot = toolFrameRot
 
 
     def parseFile(self, file):
@@ -80,10 +81,12 @@ class GcodeParserV2:
             if self.evaluateGcodeBlock(block):
                 # botPose = self.calcBotPose(self.newToolPose, self.toolOffset)
                 pos=np.array([self.newToolPose.x, self.newToolPose.y, self.newToolPose.z])
+                pos = np.matmul(self.toolFrameRot, pos)
                 if self.lengthUnits == "in":
                     pos = pos*25.4
                 pos=pos+self.toolFrameOffset
                 toolVec=np.array([self.newToolPose.i, self.newToolPose.j, self.newToolPose.k])
+                toolVec = np.matmul(self.toolFrameRot, toolVec)
                 point = DataTypes.WayPoint(pos=pos, toolVec=toolVec)
                 if self.motionMode == 0:
                     point.circijk=np.array([0.0,0.0,0.0])

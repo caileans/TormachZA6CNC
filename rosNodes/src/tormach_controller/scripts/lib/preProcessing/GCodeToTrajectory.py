@@ -12,7 +12,7 @@ import general_robotics_toolbox as grtb
 
 
 
-def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0, 0.0], origin=[562.0,0.0,866.0], toolIJKInit=[0.0,0.0,1.0], pureRotVel = np.pi/2, tOffset=[0,0]):
+def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUnits="mm", toolFrameOffset=[0.0,0.0, 0.0], toolFrameRot=[[1,0,0],[0,1,0],[0,0,1]],origin=[562.0,0.0,866.0], toolIJKInit=[0.0,0.0,1.0], pureRotVel = np.pi/2, tOffset=[0,0]):
     '''
     call necessary functions to plan a trajectory from gcode
     
@@ -32,7 +32,7 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
     Outputs:
         trajectory: an array of TrajPoint data types; the trajectory that follows the gcode, with moves from and back to origin added in
     '''
-    parser = GcodeParserV2.GcodeParserV2(feedRate=feedRate, rapidFeed=rapidFeed, defaultLengthUnits=defaultLengthUnits, toolFrameOffset=toolFrameOffset)
+    parser = GcodeParserV2.GcodeParserV2(feedRate=feedRate, rapidFeed=rapidFeed, defaultLengthUnits=defaultLengthUnits, toolFrameOffset=toolFrameOffset, toolFrameRot=toolFrameRot)
     # print(os.getcwd())
     if parser.parseFile(file):
         return 0 
