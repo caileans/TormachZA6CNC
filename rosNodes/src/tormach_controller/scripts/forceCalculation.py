@@ -36,6 +36,7 @@ def jointStateCallback(msg,gravity,friction):
 
     #force=np.array([0,0,0,0,0,0])
     force=np.matmul(np.transpose(np.linalg.inv(jac)),tau)
+    print(np.transpose(np.linalg.inv(jac)))
     # force=mp.getEEState(msg.position[0:6],tau)
     pubmsg=forceTorque()
     pubmsg.forcex=force[3];
