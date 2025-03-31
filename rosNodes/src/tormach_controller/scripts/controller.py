@@ -29,8 +29,9 @@ def pose_callback(msg):
 def getParams(file,default):
     params=default
     print(file)
+    print(file.split('.')[0]+'.csv')
     try:
-        with open(file.split('.')+'.csv', 'r') as csvfile:
+        with open(file.split('.')[0]+'.csv', 'r') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
                 try:
@@ -197,7 +198,7 @@ if __name__=='__main__':
 
             pub.pubBigMove(publisher,jprev,3.5)
             sleep(3.5)
-            pointList=gct.genTrajectory(file, a=a,hz=hz,feedRate=velocity[0],rapidFeed=velocity[1],toolFrameOffset=offset,pureRotVel=np.pi/velocity[2], tOffset=tOffset,origin=fwdkin.p,toolIJKInit=np.matmul(fwdkin.rot,np.array([0,0,1])),toolFrameRot=rotate)
+            pointList=gct.genTrajectory(file, a=a,hz=hz,feedRate=velocity[0],rapidFeed=velocity[1],toolFrameOffset=offset,pureRotVel=np.pi/velocity[2], tOffset=tOffset,origin=fwdkin.p,toolIJKInit=np.matmul(fwdkin.R,np.array([0,0,1])),toolFrameRot=rotate)
         
         if not pointList==0:
             for point in pointList:
