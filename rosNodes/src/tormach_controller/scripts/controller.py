@@ -43,7 +43,8 @@ def getParams(file,default):
                     # print(row)
                     temp1=row[1].split(',')
                     temp2=0
-                    # print(row)
+                    print(row)
+                    print(temp1)
                     if len(temp1)>2:
                         temp=[];
                         for i in range(len(temp1)-1):
