@@ -25,6 +25,23 @@ from sensor_msgs.msg import JointState
 
 def pose_callback(msg):
     return np.array([msg.forcex,    msg.forcey,    msg.forcez,    msg.momenti,    msg.momentj,    msg.momentk])
+
+def getParams(file,default):
+    params=default
+    try:
+        with open(file.split('.')+'.csv', 'r') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                try:
+                    row=row.split(',')
+                    params[row[0]]=row[1]
+                except:
+                    print('unknown input')
+    except:
+        print("no file")
+    finally:
+        return params["hz"],params["offset"],params["velocity"], params["jprev"],params["overshoot"],params["rotate"],params["a"],params["tOffset"]
+
 # NOTE THIS NODE IS IN RADIANS!!!!!!!!!!!!!
 #publishing a new position will overwrite the current move
 #Note: this doesnt work for cartesian space
@@ -33,11 +50,11 @@ if __name__=='__main__':
     #start the test node
     rospy.init_node("controller")
     # os.system("xterm -e rosrun tormach_controller forceCalculation.py")
-    feedback=False
-    myargv = rospy.myargv(argv=sys.argv)
-    if len(myargv) == 2:
-        feedback=myargv[1]
-    print(myargv)
+    # feedback=False
+    # myargv = rospy.myargv(argv=sys.argv)
+    # if len(myargv) == 2:
+    #     feedback=myargv[1]
+    # print(myargv)
     # x=DataTypes.TrajPoint()
     filepath ='/home/pathpilot/Downloads/TormachZA6CNC/Gcode/'
     publisher=pub.startPublisher()
@@ -47,21 +64,22 @@ if __name__=='__main__':
     while True:
         userfile=input("file name:").strip()
         pub.home(publisher)
+        default=dict(hz=50,offset=[0,0,0], velocity=[30,30,20],jprev=np.array([0,0,np.pi/18,0,-np.pi/18,0]),overshoot=1.2,rotate=np.eye(3),a=30,tOffset=[0,50])
         jprev = np.zeros(6)
         jprev[2]=np.pi/18;
         jprev[4]=-np.pi/18
-        file=filepath
-        offset=[0,0,0]
+        
+        file=""
         # print(userfile)
-        hz=float(input("hz: ").strip())
-        overshoot=float(input("overshoot: ").strip())
+        # hz=float(input("hz: ").strip())
+        # overshoot=float(input("overshoot: ").strip())
         if userfile=='0':
             exit()
         elif userfile =='1':
-            file=file+"circleTest.nc"
+            file=filepath+"circleTest.nc"
         elif userfile =='2':
-            file=file+"TormachR.nc"
-            offset=[432.1,89,427]
+            file=filepath+"TormachR.nc"
+            default["offset"]=[432.1,89,427]
         elif userfile=='jog':
             eePositon, jprev=jog.keyboardMove(publisher,jprev,hz)
         elif userfile=='calibrateGravity':
@@ -155,17 +173,34 @@ if __name__=='__main__':
                 rate.sleep()
 
         else:
-            file=file+userfile
-            offset=[float(input("offset x").strip()),float(input("offset y").strip()),float(input("offset z").strip())]
-            velocity=[float(input("linear vel").strip()),float(input("rapid vel").strip()),float(input("rot vel").strip())]
+            file=filepath+userfile
+
+            # offset=[float(input("offset x").strip()),float(input("offset y").strip()),float(input("offset z").strip())]
+            # velocity=[float(input("linear vel").strip()),float(input("rapid vel").strip()),float(input("rot vel").strip())]
+            # initPose=np.array([float(input("Initial Pose x").strip()),float(input("Initial Pose y").strip()),float(input("Initial Pose z").strip())])
+            # initPose/=np.linalg.norm(initPose)
+            # for i in range(6):
+            #     jprev[i]=float(input("Joint "+str(i+1)).strip())
+            # origin=[562.0,0.0,866.0]
+        
+
         jcur =np.zeros(6)
         jpub=np.zeros(6)
         # hz=50
         moveBuffer=Queue(maxsize=0)
+        pointList=0
 
-        pointList=gct.genTrajectory(file, a=30,hz=hz,feedRate=velocity[0],rapidFeed=velocity[1],toolFrameOffset=offset,pureRotVel=np.pi/velocity[2], tOffset=[0,50])
-        for point in pointList:
-            moveBuffer.put(point)
+        if len(file)>0:
+            hz,offset, velocity, jprev,overshoot,rotate,a,tOffset=getParams(file,default)
+            fwdkin=grtb.fwdkin(ik.tormachZA6fk(),jprev)
+
+            pub.pubBigMove(publisher,jprev,3.5)
+            sleep(3.5)
+            pointList=gct.genTrajectory(file, a=a,hz=hz,feedRate=velocity[0],rapidFeed=velocity[1],toolFrameOffset=offset,pureRotVel=np.pi/velocity[2], tOffset=tOffset,origin=fwdkin.p,toolIJKInit=np.matmul(fdwkin.rot,np.array([0,0,1])),toolFrameRot=rotate)
+        
+        if not pointList==0:
+            for point in pointList:
+                moveBuffer.put(point)
 
         rate=rospy.Rate(hz)
 
