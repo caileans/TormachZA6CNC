@@ -42,6 +42,7 @@ def getParams(file,default):
                 try:
                     print(row)
                     row=row.split(',')
+                    print(row)
                     if len(row)>2:
                         temp=[];
                         for i in range(len(row)-1):
