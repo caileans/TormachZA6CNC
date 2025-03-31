@@ -105,6 +105,7 @@ if __name__=='__main__':
             exit()
         elif userfile =='1':
             file=filepath+"circleTest.nc"
+            default["offset"]=[0,0,0]
         elif userfile =='2':
             file=filepath+"TormachR.nc"
             default["offset"]=[432.1,89,427]
