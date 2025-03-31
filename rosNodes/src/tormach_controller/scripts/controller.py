@@ -41,12 +41,12 @@ def getParams(file,default):
             for row in reader:
                 try:
                     print(row)
-                    row=row.split(',')
-                    print(row)
-                    if len(row)>2:
+                    temp1=row[1].split(',')
+                    # print(row)
+                    if len(temp1)>2:
                         temp=[];
-                        for i in range(len(row)-1):
-                            temp.append(float(row[i+1].split(']')[0].split('[')[1]))
+                        for i in range(len(temp1)-1):
+                            temp.append(float(temp1[i+1].split(']')[0].split('[')[1]))
                         row[1]=temp
                     elif len(row)==2:
                         row[1]=float(row[1])
