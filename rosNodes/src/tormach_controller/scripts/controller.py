@@ -32,7 +32,9 @@ def getParams(file,default):
     print(file.split('.')[0]+'.csv')
     try:
         with open(file.split('.')[0]+'.csv', 'r') as csvfile:
+            print("opened file")
             reader = csv.reader(csvfile)
+            print("read file")
             for row in reader:
                 try:
                     row=row.split(',')

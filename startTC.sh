@@ -1,6 +1,6 @@
 #! /bin/bash
 
-#start the docker
+#enter the docker
 docker exec -it ros-dist-ui bash
 
 cd ~/Downloads/TormachZA6CNC/rosNodes/
