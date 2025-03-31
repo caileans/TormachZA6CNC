@@ -31,6 +31,7 @@ def pose_callback(msg):
 def getParams(file,default):
     params=default
     print(file)
+    print(params)
     print(file.split('.')[0]+'.csv')
     try:
         with open(file.split('.')[0]+'.csv', 'r') as csvfile:
