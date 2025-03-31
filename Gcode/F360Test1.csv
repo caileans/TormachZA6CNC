@@ -3,7 +3,7 @@ hz, 50
 overshoot, 1.1
 offset, [500, 0, 500]
 rotate, [[0,1,0],[-1,0,0],[0,0,1]]
-velocity, [20, 20, 20]
+velocity, [10, 10, 40]
 a, 30
 jprev, [0, 0, 0, 0, 90, 180]
 
