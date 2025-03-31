@@ -220,6 +220,7 @@ if __name__=='__main__':
 
         if len(file)>0:
             hz,offset, velocity, jprev,overshoot,rotate,a,tOffset=getParams(file,default)
+            jprev=np.array(jprev)*np.pi/180
             fwdkin=grtb.fwdkin(ik.tormachZA6fk(),jprev)
 
             pub.pubBigMove(publisher,jprev,3.5)
