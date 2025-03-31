@@ -40,6 +40,7 @@ def getParams(file,default):
             for row in reader:
                 try:
                     row=row.split(',')
+                    print(row)
                     params[row[0]]=row[1]
                 except:
                     print('unknown input')
