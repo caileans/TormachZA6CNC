@@ -42,16 +42,17 @@ def getParams(file,default):
                 try:
                     # print(row)
                     temp1=row[1].split(',')
+                    temp2=0
                     # print(row)
                     if len(temp1)>2:
                         temp=[];
                         for i in range(len(temp1)-1):
                             temp.append(float(temp1[i+1].split(']')[0].split('[')[-1]))
-                        row[1]=temp
+                        temp2=temp
                     elif len(row)==2:
-                        row[1]=float(row[1])
-                    print(row)
-                    params[row[0]]=row[1]
+                        temp2=float(row[1])
+                    print(temp2)
+                    params[row[0]]=temp2
                 except:
                     print('unknown input')
     except:
