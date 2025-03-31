@@ -47,7 +47,7 @@ def getParams(file,default):
                         row[1]=temp
                     elif len(row)==2:
                         row[1]=float(row[1])
-                    # print(row)
+                    print(row)
                     params[row[0]]=row[1]
                 except:
                     print('unknown input')
