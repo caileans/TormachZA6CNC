@@ -30,27 +30,27 @@ def pose_callback(msg):
 
 def getParams(file,default):
     params=default
-    print(file)
-    print(params)
-    print(file.split('.')[0]+'.csv')
+    # print(file)
+    # print(params)
+    # print(file.split('.')[0]+'.csv')
     try:
         with open(file.split('.')[0]+'.csv', 'r') as csvfile:
-            print("opened file")
+            # print("opened file")
             reader = csv.reader(csvfile)
-            print("read file")
+            # print("read file")
             for row in reader:
                 try:
-                    print(row)
+                    # print(row)
                     temp1=row[1].split(',')
                     # print(row)
                     if len(temp1)>2:
                         temp=[];
                         for i in range(len(temp1)-1):
-                            temp.append(float(temp1[i+1].split(']')[0].split('[')[1]))
+                            temp.append(float(temp1[i+1].split(']')[0].split('[')[-1]))
                         row[1]=temp
                     elif len(row)==2:
                         row[1]=float(row[1])
-                    print(row)
+                    # print(row)
                     params[row[0]]=row[1]
                 except:
                     print('unknown input')
