@@ -30,18 +30,39 @@ def pose_callback(msg):
 
 def getParams(file,default):
     params=default
-    print(file)
-    print(file.split('.')[0]+'.csv')
+    # print(file)
+    # print(params)
+    # print(file.split('.')[0]+'.csv')
     try:
         with open(file.split('.')[0]+'.csv', 'r') as csvfile:
-            print("opened file")
+            # print("opened file")
             reader = csv.reader(csvfile)
-            print("read file")
+            # print("read file")
             for row in reader:
                 try:
-                    row=row.split(',')
-                    print(row)
-                    params[row[0]]=row[1]
+                    # print(row)
+                    # temp1=row[1].split(',')
+                    temp2=0
+                    # print(row)
+                    # print(temp1)
+                    if len(row)>2:
+                        temp=[];
+                        for i in range(len(row)-1):
+                            temp.append(float(row[i+1].split(']')[0].split('[')[-1]))
+                        temp2=temp
+                    elif len(row)==2:
+                        temp2=float(row[1])
+                    if row[0]=='rotate':
+                        temp3=[]
+                        for i in range(3):
+                            temp4=[]
+                            for j in range(3):
+                                temp4.append(temp2[3*i+j])
+                            temp3.append(temp4)
+                        temp2=temp3
+
+                    print(temp2)
+                    params[row[0]]=temp2
                 except:
                     print('unknown input')
     except:
@@ -71,7 +92,7 @@ if __name__=='__main__':
     while True:
         userfile=input("file name:").strip()
         pub.home(publisher)
-        default=dict(hz=50,offset=[550,0,550], velocity=[30,30,20],jprev=np.array([0,0,np.pi/18,0,-np.pi/18,0]),overshoot=1.2,rotate=np.eye(3),a=30,tOffset=[0,50])
+        default=dict(hz=50,offset=[550,0,550], velocity=[30,30,20],jprev=np.array([0,0,10,0,-10,0]),overshoot=1.2,rotate=np.eye(3),a=30,tOffset=[0,50])
         jprev = np.zeros(6)
         jprev[2]=np.pi/18;
         jprev[4]=-np.pi/18
@@ -199,6 +220,7 @@ if __name__=='__main__':
 
         if len(file)>0:
             hz,offset, velocity, jprev,overshoot,rotate,a,tOffset=getParams(file,default)
+            jprev=np.array(jprev)*np.pi/180
             fwdkin=grtb.fwdkin(ik.tormachZA6fk(),jprev)
 
             pub.pubBigMove(publisher,jprev,3.5)
