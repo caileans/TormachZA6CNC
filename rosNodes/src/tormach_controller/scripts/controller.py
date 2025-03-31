@@ -57,7 +57,7 @@ def getParams(file,default):
                         for i in range(3):
                             temp4=[]
                             for j in range(3):
-                                temp4.append(temp2[3i+j])
+                                temp4.append(temp2[3*i+j])
                             temp3.append(temp4)
                         temp2=temp3
 
