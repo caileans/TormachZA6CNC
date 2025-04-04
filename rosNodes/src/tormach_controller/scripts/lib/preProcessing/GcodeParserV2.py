@@ -94,15 +94,15 @@ class GcodeParserV2:
                     point.rotAxis=np.array([0.0,0.0,0.0])
                 if self.motionMode == 1:
                     point.circijk=np.array([0,0,0])
-                    point.vel=self.feedRate if self.lengthUnits == "mm" else self.feedRate*25.4/60.0
+                    point.vel=self.feedRate# if self.lengthUnits == "mm" else self.feedRate*25.4/60.0
                     point.rotAxis=np.array([0.0,0.0,0.0])
                 if self.motionMode == 2:
                     point.circijk=np.array(self.circCenter)
-                    point.vel=self.feedRate if self.lengthUnits == "mm" else self.feedRate*25.4/60.0
+                    point.vel=self.feedRate# if self.lengthUnits == "mm" else self.feedRate*25.4/60.0
                     point.rotAxis=np.array([0.0,0.0,-1.0])
                 if self.motionMode == 3:
                     point.circijk=np.array(self.circCenter)
-                    point.vel=self.feedRate if self.lengthUnits == "mm" else self.feedRate*25.4/60.0
+                    point.vel=self.feedRate# if self.lengthUnits == "mm" else self.feedRate*25.4/60.0
                     point.rotAxis=np.array([0.0,0.0,1.0])
 
                 
@@ -193,7 +193,7 @@ class GcodeParserV2:
             elif block[i] == ['G', 3]:
                 self.motionMode = 3
             elif block[i][0] == 'F':
-                self.feedRate = block[i][1]
+                self.feedRate = block[i][1] if self.lengthUnits == "mm" else block[i][1]*25.4/60.0
             elif block[i][0] == 'X':
                 newPose = True
                 self.newToolPose.x = block[i][1]
