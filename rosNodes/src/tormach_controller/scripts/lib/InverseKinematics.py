@@ -213,10 +213,10 @@ def tormachZA6fk():
 #     # c=R2rpy(rj6)
 #     return np.array([tool2R(j6,toolVector,rj6), bc[0],bc[1]])*180/pi
 
-# def getR(axis, angle):
-#     theta=angle
-#     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
-#     return grtb.rot(axis,angle)
+def getR(axis, angle):
+    theta=angle
+    R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
+    return grtb.rot(axis,angle)
 # def axang2bg(axis,angle):
 
 #     b=asin(-axis[1]*sin(angle)+(1-cos(angle))*axis[0]*axis[2])
