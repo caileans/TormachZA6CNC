@@ -1,9 +1,9 @@
 param, value
-hz, 50
+hz, 80
 overshoot, 1.2
-offset, [430, 0, 370]
+offset, [430, 0, 358.5]
 rotate, [[1,0,0],[0,1,0],[0,0,1]]
 velocity, [30, 30, 40]
 a, 30
-jprev, [0, 30, 30, 0, -60, 0]
+jprev, [0, 30, 40, 0, -80, 0]
 
