@@ -155,17 +155,19 @@ if __name__=='__main__':
             flag=False
             pub.pubBigMove(publisher,jprev,5)
             sleep(5.25)
+            bound=-18000
             while c<=10**10:
                 msg=rospy.wait_for_message('eeforce',forceTorque,.1)
                 force=np.array([msg.forcex,msg.forcey,msg.forcez])
                 c+=1
-                if np.dot(force,direct)<-14000:
-                    pose+=.05*direct
+                force=np.dot(force,direct)
+                if force<bound:
+                    pose+=.05*direct(abs(force-bound))
                     flag=True
                 elif not flag:
                     pose-=.05*direct
                 else:
-                    pose-=.05*direct
+                    pose-=.05*direct*abs(force-bound)
                 jprev=ik.runIK(np.array([pose[0],pose[1],pose[2],0,0,0]),jprev,robot)
                 pub.pubMove(publisher,jprev,1,hz)
                 sleep(1.0/hz)
