@@ -159,13 +159,13 @@ if __name__=='__main__':
                 msg=rospy.wait_for_message('eeforce',forceTorque,.1)
                 force=np.array([msg.forcex,msg.forcey,msg.forcez])
                 c+=1
-                if np.dot(force,direct)<-10000:
-                    pose+=.5*direct
+                if np.dot(force,direct)<-14000:
+                    pose+=1.5*direct
                     flag=True
                 elif not flag:
-                    pose-=1.5*direct
+                    pose-=.05*direct
                 else:
-                    pose-=.5*direct
+                    pose-=.05*direct
                 jprev=ik.runIK(np.array([pose[0],pose[1],pose[2],0,0,0]),jprev,robot)
                 pub.pubMove(publisher,jprev,1,hz)
                 sleep(1.0/hz)
