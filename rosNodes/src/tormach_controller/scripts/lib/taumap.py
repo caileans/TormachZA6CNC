@@ -27,6 +27,8 @@ def NRJn(n,q,H):
 	R=grtb.rot(H[0,:],q[0])
 	for i in range(n-1):
 		R=np.matmul(R,grtb.rot(H[i+1,:],q[i+1]))
+	# print(R)
+	# print(n)
 	return R
 
 # def JnRe(n,q,H):
@@ -47,9 +49,25 @@ def map(q):
 	H,P=tormach()
 	matr=np.zeros((6,6))
 	for i in range(6):
-		matr[i,0:3]=np.matmul(H[i,:],np.matmul(np.transpose(NRJn(i+1,q,H)),grtb.hat(rJne(i+1,q,H,P))))
-		matr[i,3:]=np.matmul(H[i,:],np.transpose(NRJn(i+1,q,H)))
+		matr[0:3,i]=np.matmul(H[i,:],np.matmul(np.transpose(NRJn(i+1,q,H)),grtb.hat(rJne(i+1,q,H,P))))
+		matr[3:,i]=np.matmul(H[i,:],np.transpose(NRJn(i+1,q,H)))
 	return matr
+
+def map2(q):
+
+	H,P=tormach()
+	matr=np.zeros((6,6));
+	for i in range(6):
+		r=rJne(i+1,q,H,P)
+		matr[0:3,i]=np.matmul(grtb.hat(np.matmul(NRJn(i+1,q,H),H[i,:])),r)/np.dot(r,r)
+		temp=np.matmul(H[i,:],(NRJn(i+1,q,H)))
+		for j in range(3):
+			matr[3+j,i]=temp[j]
+		# print(H[i,:])
+		# c=NRJn(i+1,q,H)
+		# print(c)
+		# print(np.transpose(np.matmul(c,H[i,:])))
+	return matr	
 
 def getEEState(q,tau):
 	return np.matmul(np.linalg.inv(map(q)),tau)

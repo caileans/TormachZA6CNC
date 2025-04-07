@@ -164,68 +164,68 @@ def tormachZA6fk():
         an general robotics toolbox Robot type describing the robot arm """
     H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])
     # H=np.transpose(H)
-    P=np.array([[0,.025,0,.123,.2965,.1,.1175-.1],[0,0,0,0,0,0,0],[.279,.171,.454,.035,0,0,0]])*1000 #approximated without 1mm offsets
+    P=np.array([[0,.025,0,.123+.2965,0,0,.1+.1175-.1],[0,0,0,0,0,0,0],[.279,.171,.454,.035,0,0,0]])*1000 #approximated without 1mm offsets
     # P=np.transpose(P)
     # print(np.shape(P))
     robot=grtb.Robot(H,P,[0,0,0,0,0,0])
     return robot
 
 
-def j62R(j6):
+# def j62R(j6):
 
-    j6/=np.linalg.norm(j6)
-    x=np.array([1,0,0])
-    theta=acos(np.dot(j6,x))
-    axis=np.cross(x,j6)
-    R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
-    return R
-def tool2R(j6,tool,rj6):
-    tool/=np.linalg.norm(tool)
-    # print(tool)
-    z=np.matmul(rj6,np.array([[0],[0],[1]]))
-    # print(z)
-    z=np.array(z[:,0])
-    # print(z)
-    # z=np.array([0,0,1])
-    theta=acos(np.dot(tool,z))
-    # print(theta)
-    # axis=np.array([1,0,0])*copysign(1,np.dot(np.cross(z,tool),j6))
-    # R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
-    return theta*copysign(1,np.dot(np.cross(z,tool),j6))
+#     j6/=np.linalg.norm(j6)
+#     x=np.array([1,0,0])
+#     theta=acos(np.dot(j6,x))
+#     axis=np.cross(x,j6)
+#     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
+#     return R
+# def tool2R(j6,tool,rj6):
+#     tool/=np.linalg.norm(tool)
+#     # print(tool)
+#     z=np.matmul(rj6,np.array([[0],[0],[1]]))
+#     # print(z)
+#     z=np.array(z[:,0])
+#     # print(z)
+#     # z=np.array([0,0,1])
+#     theta=acos(np.dot(tool,z))
+#     # print(theta)
+#     # axis=np.array([1,0,0])*copysign(1,np.dot(np.cross(z,tool),j6))
+#     # R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
+#     return theta*copysign(1,np.dot(np.cross(z,tool),j6))
 
-def R2rpy(R):
-    # print(R)
-    # print(np.linalg.norm(R[0:2,0]))
-    # print(R[0:2,0])
-    abc=grtb.R2rpy(R)
-    # b=asin(-R[0,2])
-    # print(abc)
-    # assert np.linalg.norm(R[0:2,0]) > np.finfo(float).eps * 10.0, "Singular rpy requested"
-    return np.array([abc[-1],abc[-2],abc[-3]])
+# def R2rpy(R):
+#     # print(R)
+#     # print(np.linalg.norm(R[0:2,0]))
+#     # print(R[0:2,0])
+#     abc=grtb.R2rpy(R)
+#     # b=asin(-R[0,2])
+#     # print(abc)
+#     # assert np.linalg.norm(R[0:2,0]) > np.finfo(float).eps * 10.0, "Singular rpy requested"
+#     return np.array([abc[-1],abc[-2],abc[-3]])
 
-def j62rpy(j6,toolVector):
-    j6/=np.linalg.norm(j6)
-    x=np.array([1,0,0])
-    theta=acos(np.dot(j6,x))
-    axis=np.cross(x,j6)
-    bc=axang2bg(axis,theta)
-    rj6=j62R(j6)
-    # c=R2rpy(rj6)
-    return np.array([tool2R(j6,toolVector,rj6), bc[0],bc[1]])*180/pi
+# def j62rpy(j6,toolVector):
+#     j6/=np.linalg.norm(j6)
+#     x=np.array([1,0,0])
+#     theta=acos(np.dot(j6,x))
+#     axis=np.cross(x,j6)
+#     bc=axang2bg(axis,theta)
+#     rj6=j62R(j6)
+#     # c=R2rpy(rj6)
+#     return np.array([tool2R(j6,toolVector,rj6), bc[0],bc[1]])*180/pi
 
-def getR(axis, angle):
-    theta=angle
-    R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
-    return grtb.rot(axis,angle)
-def axang2bg(axis,angle):
+# def getR(axis, angle):
+#     theta=angle
+#     R=cos(theta)*np.eye(3)+sin(theta)*np.cross(np.eye(3),axis)+(1-cos(theta))*np.outer(axis,axis)
+#     return grtb.rot(axis,angle)
+# def axang2bg(axis,angle):
 
-    b=asin(-axis[1]*sin(angle)+(1-cos(angle))*axis[0]*axis[2])
-    g=0;
-    if b==np.pi/2 or b==-np.pi/2:
-        g=0;
-    else:
-        g=atan2(-1*(axis[2]*sin(angle)+(1-cos(angle))*axis[0]*axis[1]), 1-(1-cos(angle))*(axis[2]*axis[2]+axis[1]*axis[1]))
-    return [b,g]
+#     b=asin(-axis[1]*sin(angle)+(1-cos(angle))*axis[0]*axis[2])
+#     g=0;
+#     if b==np.pi/2 or b==-np.pi/2:
+#         g=0;
+#     else:
+#         g=atan2(-1*(axis[2]*sin(angle)+(1-cos(angle))*axis[0]*axis[1]), 1-(1-cos(angle))*(axis[2]*axis[2]+axis[1]*axis[1]))
+#     return [b,g]
 # ----- Testing -----
 
 # H=np.array([[0,0,0,1,0,1],[0,1,1,0,1,0],[1,0,0,0,0,0]])

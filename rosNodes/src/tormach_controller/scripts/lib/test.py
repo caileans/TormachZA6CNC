@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 sys.path.append(os.path.abspath(__file__.split("test.py")[0]+"/preProcessing"))
 import preProcessing.DataTypes
 import preProcessing.GCodeToTrajectory as gct
-
+import taumap as tp
+from random import random
 
 # n=358
 # output=np.zeros((n,6))
@@ -76,26 +77,42 @@ import preProcessing.GCodeToTrajectory as gct
 # plt.legend(['x','y','z','cx','cy','cz'])
 # plt.show()
 
-j=[[0,0,0,0,0,0]]
-pointList=gct.genTrajectory('../../../../../Gcode/circleTest.nc', a=1,hz=50,feedRate=.3,rapidFeed=.6)
-i=1;
-print(j[0])
-for point in pointList:
-	j.append(ik.runIK(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0),j[i-1],robot2))
-	i+=1
-	# print(j)
+# j=[[0,0,0,0,0,0]]
+# pointList=gct.genTrajectory('../../../../../Gcode/circleTest.nc', a=1,hz=50,feedRate=.3,rapidFeed=.6)
+# i=1;
+# print(j[0])
+# for point in pointList:
+# 	j.append(ik.runIK(np.append(np.array(point.pos[0:3]),point.rot[0:3], axis=0),j[i-1],robot2))
+# 	i+=1
+# 	# print(j)
 
-plt.figure(4)
-plt.plot(j[:][0])
-plt.plot(j[:][1])
-plt.plot(j[:][2])
-plt.plot(j[:][3])
-plt.plot(j[:][4]-np.ones(6)*.1)
-plt.plot(j[:][5]+np.ones(6)*.1)
-plt.legend(['j1','j2','j3','j4','j5','j6'])
+# plt.figure(4)
+# plt.plot(j[:][0])
+# plt.plot(j[:][1])
+# plt.plot(j[:][2])
+# plt.plot(j[:][3])
+# plt.plot(j[:][4]-np.ones(6)*.1)
+# plt.plot(j[:][5]+np.ones(6)*.1)
+# plt.legend(['j1','j2','j3','j4','j5','j6'])
 
 
-plt.figure(5)
-plt.plot(j1,".")
+# plt.figure(5)
+# plt.plot(j1,".")
 
-plt.show()
+# plt.show()
+pos=[[0,0,0,0,np.pi/2,0]]
+# for i in range(50):
+# 	pos.append([random(),random(),random(),random(),random(),random()])
+
+# for j in pos:
+# 	# jacdif=np.transpose(grtb.robotjacobian(ik.tormachZA6fk(),np.array(j)*np.pi/4))-tp.map(np.array(j)*np.pi/4)
+# 	if not j[5]==0:
+# 		print(np.array(j)*180.0/4)		# print(jacdif)
+# 		print(np.linalg.inv(np.transpose(grtb.robotjacobian(ik.tormachZA6fk(),np.array(j)*np.pi/4))))
+# 	# print(tp.map(np.array(j)*np.pi/4))
+
+print(np.linalg.inv(np.transpose(grtb.robotjacobian(ik.tormachZA6fk(),np.array(pos[0])))))
+print(grtb.robotjacobian(ik.tormachZA6fk(),np.array(pos[0])))
+print((tp.map2(np.array(pos[0]))))
+# print(np.linalg.inv(tp.map(np.array(pos[0]))))
+# tau x, tau y, 
