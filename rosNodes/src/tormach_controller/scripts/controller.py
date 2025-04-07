@@ -146,14 +146,14 @@ if __name__=='__main__':
 
         elif userfile=='forcePoint':
             hz=50
+            jprev=np.array([0,41,37,0,-77.887,0])*np.pi/180
             sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
             direct=np.array([float(input("dir x").strip()),float(input("dir y").strip()),float(input("dir z").strip())])
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
             direct/=np.linalg.norm(direct)
             c=0
             flag=False
-            j=np.array([0,41,37,0,-77.887,0])*np.pi/180
-            pub.pubBigMove(publisher,j,5)
+            pub.pubBigMove(publisher,jprev,5)
             sleep(5.25)
             while c<=10**10:
                 msg=rospy.wait_for_message('eeforce',forceTorque,.1)
