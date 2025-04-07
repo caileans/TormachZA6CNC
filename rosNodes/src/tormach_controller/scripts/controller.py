@@ -145,6 +145,7 @@ if __name__=='__main__':
 
 
         elif userfile=='forcePoint':
+            hz=50
             sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
             direct=np.array([float(input("dir x").strip()),float(input("dir y").strip()),float(input("dir z").strip())])
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
