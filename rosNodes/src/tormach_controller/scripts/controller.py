@@ -160,7 +160,7 @@ if __name__=='__main__':
                 force=np.array([msg.forcex,msg.forcey,msg.forcez])
                 c+=1
                 if np.dot(force,direct)<-14000:
-                    pose+=1.5*direct
+                    pose+=.05*direct
                     flag=True
                 elif not flag:
                     pose-=.05*direct
