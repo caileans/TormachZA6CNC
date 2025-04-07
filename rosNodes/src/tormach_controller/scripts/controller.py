@@ -156,7 +156,7 @@ if __name__=='__main__':
             pub.pubBigMove(publisher,jprev,5)
             sleep(5.25)
             bound=-18000
-            kp=.1**4.5
+            kp=.1**6.5
             while c<=10**10:
                 msg=rospy.wait_for_message('eeforce',forceTorque,.1)
                 force=np.array([msg.forcex,msg.forcey,msg.forcez])
