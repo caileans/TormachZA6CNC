@@ -21,6 +21,8 @@ def getIK(position, Rotation,robot):
     sols = robot.get_ik_sorted(Rotation,[position[0],position[1],position[2]])
 
     sols = applyJointLimits(sols, 6, 360)
+    
+    
     # sols = applyJointLimits(sols, 4, 270) tormach doesn't throw error, but just moves to 180 and won't move past
 
 
@@ -138,7 +140,7 @@ def runIK (r, r0, ikrobot, w=[20,20,20,20,20,20,0,2,2,2,2,2,0]):
     R=abcToR(abc)
     # print(R)
     sols=getIK(r,np.transpose(R), ikrobot)
-    return chooseIK(r0,sols,w)
+    return chooseIK(r0,sols,w)-np.array([0,0,0,0,0,10])
 
 
 def tormachZA6():
