@@ -33,7 +33,7 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
         trajectory: an array of TrajPoint data types; the trajectory that follows the gcode, with moves from and back to origin added in
     '''
 
-    toolIJKInit = [-1, -0.08, 0]
+    # toolIJKInit = [-1, -0.04, 0]
     parser = GcodeParserV2.GcodeParserV2(feedRate=feedRate, rapidFeed=rapidFeed, defaultLengthUnits=defaultLengthUnits, toolFrameOffset=toolFrameOffset, toolFrameRot=toolFrameRot)
     # print(os.getcwd())
     if parser.parseFile(file):
