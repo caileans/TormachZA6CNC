@@ -1,7 +1,7 @@
 param, value
 hz, 80
 overshoot, 1.2
-offset, [450, 175, 420]
+offset, [450, 175, 427]
 rotate, [[0,0,-1],[-1,0,0],[0,1,0]]
 velocity, [10, 10, 40]
 a, 30
