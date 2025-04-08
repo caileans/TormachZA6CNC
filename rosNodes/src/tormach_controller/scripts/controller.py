@@ -234,8 +234,8 @@ if __name__=='__main__':
 
             pub.pubBigMove(publisher,jprev,3.5)
             sleep(3.5)
-            print(fwdkin.p)
-            pointList=gct.genTrajectory(file, a=a,hz=hz,feedRate=velocity[0],rapidFeed=velocity[1],toolFrameOffset=offset,pureRotVel=np.pi/velocity[2], tOffset=tOffset,origin=[444.5, 0, 821],toolIJKInit=np.matmul(fwdkin.R,np.array([0,0,1])),toolFrameRot=rotate)
+            # print(fwdkin.p)
+            pointList=gct.genTrajectory(file, a=a,hz=hz,feedRate=velocity[0],rapidFeed=velocity[1],toolFrameOffset=offset,pureRotVel=np.pi/velocity[2], tOffset=tOffset,origin=fwdkin.p,toolIJKInit=np.matmul(fwdkin.R,np.array([0,0,1])),toolFrameRot=rotate)
         
         if not pointList==0:
             for point in pointList:
