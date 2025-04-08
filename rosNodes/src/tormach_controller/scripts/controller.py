@@ -261,6 +261,7 @@ if __name__=='__main__':
                 jpub=pub.applyOvershoot(jprev,jcur,overshoot)
                 # jpub=jcur
                 # print(jpub)
+                jpub[5] -= 10*np.pi/180.0
                 pub.pubMove(publisher,jpub,overshoot,hz)
                 jprev=jcur;
             # pub.pubMove(publisher,[0,0,np.pi/18,0,-np.pi/18,0],1,)
