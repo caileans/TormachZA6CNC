@@ -140,7 +140,7 @@ def runIK (r, r0, ikrobot, w=[20,20,20,20,20,20,0,2,2,2,2,2,0]):
     R=abcToR(abc)
     # print(R)
     sols=getIK(r,np.transpose(R), ikrobot)
-    return chooseIK(r0,sols,w)-np.array([0,0,0,0,0,10])
+    return chooseIK(r0,sols,w)-np.array([0,0,0,0,0,10*np.pi/180.0])
 
 
 def tormachZA6():
