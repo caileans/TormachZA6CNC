@@ -18,26 +18,27 @@ import general_robotics_toolbox as grtb
 
 # file = 'F360Test1.nc'
 # file = '5DOFTest.nc'
-# file = 'WAAM_wall_2025.nc'
+file = 'WAAM_wall_2025.nc'
 # file = 'tiltCircTest1.nc'
-file = 'WAAM_cylinder_04042025.nc'
-hz = 10
-posInit = [550.0,0.0,600.0]
-# toolIJKInit = [-1,0.0,0.0]
-toolIJKInit = [0,0,1]
-tfRot = [[1,0,0],[0,1,0],[0,0,1]]
+# file = 'WAAM_cylinder_04042025.nc'
+hz = 50
+posInit = [444.5,0.0,821]
+toolIJKInit = [-1,0.0,0.0]
+# toolIJKInit = [0,0,1]
+# tfRot = [[1,0,0],[0,1,0],[0,0,1]]
 # tfRot = [[0,1,0],[-1,0,0],[0,0,1]]
+tfRot = [[0,0,-1],[-1,0,0],[0,1,0]]
 robot=ik.tormachZA6();
 # pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,100,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
-pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=30,rapidFeed=30,toolFrameOffset=np.array([500,50,500]),toolFrameRot=tfRot, pureRotVel=np.pi/40, tOffset=[0, 20], origin=posInit, toolIJKInit=toolIJKInit)
+pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=30,rapidFeed=30,toolFrameOffset=np.array([500,0,500]),toolFrameRot=tfRot, pureRotVel=np.pi/40, tOffset=[0, 20], origin=posInit, toolIJKInit=toolIJKInit)
 # pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
 
 # set up arrays to save data here
 jprev = np.zeros(6)
-jprev[2]=np.pi/18;
-jprev[4] = -np.pi/18
-# jprev[4]=np.pi/2#18
-# jprev[5]=np.pi
+# jprev[2]=np.pi/18;
+# jprev[4] = -np.pi/18
+jprev[4]=np.pi/2#18
+jprev[5]=np.pi
 
 sols=[np.zeros(6)]
 pick=[jprev];
