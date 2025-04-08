@@ -30,7 +30,7 @@ toolIJKInit = [-1,0.0,0.0]
 tfRot = [[0,0,-1],[-1,0,0],[0,1,0]]
 robot=ik.tormachZA6();
 # pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,100,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
-pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=10,rapidFeed=10,toolFrameOffset=np.array([500,170,500]),toolFrameRot=tfRot, pureRotVel=np.pi/40, tOffset=[0, 20], origin=posInit, toolIJKInit=toolIJKInit)
+pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=10,rapidFeed=10,toolFrameOffset=np.array([500,170,500]),toolFrameRot=tfRot, pureRotVel=np.pi/40, tOffset=[0, 50], origin=posInit, toolIJKInit=toolIJKInit)
 # pointList=gct.genTrajectory(__file__.split("TormachZA6CNC")[0]+'TormachZA6CNC/Gcode/'+file, a=30,hz=hz,feedRate=5,rapidFeed=5,toolFrameOffset=np.array([500,0,500]),pureRotVel=np.pi/20, tOffset=[0, 20])
 
 # set up arrays to save data here
