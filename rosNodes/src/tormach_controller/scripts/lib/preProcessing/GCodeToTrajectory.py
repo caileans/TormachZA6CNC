@@ -41,7 +41,7 @@ def genTrajectory(file, a=9, hz=50, feedRate=1.0, rapidFeed=2.0, defaultLengthUn
 
     wayPoints = parser.evaluateGcode()
 
-    wayPoints.append(DataTypes.WayPoint(pos=origin, toolVec=toolIJKInit, vel=(rapidFeed if defaultLengthUnits=="mm" else rapidFeed*25.4/60.0))) #add the origin to the end
+    wayPoints.append(DataTypes.WayPoint(pos=origin, toolVec=toolIJKInit, vel=(rapidFeed if defaultLengthUnits=="mm" else rapidFeed*25.4))) #add the origin to the end
 
     trajectory = TrajectoryPlanner.planTrajectory(wayPoints, a=a, hz=hz, pInit=origin, ijkInit=toolIJKInit, pureRotVel = pureRotVel)
 
@@ -179,8 +179,8 @@ def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0, step=1, titleFile=
 
     # nmin = 350
     nmax = len(x)-nmaxOffset
-    ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i[nmin:nmax], j[nmin:nmax], k[nmin:nmax], length=10, normalize=True, color='b', label="tool vector")
-    ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i_j6[nmin:nmax], j_j6[nmin:nmax], k_j6[nmin:nmax], length=10, normalize=True, color='r', label="h6 vector")
+    ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i[nmin:nmax], j[nmin:nmax], k[nmin:nmax], length=10, normalize=True, color='b', label="Tool Vector")
+    ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], i_j6[nmin:nmax], j_j6[nmin:nmax], k_j6[nmin:nmax], length=10, normalize=True, color='r', label="h6 Vector")
     # ax.quiver(x[nmin:nmax], y[nmin:nmax], z[nmin:nmax], ijk_fromabc[nmin:nmax, 0], ijk_fromabc[nmin:nmax, 1], ijk_fromabc[nmin:nmax, 2], length=8, normalize=True, color='g')
     
     ax.set_aspect('equal')#, adjustable='box')
@@ -189,7 +189,7 @@ def plot3DTrajectory(trajectory, hz=50, nmin=0, nmaxOffset=0, step=1, titleFile=
     ax.set_ylabel("Y (mm)")
     ax.set_zlabel("Z (mm)")
     ax.set_title("Tool vector and h6 vector trajectory for "+titleFile)
-    ax.legend()
+    ax.legend(draggable=True)
     plt.show()
 
 

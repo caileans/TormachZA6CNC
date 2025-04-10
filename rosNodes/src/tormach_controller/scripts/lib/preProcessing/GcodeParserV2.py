@@ -193,7 +193,7 @@ class GcodeParserV2:
             elif block[i] == ['G', 3]:
                 self.motionMode = 3
             elif block[i][0] == 'F':
-                self.feedRate = block[i][1] if self.lengthUnits == "mm" else block[i][1]*25.4/60.0
+                self.feedRate = block[i][1] if self.lengthUnits == "mm" else block[i][1]*25.4#/60.0
             elif block[i][0] == 'X':
                 newPose = True
                 self.newToolPose.x = block[i][1]
