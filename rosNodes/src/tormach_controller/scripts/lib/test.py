@@ -116,3 +116,4 @@ print(grtb.robotjacobian(ik.tormachZA6fk(),np.array(pos[0])))
 print((tp.map2(np.array(pos[0]))))
 # print(np.linalg.inv(tp.map(np.array(pos[0]))))
 # tau x, tau y, 
+print(grtb.fwdkin(ik.tormachZA6fk(),pos[0]).p)
