@@ -186,7 +186,7 @@ if __name__=='__main__':
         elif userfile=='complianceDemo':
             hz=20
             rate=rospy.Rate(hz)
-            threshold=[3000,9600,8000];
+            threshold=[.12,.12,.12];
             sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
             n=3
             force=np.zeros((n,3));
@@ -194,7 +194,7 @@ if __name__=='__main__':
             avg=0
             movemax=7
             movemin=0
-            k=.1**3.5
+            k=.1**(3.5/4)
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
             while True:
                 msg=rospy.wait_for_message('eeforce',forceTorque,.2)
