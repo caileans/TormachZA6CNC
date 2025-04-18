@@ -186,7 +186,7 @@ if __name__=='__main__':
         elif userfile=='complianceDemo':
             hz=20
             rate=rospy.Rate(hz)
-            threshold=[.12,.12,.12];
+            threshold=[.09,.09,.09];
             sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
             n=3
             force=np.zeros((n,3));
@@ -202,7 +202,7 @@ if __name__=='__main__':
                 for i in range(3):
                     avg=np.mean(force[:,i])
                     if abs(avg)>threshold[i]:
-                        print(o)
+                        print(0)
                         pose[i]-=(avg/abs(avg))*max(movemin,min(movemax,k*(abs(avg)-abs(threshold[i]))))
 
                 jprev=ik.runIK(np.array([pose[0],pose[1],pose[2],0,0,0]),jprev,robot)
