@@ -195,7 +195,7 @@ if __name__=='__main__':
             avg=0
             movemax=7
             movemin=0
-            k=.1**(3.5-4-.5-.75-.05)
+            k=.1**(3.5-4-.5-.75-.15)
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
             while True:
                 msg=rospy.wait_for_message('eeforce',forceTorque,.2)
@@ -203,7 +203,7 @@ if __name__=='__main__':
                 for i in range(3):
                     avg=np.mean(force[:,i])
                     if abs(avg)>threshold[i]:
-                        print(0)
+                        # print(0)
                         pose[i]-=(avg/abs(avg))*max(movemin,min(movemax,k*(abs(avg)-abs(threshold[i]))))
 
                 jprev=ik.runIK(np.array([pose[0],pose[1],pose[2],0,0,0]),jprev,robot)
