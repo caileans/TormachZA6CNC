@@ -184,6 +184,7 @@ if __name__=='__main__':
                     force+=np.array([msg.forcex,msg.forcey,msg.forcez])
                 print((force/n))
         elif userfile=='complianceDemo':
+            sleep(1)
             hz=20
             rate=rospy.Rate(hz)
             threshold=[.05,.05,.05];
