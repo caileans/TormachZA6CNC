@@ -194,7 +194,7 @@ if __name__=='__main__':
             avg=0
             movemax=7
             movemin=0
-            k=.1**(3.5-4-.5-.75-.25)
+            k=.1**(3.5-4-.5-.75-.05)
             pose=np.array(grtb.fwdkin(ik.tormachZA6fk(),jprev).p)
             while True:
                 msg=rospy.wait_for_message('eeforce',forceTorque,.2)
