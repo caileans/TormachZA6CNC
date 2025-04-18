@@ -187,7 +187,7 @@ if __name__=='__main__':
             sleep(1)
             hz=20
             rate=rospy.Rate(hz)
-            threshold=[.05,.05,.05];
+            threshold=[.06,.06,.06];
             sub=rospy.Subscriber("eeforce", forceTorque, callback=pose_callback)
             n=3
             force=np.zeros((n,3));
