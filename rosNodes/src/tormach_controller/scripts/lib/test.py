@@ -110,7 +110,7 @@ pos=[[0,0,0,0,np.pi/2,0]]
 # 		print(np.array(j)*180.0/4)		# print(jacdif)
 # 		print(np.linalg.inv(np.transpose(grtb.robotjacobian(ik.tormachZA6fk(),np.array(j)*np.pi/4))))
 # 	# print(tp.map(np.array(j)*np.pi/4))
-
+print(np.linalg.inv((grtb.robotjacobian(ik.tormachZA6fk(),np.array(pos[0])))))
 print(np.linalg.inv(np.transpose(grtb.robotjacobian(ik.tormachZA6fk(),np.array(pos[0])))))
 print(grtb.robotjacobian(ik.tormachZA6fk(),np.array(pos[0])))
 print((tp.map2(np.array(pos[0]))))
